@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>commitments.tex</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">commitments.tex</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#chapter:pedersen-commitments">Monero Amount Hiding</a>
+<ul>
+<li><a href="#sec:commitments">Commitments</a></li>
+<li><a href="#pedersen_section">Pedersen commitments</a></li>
+<li><a href="#sec:pedersen_monero">Amount commitments</a></li>
+<li><a href="#sec:ringct-introduction">RingCT introduction</a></li>
+<li><a href="#sec:range_proofs">Range proofs</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="chapter:pedersen-commitments">Monero Amount Hiding</h1>
+<p>In most cryptocurrencies like Bitcoin, transaction output notes, which give spending rights to ‘amounts’ of money, communicate those amounts in clear text. This allows observers to easily verify the amount spent equals the amount sent.</p>
+<p>In Monero we use <span><em>commitments</em></span> to hide output amounts from everyone except senders and receivers, while still giving observers confidence that a transaction sends no more or less than what is spent. As we will see, amount commitments must also have corresponding ‘range proofs’ which prove the hidden amount is within a legitimate range.</p>
+<h2 id="sec:commitments">Commitments</h2>
+<p>Generally speaking, a cryptographic <span><em>commitment scheme</em></span> is a way of committing to a value without revealing the value itself. After committing to something, you are stuck with it.</p>
+<p>For example, in a coin-flipping game Alice could privately commit to one outcome (i.e. ‘call it’) by hashing her committed value with secret data and publishing the hash. After Bob flips the coin, Alice declares which value she committed to and proves it by revealing the secret data. Bob could then verify her claim.</p>
+<p>In other words, assume that Alice has a secret string <span class="math inline">\(blah\)</span> and the value she wants to commit to is <span class="math inline">\(heads\)</span>. She hashes <span class="math inline">\(h = \mathcal{H}(blah, heads)\)</span> and gives <span class="math inline">\(h\)</span> to Bob. Bob flips a coin, then Alice tells Bob the secret string <span class="math inline">\(blah\)</span> and that she committed to <span class="math inline">\(heads\)</span>. Bob calculates <span class="math inline">\(h’ = \mathcal{H}(blah, heads)\)</span>. If <span class="math inline">\(h&#39; = h\)</span>, then he knows Alice called <span class="math inline">\(heads\)</span> before the coin flip.</p>
+<p>Alice uses the so-called ‘salt’, <span class="math inline">\(blah\)</span>, so Bob can’t just guess <span class="math inline">\(\mathcal{H}(heads)\)</span> and <span class="math inline">\(\mathcal{H}(tails)\)</span> before his coin flip, and figure out she committed to <span class="math inline">\(heads\)</span>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<h2 id="pedersen_section">Pedersen commitments</h2>
+<p>A <span><em>Pedersen commitment</em></span> <span class="citation" data-cites="Pedersen1992"></span> is a commitment that has the property of being <span><em>additively homomorphic</em></span>. If <span class="math inline">\(C(a)\)</span> and <span class="math inline">\(C(b)\)</span> denote the commitments for values <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> respectively, then <span class="math inline">\(C(a + b) = C(a) + C(b)\)</span>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> This property will be useful when committing transaction amounts, as one can prove, for instance, that inputs equal outputs, without revealing the amounts at hand.<br />
+Fortunately, Pedersen commitments are easy to implement with elliptic curve cryptography, as the following holds trivially <span class="math display">\[a G + b G = (a + b) G\]</span></p>
+<p>Clearly, by defining a commitment as simply <span class="math inline">\(C(a) = a G\)</span>, we could easily create cheat tables of commitments to help us recognize common values of <span class="math inline">\(a\)</span>.</p>
+<p>To attain information-theoretic privacy, one needs to add a secret <span><em>blinding factor</em></span> and another generator <span class="math inline">\(H\)</span>, such that it is unknown for which value of <span class="math inline">\(\gamma\)</span> the following holds: <span class="math inline">\(H = \gamma G\)</span>. The hardness of the discrete logarithm problem ensures calculating <span class="math inline">\(\gamma\)</span> from <span class="math inline">\(H\)</span> is infeasible.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>We can then define the commitment to a value <span class="math inline">\(a\)</span> as <span class="math inline">\(C(x, a) = x G + a H\)</span>, where <span class="math inline">\(x\)</span> is the blinding factor (a.k.a. ‘mask’) that prevents observers from guessing <span class="math inline">\(a\)</span>.</p>
+<p>Commitment <span class="math inline">\(C(x, a)\)</span> is information-theoretically private because there are many possible combinations of <span class="math inline">\(x\)</span> and <span class="math inline">\(a\)</span> that would output the same <span class="math inline">\(C\)</span>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> If <span class="math inline">\(x\)</span> is truly random, an attacker would have literally no way to figure out <span class="math inline">\(a\)</span> <span class="citation" data-cites="maxwell-ct SCOZZAFAVA1993313"></span>.</p>
+<h2 id="sec:pedersen_monero">Amount commitments</h2>
+<p>In Monero, output amounts are stored in transactions as Pedersen commitments. We define a commitment to an output’s amount <span class="math inline">\(b\)</span> as: <span class="math display">\[C(y,b) = y G + b H\marginnote{src/ringct/ rctOps.cpp {\tt addKeys2()}}\]</span></p>
+<p>Recipients should be able to know how much money is in each output they own, as well as reconstruct the amount commitments, so they can be used as the inputs to new transactions. This means the blinding factor <span class="math inline">\(y\)</span> and amount <span class="math inline">\(b\)</span> must be communicated to the receiver.</p>
+<p>The solution adopted is a Diffie-Hellman shared secret <span class="math inline">\(r K_B^v\)</span> using the ‘transaction public key’ (recall Section <a href="#sec:multi_out_transactions" data-reference-type="ref" data-reference="sec:multi_out_transactions">[sec:multi_out_transactions]</a>). For any given transaction in the blockchain, each of its outputs <span class="math inline">\(t \in \{0, ..., p-1\}\)</span> has a mask <span class="math inline">\(y_t\)</span> that senders and receivers can privately compute, and an <span><em>amount</em></span> stored in the transaction’s data. While <span class="math inline">\(y_t\)</span> is an elliptic curve scalar and occupies 32 bytes, <span class="math inline">\(b\)</span> will be restricted to 8 bytes by the range proof so only an 8 byte value needs to be stored.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>[.725cm] <span class="math display">\[\begin{aligned}
+  y_t &amp;= \mathcal{H}_n(``commitment\_mask&quot;,\mathcal{H}_n(r K_B^v, t)) \\
+  \mathit{amount}_t &amp;= b_t \oplus_8 \mathcal{H}_n(``amount”, \mathcal{H}_n(r K_B^v, t))\end{aligned}\]</span></p>
+<p>Here, <span class="math inline">\(\oplus_8\)</span> means to perform an XOR operation (Section <a href="#sec:XOR_section" data-reference-type="ref" data-reference="sec:XOR_section">[sec:XOR_section]</a>) between the first 8 bytes of each operand (<span class="math inline">\(b_t\)</span> which is already 8 bytes, and <span class="math inline">\(\mathcal{H}_n(...)\)</span> which is 32 bytes). Recipients can perform the same XOR operation on <span class="math inline">\(\mathit{amount}_t\)</span> to reveal <span class="math inline">\(b_t\)</span>.</p>
+<p>The receiver Bob will be able to calculate the blinding factor <span class="math inline">\(y_t\)</span> and the amount <span class="math inline">\(b_t\)</span> using the transaction public key <span class="math inline">\(r G\)</span> and his view key <span class="math inline">\(k_B^v\)</span>. He can also check that the commitment <span class="math inline">\(C(y_t, b_t)\)</span> provided in the transaction data, henceforth denoted <span class="math inline">\(C_t^b\)</span>, corresponds to the amount at hand.<br />
+More generally, any third party with access to Bob’s view key could decrypt his output amounts, and also make sure they agree with their associated commitments.</p>
+<h2 id="sec:ringct-introduction">RingCT introduction</h2>
+<p>A transaction will contain references to other transactions’ outputs (telling observers which old outputs are to be spent), and its own outputs. The content of an output includes a one-time address (assigning ownership of the output) and an output commitment hiding the amount (also the encoded output amount from Section <a href="#sec:pedersen_monero" data-reference-type="ref" data-reference="sec:pedersen_monero">1.3</a>).</p>
+<p>While a transaction’s verifiers don’t know how much money is contained in each input and output, they still need to be sure the sum of input amounts equals the sum of output amounts. Monero uses a technique called RingCT <span class="citation" data-cites="MRL-0005-ringct"></span>, first implemented in January 2017 (v4 of the protocol), to accomplish this.</p>
+<p>If we have a transaction with <span class="math inline">\(m\)</span> inputs containing amounts <span class="math inline">\(a_1, ..., a_m\)</span>, and <span class="math inline">\(p\)</span> outputs with amounts <span class="math inline">\(b_0, ..., b_{p-1}\)</span>, then an observer would justifiably expect that:<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> <span class="math display">\[\sum_j a_j - \sum_t b_t = 0\]</span></p>
+<p>Since commitments are additive and we don’t know <span class="math inline">\(\gamma\)</span>, we could easily prove our inputs equal outputs to observers by making the sum of commitments to input and output amounts equal zero (i.e. by setting the sum of output blinding factors equal to the sum of old input blinding factors):<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> <span class="math display">\[\sum_{j}{C_{j, in}} - \sum_{t}{C_{t, out}} = 0\]</span></p>
+<p>To avoid sender identifiability we use a slightly different approach. The amounts being spent correspond to the outputs of previous transactions, which had commitments <span class="math display">\[C^a_{j} = x_j G + a_j H\]</span></p>
+<p>The sender can create new commitments to the same amounts but using different blinding factors; that is, <span class="math display">\[C&#39;^a_{j} = x&#39;_j G + a_j H\]</span></p>
+<p>Clearly, she would know the private key of the difference between the two commitments: <span class="math display">\[C^a_{j} - C&#39;^a_{j} = (x_j - x&#39;_j) G\]</span><br />
+Hence, she would be able to use this value as a <span><em>commitment to zero</em></span>, since she can make a signature with the private key <span class="math inline">\((x_j - x&#39;_j) = z_j\)</span> and prove there is no <span class="math inline">\(H\)</span> component to the sum (assuming <span class="math inline">\(\gamma\)</span> is unknown). In other words prove that <span class="math inline">\(C^a_{j} - C&#39;^a_{j} = z_j G + 0H\)</span>, which we will actually do in Chapter <a href="#chapter:transactions" data-reference-type="ref" data-reference="chapter:transactions">[chapter:transactions]</a> when we discuss the structure of RingCT transactions.</p>
+<p>Let us call <span class="math inline">\(C&#39;^a_j\)</span> a <span><em>pseudo output commitment</em></span>. Pseudo output commitments are included in transaction data, and there is one for each input.</p>
+<p>Before committing a transaction to the blockchain, the network will want to verify that its amounts balance. Blinding factors for pseudo and output commitments are selected such that <span class="math display">\[\sum_j x&#39;_j  - \sum_t y_t = 0\]</span></p>
+<p>This allows us to prove input amounts equal output amounts: <span class="math display">\[(\sum_j C&#39;^a_{j} - \sum_t C^b_{t}) = 0\]</span></p>
+<p>Fortunately, choosing such blinding factors is easy. In the current version of Monero, all blinding factors are random except for the <span class="math inline">\(m\)</span>pseudo out commitment, where <span class="math inline">\(x&#39;_m\)</span> is simply <span class="math display">\[x&#39;_m = \sum_t y_t - \sum_{j=1}^{m-1} x&#39;_j\]</span></p>
+<h2 id="sec:range_proofs">Range proofs</h2>
+<p>One problem with additive commitments is that, if we have commitments <span class="math inline">\(C(a_1)\)</span>, <span class="math inline">\(C(a_2)\)</span>, <span class="math inline">\(C(b_1)\)</span>, and <span class="math inline">\(C(b_2)\)</span> and we intend to use them to prove that <span class="math inline">\((a_1 + a_2) - (b_1 + b_2) = 0\)</span>, then those commitments would still apply if one value in the equation were ‘negative’.</p>
+<p>For instance, we could have <span class="math inline">\(a_1 = 6\)</span>, <span class="math inline">\(a_2 = 5\)</span>, <span class="math inline">\(b_1 = 21\)</span>, and <span class="math inline">\(b_2 = -10\)</span>.</p>
+<p>&amp;&amp; (6 + 5) - (&amp;21 + -10) = 0&amp;<br />
+&amp;&amp; 21G + -10G = 21G + (&amp;l-10)G = (l + 11)G = 11G&amp;</p>
+<p>Since <span class="math inline">\(-10 = l-10\)</span>, we have effectively created <span class="math inline">\(l\)</span> more Moneroj (over 7.2x10<span class="math inline">\(^{74}\)</span>!) than we put in.</p>
+<p>The solution addressing this issue in Monero is to prove each output amount is in a certain range (from 0 to <span class="math inline">\(2^{64}-1\)</span>) using the Bulletproofs proving scheme first described by Benedikt Bünz <span><em>et al.</em></span> in <span class="citation" data-cites="Bulletproofs_paper"></span> (and also explained in <span class="citation" data-cites="adam-zero-to-bulletproofs dalek-bulletproofs-notes"></span>).<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> Given the involved and intricate nature of Bulletproofs, it is not elucidated in this document. Moreover we feel the cited materials adequately present its concepts.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></p>
+<p>The Bulletproof proving algorithm takes as input output amounts <span class="math inline">\(b_t\)</span> and commitment masks <span class="math inline">\(y_t\)</span>, and outputs all <span class="math inline">\(C^b_t\)</span> and an <span class="math inline">\(n\)</span>-tuple aggregate proof <span class="math inline">\(\Pi_{BP} = (A, S, T_1, T_2, \tau_x, \mu, \mathbb{L}, \mathbb{R}, a, b, t)\)</span><a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a><a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a>. That single proof is used to prove all output amounts are in range at the same time, as aggregating them greatly reduces space requirements (although it does increase the time to verify).<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a> The verification algorithm takes as input all <span class="math inline">\(C^b_t\)</span>, and <span class="math inline">\(\Pi_{BP}\)</span>, and outputs <span><code>true</code></span> if all committed amounts are in the range 0 to <span class="math inline">\(2^{64} - 1\)</span>.</p>
+<p>The <span class="math inline">\(n\)</span>-tuple <span class="math inline">\(\Pi_{BP}\)</span> occupies <span class="math inline">\((2 \cdot \lceil \textrm{log}_2(64 \cdot p) \rceil + 9) \cdot 32\)</span> bytes of storage.</p>
+<section class="footnotes" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1" role="doc-endnote"><p>If the committed value is very difficult to guess and check, e.g. if it’s an apparently random elliptic curve point, then salting the commitment isn’t necessary.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>Additively homomorphic in this context means addition is preserved when you transform scalars into EC points by applying, for scalar <span class="math inline">\(x\)</span>, <span class="math inline">\(x \rightarrow x G\)</span>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>In the case of Monero, <span class="math inline">\(H = 8*to\_point(\mathcal{H}_n(G))\)</span>. This differs from the <span class="math inline">\(\mathcal{H}_p\)</span> hash function in that it directly interprets the output of <span class="math inline">\(\mathcal{H}_n(G)\)</span> as a compressed point coordinate instead of deriving a curve point mathematically (see <span class="citation" data-cites="hashtopoint-writeup"></span>). The historical reasons for this discrepancy are unknown to us, and indeed this is the only place where <span class="math inline">\(\mathcal{H}_p\)</span> is not used (Bulletproofs also use <span class="math inline">\(\mathcal{H}_p\)</span>). Note how there is a <span class="math inline">\(*8\)</span> operation, to ensure the resultant point is in our <span class="math inline">\(l\)</span> subgroup (<span class="math inline">\(\mathcal{H}_p\)</span> also does that).<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4" role="doc-endnote"><p>Basically, there are many <span class="math inline">\(x’\)</span> and <span class="math inline">\(a’\)</span> such that <span class="math inline">\(x’+a’ \gamma = x+a \gamma\)</span>. A committer knows one combination, but an attacker has no way to know which one. This property is also known as ‘perfect hiding’ <span class="citation" data-cites="adam-zero-to-bulletproofs"></span>. Furthermore, even the committer can’t find another combination without solving the DLP for <span class="math inline">\(\gamma\)</span>, a property called ‘computational binding’ <span class="citation" data-cites="adam-zero-to-bulletproofs"></span>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5" role="doc-endnote"><p>As with the one-time address <span class="math inline">\(K^o\)</span> from Section <a href="#sec:one-time-addresses" data-reference-type="ref" data-reference="sec:one-time-addresses">[sec:one-time-addresses]</a>, the output index <span class="math inline">\(t\)</span> is appended to the shared secret before hashing. This ensures outputs directed to the same address do not have similar masks and <span><em>amounts</em></span>, except with negligible probability. Also like before, the term <span class="math inline">\(r K^v_B\)</span> is multiplied by 8, so it’s really <span class="math inline">\(8rK^v_B.\)</span><a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6" role="doc-endnote"><p>This solution (implemented in v10 of the protocol) replaced a previous method that used more data, thereby causing the transaction type to change from v3 (<span><code>RCTTypeBulletproof</code></span>) to v4 (<span><code>RCTTypeBulletproof2</code></span>). The first edition of this report discussed the previous method <span class="citation" data-cites="ztm-1"></span>.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7" role="doc-endnote"><p>If the intended total output amount doesn’t precisely equal any combination of owned outputs, then transaction authors can add a ‘change’ output sending extra money back to themselves. By analogy to cash, with a 20$ bill and 15$ expense you will receive 5$ back from the cashier.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8" role="doc-endnote"><p>Recall from Section <a href="#elliptic_curves_section" data-reference-type="ref" data-reference="elliptic_curves_section">[elliptic_curves_section]</a> we can subtract a point by inverting its coordinates then adding it. If <span class="math inline">\(P = (x, y)\)</span>, <span class="math inline">\(-P = (-x, y)\)</span>. Recall also that negations of field elements are calculated<span class="math inline">\(\pmod q\)</span>, so <span class="math inline">\((–x \pmod q)\)</span>.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9" role="doc-endnote"><p>It’s conceivable that with several outputs in a legitimate range, the sum of their amounts could roll over and cause a similar problem. However, when the maximum output is much smaller than <span class="math inline">\(l\)</span> it takes a huge number of outputs for that to happen. For example, if the range is 0-5, and l = 99, then to counterfeit money using an input of 2, we would need <span class="math inline">\(5 + 5 + …. + 5 + 1 = 101 \equiv 2 \pmod{99}\)</span>, for 21 total outputs. In Monero <span class="math inline">\(l\)</span> is about 2^189 times bigger than the available range, which means a ridiculous 2^189 outputs to counterfeit money.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10" role="doc-endnote"><p>Prior to protocol v8 range proofs were accomplished with Borromean ring signatures, which were explained in the first edition of Zero to Monero <span class="citation" data-cites="ztm-1"></span>.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11" role="doc-endnote"><p>Vectors <span class="math inline">\(\mathbb{L}\)</span> and <span class="math inline">\(\mathbb{R}\)</span> contain <span class="math inline">\(\lceil \textrm{log}_2(64 \cdot p) \rceil\)</span> elements each. <span class="math inline">\(\lceil\)</span> <span class="math inline">\(\rceil\)</span> means the log function is rounded up. Due to their construction, some Bulletproofs use ‘dummy outputs’ as padding to ensure <span class="math inline">\(p\)</span> plus the number of dummy outputs is a power of 2. Those dummy outputs can be generated during verification, and are not stored with the proof data.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12" role="doc-endnote"><p>The variables in a Bulletproof are unrelated to other variables in this document. Symbol overlap is merely coincidental. Note that group elements <span class="math inline">\(A, S, T_1, T_2, \mathbb{L},\)</span> and <span class="math inline">\(\mathbb{R}\)</span> are multiplied by 1/8 before being stored, then multiplied by 8 during verification. This ensures they are all members of the <span class="math inline">\(l\)</span> sub-group (recall Section <a href="#elliptic_curves_section" data-reference-type="ref" data-reference="elliptic_curves_section">[elliptic_curves_section]</a>).<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13" role="doc-endnote"><p>It turns out multiple separate Bulletproofs can be ‘batched’ together, which means they are verified simultaneously. Doing so improves how long it takes to verify them, and currently in Monero Bulletproofs are batched on a per-block basis, although there is no theoretical limit to how many can be batched together. Each transaction is only allowed to have one Bulletproof.<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+</body>
+</html>

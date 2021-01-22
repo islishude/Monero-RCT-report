@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Transactions.tex</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Transactions.tex</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#chapter:transactions">Monero Ring Confidential Transactions (RingCT)</a>
+<ul>
+<li><a href="#sec:transaction_types">Transaction types</a></li>
+<li><a href="#sec:RCTTypeBulletproof2">Ring Confidential Transactions of type <span><code>RCTTypeBulletproof2</code></span></a>
+<ul>
+<li><a href="#sec:commitments-and-fees">Amount commitments and transaction fees</a></li>
+<li><a href="#full-signature">Signature</a></li>
+<li><a href="#avoiding-double-spending">Avoiding double-spending</a></li>
+<li><a href="#subsec:space-and-ver-rcttypefull">Space requirements</a></li>
+</ul></li>
+<li><a href="#sec:transaction_summary">Concept summary: Monero transactions</a>
+<ul>
+<li><a href="#storage-requirements">Storage requirements</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="chapter:transactions">Monero Ring Confidential Transactions (RingCT)</h1>
+<p>Throughout Chapters <a href="#chapter:addresses" data-reference-type="ref" data-reference="chapter:addresses">[chapter:addresses]</a> and <a href="#chapter:pedersen-commitments" data-reference-type="ref" data-reference="chapter:pedersen-commitments">[chapter:pedersen-commitments]</a> we built up several aspects of Monero transactions. At this point a simple one-input, one-output transaction from some unknown author to some unknown recipient sounds like:</p>
+<p>“My transaction uses transaction public key <span class="math inline">\(r G\)</span>. I will spend old output <span class="math inline">\(X\)</span> (note that it has a hidden amount <span class="math inline">\(A_X\)</span>, committed to in <span class="math inline">\(C_X\)</span>). I will give it a pseudo output commitment <span class="math inline">\(C&#39;_X\)</span>. I will make one output <span class="math inline">\(Y\)</span>, which may be spent by the one-time address <span class="math inline">\(K^o_Y\)</span>. It has a hidden amount <span class="math inline">\(A_Y\)</span> committed to in <span class="math inline">\(C_Y\)</span>, encrypted for the recipient, and proven in range with a Bulletproofs-style range proof. Please note that <span class="math inline">\(C&#39;_X - C_Y = 0\)</span>."</p>
+<p>Some questions remain. Did the author actually own <span class="math inline">\(X\)</span>? Does the pseudo output commitment <span class="math inline">\(C&#39;_X\)</span> actually correspond to <span class="math inline">\(C_X\)</span>, such that <span class="math inline">\(A_X = A&#39;_X = A_Y\)</span>? Has someone tampered with the transaction, and perhaps directed the output at a recipient unintended by the original author?<br />
+As mentioned in Section <a href="#sec:one-time-addresses" data-reference-type="ref" data-reference="sec:one-time-addresses">[sec:one-time-addresses]</a>, we can prove ownership of an output by signing a message with its one-time address (whoever has the address’s key owns the output). We can also prove it has the same amount as a pseudo output commitment by proving knowledge of the commitment to zero’s private key (<span class="math inline">\(C_X - C&#39;_X = z_X G\)</span>). Moreover, if that message is <span><em>all the transaction data</em></span> (except the signature itself), then verifiers can be assured everything is as the author intended (the signature only works with the original message). MLSAG signatures allow us to do all of this while also obscuring the actual spent output amongst other outputs from the blockchain, so observers can’t be sure which one is being spent.</p>
+<h2 id="sec:transaction_types">Transaction types</h2>
+<p>Monero is a cryptocurrency under steady development. Transaction structures, protocols, and cryptographic schemes are always prone to evolving as new innovations, objectives, or threats are found.</p>
+<p>In this report we have focused our attention on <span><em>Ring Confidential Transactions</em></span>, a.k.a. <span><em>RingCT</em></span>, as they are implemented in the current version of Monero. RingCT is mandatory for all new Monero transactions, so we will not describe any deprecated transaction schemes, even if they are still partially supported.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> The transaction type we have discussed so far, and which will be further elaborated in this chapter, is <span><code>RCTTypeBulletproof2</code></span>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>We present a conceptual summary of transactions in Section <a href="#sec:transaction_summary" data-reference-type="ref" data-reference="sec:transaction_summary">1.3</a>.</p>
+<h2 id="sec:RCTTypeBulletproof2">Ring Confidential Transactions of type <span><code>RCTTypeBulletproof2</code></span></h2>
+<p>Currently (protocol v12) all new transactions must use this transaction type, in which each input is signed separately. An actual example of an <span><code>RCTTypeBulletproof2</code></span> transaction, with all its components, can be inspected in Appendix <a href="#appendix:RCTTypeBulletproof2" data-reference-type="ref" data-reference="appendix:RCTTypeBulletproof2">[appendix:RCTTypeBulletproof2]</a>.</p>
+<h3 id="sec:commitments-and-fees">Amount commitments and transaction fees</h3>
+<p>Assume a transaction sender has previously received various outputs with amounts <span class="math inline">\(a_1, ..., a_m\)</span> addressed to one-time addresses <span class="math inline">\(K^o_{\pi,1}, ..., K^o_{\pi,m}\)</span> and with amount commitments <span class="math inline">\(C^a_{\pi,1}, ..., C^a_{\pi,m}\)</span>.</p>
+<p>This sender knows the private keys <span class="math inline">\(k^o_{\pi,1}, ..., k^o_{\pi,m}\)</span> corresponding to the one-time addresses (Section <a href="#sec:one-time-addresses" data-reference-type="ref" data-reference="sec:one-time-addresses">[sec:one-time-addresses]</a>). The sender also knows the blinding factors <span class="math inline">\(x_j\)</span> used in commitments <span class="math inline">\(C^a_{\pi,j}\)</span> (Section <a href="#sec:pedersen_monero" data-reference-type="ref" data-reference="sec:pedersen_monero">[sec:pedersen_monero]</a>).</p>
+<p>Typically transaction outputs are <span><em>lower</em></span> in total than transaction inputs, in order to provide a fee that will incentivize miners to include the transaction in the blockchain.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> Transaction fee amounts <span class="math inline">\(f\)</span> are stored in clear text in the transaction data transmitted to the network. Miners can create an additional output for themselves with the fee (see Section <a href="#subsec:miner-transaction" data-reference-type="ref" data-reference="subsec:miner-transaction">[subsec:miner-transaction]</a>).</p>
+<p>A transaction consists of inputs <span class="math inline">\(a_1, ..., a_m\)</span> and outputs <span class="math inline">\(b_0, ..., b_{p-1}\)</span> such that <span class="math inline">\(\sum\limits_{j=1}^m a_j - \sum\limits_{t=0}^{p-1} b_t - f = 0\)</span>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<p>The sender calculates pseudo output commitments for the input amounts, <span class="math inline">\(C&#39;^a_{\pi,1}, ..., C&#39;^a_{\pi,m}\)</span>, and creates commitments for intended output amounts <span class="math inline">\(b_0, ..., b_{p-1}\)</span>. Let these new commitments be <span class="math inline">\(C^b_0, ..., C^b_{p-1}\)</span>.</p>
+<p>He knows the private keys <span class="math inline">\(z_1,...,z_m\)</span> to the commitments to zero <span class="math inline">\((C^a_{\pi,1} - C&#39;^a_{\pi,1}),...,(C^a_{\pi,m} - C&#39;^a_{\pi,m})\)</span>.</p>
+<p>For verifiers to confirm transaction amounts sum to zero, the fee amount must be converted into a commitment. The solution is to calculate the commitment of the fee <span class="math inline">\(f\)</span> without the masking effect of any blinding factor. That is, <span class="math inline">\(C(f) = f H\)</span>.</p>
+<p>Now we can prove input amounts equal output amounts:<br />
+<span class="math display">\[(\sum_j C&#39;^a_{j} - \sum_t C^b_{t}) - f H = 0\]</span></p>
+<h3 id="full-signature">Signature</h3>
+<p>The sender selects <span class="math inline">\(m\)</span> sets of size <span class="math inline">\(v\)</span>, of additional unrelated one-time addresses and their commitments from the blockchain, corresponding to apparently unspent outputs.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> To sign input <span class="math inline">\(j\)</span>, she stirs a set of size <span class="math inline">\(v\)</span> into a <span><em>ring</em></span> with her own <span class="math inline">\(j\)</span>unspent one-time address (placed at unique index <span class="math inline">\(\pi\)</span>), along with false commitments to zero, as follows:<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
+<p><span class="math display">\[\begin{aligned}
+    \mathcal{R}_j = \{&amp;\{K^o_{1, j}, (C_{1, j} - C&#39;^a_{\pi, j})\}, \\
+    &amp;... \\
+    &amp;\{ K^o_{\pi, j}, (C^a_{\pi, j} - C&#39;^a_{\pi, j})\}, \\
+    &amp;... \\
+    &amp;\{ K^o_{v+1, j}, (C_{v+1, j} - C&#39;^a_{\pi, j})\}\}\end{aligned}\]</span></p>
+<p>Alice uses an MLSAG signature (Section <a href="#sec:MLSAG" data-reference-type="ref" data-reference="sec:MLSAG">[sec:MLSAG]</a>) to sign this ring, where she knows the private keys <span class="math inline">\(k^o_{\pi,j}\)</span> for <span class="math inline">\(K^o_{\pi,j}\)</span>, and <span class="math inline">\(z_j\)</span> for the commitment to zero <span class="math inline">\((C^a_{\pi,j}\)</span> - <span class="math inline">\(C&#39;^a_{\pi,j})\)</span>. Since no key image is needed for the commitments to zero, there is consequently no corresponding key image component in the signature’s construction.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p>
+<p>Each input in a transaction is signed individually using rings like <span class="math inline">\(\mathcal{R}_j\)</span> as defined above, thereby obscuring the real outputs being spent, (<span class="math inline">\(K^o_{\pi,1},...,K^o_{\pi,m}\)</span>), amongst other unspent outputs.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> Since part of each ring includes a commitment to zero, the pseudo output commitment used must contain an amount equal to the real input being spent. This ties input amounts to the proof that amounts balance, without compromising which ring member is the real input.</p>
+<p>The message <span class="math inline">\(\mathfrak{m}\)</span> signed by each input is essentially a hash of all transaction data <span><em>except</em></span> for the MLSAG signatures.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a> This ensures transactions are tamper-proof from the perspective of both transaction authors and verifiers. Only one message is produced, and each input MLSAG signs it.</p>
+<p>One-time private key <span class="math inline">\(k^o\)</span> is the essence of Monero’s transaction model. Signing <span class="math inline">\(\mathfrak{m}\)</span> with <span class="math inline">\(k^o\)</span> proves you are the owner of the amount committed to in <span class="math inline">\(C^a\)</span>. Verifiers can be confident that transaction authors are spending their own funds, without even knowing which funds are being spent, how much is being spent, or what other funds they might own!</p>
+<h3 id="avoiding-double-spending">Avoiding double-spending</h3>
+<p>An MLSAG signature (Section <a href="#sec:MLSAG" data-reference-type="ref" data-reference="sec:MLSAG">[sec:MLSAG]</a>) contains images <span class="math inline">\(\tilde{K}_{j}\)</span> of private keys <span class="math inline">\(k_{\pi, j}\)</span>. An important property for any cryptographic signature scheme is that it should be unforgeable with non-negligible probability. Therefore, to all practical effects, we can assume a signature’s key images must have been deterministically produced from legitimate private keys.</p>
+<p>The network only needs to verify that key images included with MLSAG signatures (corresponding to inputs and calculated as <span class="math inline">\(\tilde{K}^o_{j} = k^o_{\pi,j} \mathcal{H}_p(K^o_{\pi,j})\)</span>) have not appeared before in other transactions.<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a> If they have, then we can be sure we are witnessing an attempt to re-spend an output <span class="math inline">\((C^a_{\pi,j}, K_{\pi,j}^o)\)</span>.</p>
+<h3 id="subsec:space-and-ver-rcttypefull">Space requirements</h3>
+<h4 class="unnumbered" id="mlsag-signature-inputs">MLSAG signature (inputs)</h4>
+<p>From Section <a href="#sec:MLSAG" data-reference-type="ref" data-reference="sec:MLSAG">[sec:MLSAG]</a> we recall that an MLSAG signature in this context would be expressed as</p>
+<p><span class="math inline">\(\sigma_j(\mathfrak{m}) = (c_1, r_{1, 1}, r_{1, 2}, ..., r_{v+1, 1}, r_{v+1, 2}) \textrm{ with } \tilde{K}^o_j\)</span></p>
+<p>As a legacy of CryptoNote, the values <span class="math inline">\(\tilde{K}^o_j\)</span> are not referred to as part of the signature, but rather as <span><em>images</em></span> of the private keys <span class="math inline">\(k^o_{\pi,j}\)</span>. These <span><em>key images</em></span> are normally stored separately in the transaction structure, as they are used to detect double-spending attacks.</p>
+<p>With this in mind and assuming point compression (Section <a href="#point_compression_section" data-reference-type="ref" data-reference="point_compression_section">[point_compression_section]</a>), since each ring <span class="math inline">\(\mathcal{R}_j\)</span> contains <span class="math inline">\((v+1) \cdot 2\)</span> keys, an input signature <span class="math inline">\(\sigma_j\)</span> will require <span class="math inline">\((2(v+1) + 1) \cdot 32\)</span> bytes. On top of this, the key image <span class="math inline">\(\tilde{K}^o_{\pi,j}\)</span> and the pseudo output commitment <span class="math inline">\(C&#39;^a_{\pi,j}\)</span> leave a total of <span class="math inline">\((2(v+1)+3) \cdot 32\)</span> bytes per input.</p>
+<p>To this value we would need additional space to store the ring member offsets in the blockchain (see Appendix <a href="#appendix:RCTTypeBulletproof2" data-reference-type="ref" data-reference="appendix:RCTTypeBulletproof2">[appendix:RCTTypeBulletproof2]</a>). These offsets are used by verifiers to find each MLSAG signature’s ring members’ output keys and commitments in the blockchain, and are stored as variable length integers, hence we can not exactly quantify the space needed.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a><a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a><a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a></p>
+<p>Verifying[-1cm] all of an <span><code>RCTTypeBulletproof2</code></span> transaction’s MLSAGs includes the computation of <span class="math inline">\((C_{i, j} - C&#39;^a_{\pi, j})\)</span> and <span class="math inline">\((\sum_j C&#39;^a_{j} \stackrel{?}{=} \sum_t C^b_{t} + f H)\)</span>, and verifying key images are in <span class="math inline">\(G\)</span>’s subgroup with <span class="math inline">\(l \tilde{K} \stackrel{?}{=} 0\)</span>.</p>
+<h4 class="unnumbered" id="range-proofs-outputs">Range proofs (outputs)</h4>
+<p>An aggregate Bulletproof range proof will require <span class="math inline">\((2 \cdot \lceil \textrm{log}_2(64 \cdot p) \rceil + 9) \cdot 32\)</span> total bytes.</p>
+<h2 id="sec:transaction_summary">Concept summary: Monero transactions</h2>
+<p>To summarize this chapter, and the previous two chapters, we present the main content of a transaction, organized for conceptual clarity. A real example can be found in Appendix <a href="#appendix:RCTTypeBulletproof2" data-reference-type="ref" data-reference="appendix:RCTTypeBulletproof2">[appendix:RCTTypeBulletproof2]</a>.</p>
+<ul>
+<li><p><u>Type</u>: ‘0’ is <span><code>RCTTypeNull</code></span> (for miners), ‘4’ is <span><code>RCTTypeBulletproof2</code></span></p></li>
+<li><p><u>Inputs</u>: for each input <span class="math inline">\(j \in \{1,...,m\}\)</span> spent by the transaction author</p>
+<ul>
+<li><p><strong>Ring member offsets</strong>: a list of ‘offsets’ indicating where a verifier can find input <span class="math inline">\(j\)</span>’s ring members <span class="math inline">\(i \in \{1,...,v+1\}\)</span> in the blockchain (includes the real input)</p></li>
+<li><p><strong>MLSAG Signature</strong>: <span class="math inline">\(\sigma_j\)</span> terms <span class="math inline">\(c_1\)</span>, and <span class="math inline">\(r_{i,1}\)</span> &amp; <span class="math inline">\(r_{i,2}\)</span> for <span class="math inline">\(i \in \{1,...,v+1\}\)</span></p></li>
+<li><p><strong>Key image</strong>: the key image <span class="math inline">\(\tilde{K}^{o,a}_j\)</span> for input <span class="math inline">\(j\)</span></p></li>
+<li><p><strong>Pseudo output commitment</strong>: <span class="math inline">\(C&#39;^{a}_j\)</span> for input <span class="math inline">\(j\)</span></p></li>
+</ul></li>
+<li><p><u>Outputs</u>: for each output <span class="math inline">\(t \in \{0,...,p-1\}\)</span> to address or subaddress <span class="math inline">\((K^v_t,K^s_t)\)</span></p>
+<ul>
+<li><p><strong>One-time address</strong>: <span class="math inline">\(K^{o,b}_t\)</span> for output <span class="math inline">\(t\)</span></p></li>
+<li><p><strong>Output commitment</strong>: <span class="math inline">\(C^{b}_t\)</span> for output <span class="math inline">\(t\)</span></p></li>
+<li><p><strong>Encoded amount</strong>: so output owners can compute <span class="math inline">\(b_t\)</span> for output <span class="math inline">\(t\)</span></p>
+<ul>
+<li><p><em>Amount</em>: <span class="math inline">\(b_t \oplus_8 \mathcal{H}_n(``amount”, \mathcal{H}_n(r K_B^v, t))\)</span></p></li>
+</ul></li>
+<li><p><strong>Range proof</strong>: an aggregate Bulletproof for all output amounts <span class="math inline">\(b_t\)</span></p>
+<ul>
+<li><p><em>Proof</em>: <span class="math inline">\(\Pi_{BP} = (A, S, T_1, T_2, \tau_x, \mu, \mathbb{L}, \mathbb{R}, a, b, t)\)</span></p></li>
+</ul></li>
+</ul></li>
+<li><p><u>Transaction fee</u>: communicated in clear text multiplied by <span class="math inline">\(10^{12}\)</span> (i.e. atomic units, see Section <a href="#subsec:block-reward" data-reference-type="ref" data-reference="subsec:block-reward">[subsec:block-reward]</a>), so a fee of 1.0 would be recorded as 1000000000000</p></li>
+<li><p><u>Extra</u>: includes the transaction public key <span class="math inline">\(r G\)</span>, or, if at least one output is directed to a subaddress, <span class="math inline">\(r_t K^{s,i}_t\)</span> for each subaddress’d output <span class="math inline">\(t\)</span> and <span class="math inline">\(r_t G\)</span> for each normal address’d output <span class="math inline">\(t\)</span>, and maybe an encoded payment ID (should be at most one per transaction)<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a></p></li>
+</ul>
+<p>Our final one-input/one-output example transaction sounds like this: “My transaction uses transaction public key <span class="math inline">\(r G\)</span>. I will spend one of the outputs in set <span class="math inline">\(\mathbb{X}\)</span> (note that it has a hidden amount <span class="math inline">\(A_X\)</span>, committed to in <span class="math inline">\(C_X\)</span>). The output being spent is owned by me (I made a MSLAG signature on the one-time addresses in <span class="math inline">\(\mathbb{X}\)</span>), and hasn’t been spent before (its key image <span class="math inline">\(\tilde{K}\)</span> has not yet appeared in the blockchain). I will give it a pseudo output commitment <span class="math inline">\(C&#39;_X\)</span>. I will make one output <span class="math inline">\(Y\)</span>, which may be spent by the one-time address <span class="math inline">\(K^o_Y\)</span>. It has a hidden amount <span class="math inline">\(A_Y\)</span> committed to in <span class="math inline">\(C_Y\)</span>, encrypted for the recipient, and proven in range with a Bulletproofs-style range proof. My transaction includes a transaction fee <span class="math inline">\(f\)</span>. Please note that <span class="math inline">\(C&#39;_X - (C_Y + C_f) = 0\)</span>, and that I have signed the commitment to zero <span class="math inline">\(C&#39;_X - C_X = z G\)</span> which means the input amount equals the output amount (<span class="math inline">\(A_X = A&#39;_X = A_Y + f\)</span>). My MLSAG signed all transaction data, so observers can be sure it hasn’t been tampered with."</p>
+<h3 id="storage-requirements">Storage requirements</h3>
+<p>For <span><code>RCTTypeBulletproof2</code></span> we need <span class="math inline">\((2(v+1)+2) \cdot m \cdot 32\)</span> bytes of storage, and the aggregate Bulletproof range proof needs <span class="math inline">\((2 \cdot \lceil \textrm{log}_2(64 \cdot p) \rceil + 9) \cdot 32\)</span> bytes of storage.<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a></p>
+<p>Miscellaneous requirements:</p>
+<ul>
+<li><p>Input key images: <span class="math inline">\(m*32\)</span> bytes</p></li>
+<li><p>One-time output addresses: <span class="math inline">\(p*32\)</span> bytes</p></li>
+<li><p>Output commitments: <span class="math inline">\(p*32\)</span> bytes</p></li>
+<li><p>Encoded output amounts: <span class="math inline">\(p*8\)</span> bytes</p></li>
+<li><p>Transaction public key: 32 bytes normally, <span class="math inline">\(p*32\)</span> bytes if sending to at least one subaddress.</p></li>
+<li><p>Payment ID: 8 bytes for an integrated address. There should be no more than one per tx.</p></li>
+<li><p>Transaction fee: stored as a variable length integer, so <span class="math inline">\(\leq 9\)</span> bytes</p></li>
+<li><p>Input offsets: stored as variable length integers, so <span class="math inline">\(\leq 9\)</span> bytes per offset, for <span class="math inline">\(m*(v+1)\)</span> ring members</p></li>
+<li><p>Unlock time: stored as a variable length integer, so <span class="math inline">\(\leq 9\)</span> bytes<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a></p></li>
+<li><p>‘Extra’ tags: each piece of data in the ‘extra’ field (e.g. a transaction public key) begins with a 1 byte ‘tag’, and some pieces also have a 1+ byte ‘length’; see Appendix <a href="#appendix:RCTTypeBulletproof2" data-reference-type="ref" data-reference="appendix:RCTTypeBulletproof2">[appendix:RCTTypeBulletproof2]</a> for more details</p></li>
+</ul>
+<section class="footnotes" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1" role="doc-endnote"><p>RingCT was first implemented in January 2017 (v4 of the protocol). It was made mandatory for all new transactions in September 2017 (v6 of the protocol) <span class="citation" data-cites="ringct-dates"></span>. RingCT is version 2 of Monero’s transaction protocol.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>Within the RingCT era there are three deprecated transaction types: <span><code>RCTTypeFull</code></span>, <span><code>RCTTypeSimple</code></span>, and <span><code>RCTTypeBulletproof</code></span>. The former two coexisted in the first iteration of RingCT and are explored in the first edition of this report <span class="citation" data-cites="ztm-1"></span>, then with the advent of Bulletproofs (protocol v8) <span><code>RCTTypeFull</code></span> was deprecated, and <span><code>RCTTypeSimple</code></span> was upgraded to <span><code>RCTTypeBulletproof</code></span>. <span><code>RCTTypeBulletproof2</code></span> arrived due to a minor improvement in encrypting output commitments’ masks and amounts (v10).<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>In Monero there is a minimum base fee that scales with transaction weight. It is semi-mandatory because while you can create new blocks containing tiny-fee transactions, most Monero nodes won’t relay such transactions to other nodes. The result is few if any miners will try to include them in blocks. Transaction authors can provide miner fees above the minimum if they want. We go into more detail on this in Section <a href="#subsec:dynamic-minimum-fee" data-reference-type="ref" data-reference="subsec:dynamic-minimum-fee">[subsec:dynamic-minimum-fee]</a>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4" role="doc-endnote"><p>Outputs[-1.9cm] are randomly shuffled by the core implementation before getting assigned an index, so observers can’t build heuristics around their order. Inputs are sorted by key image within transaction data.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5" role="doc-endnote"><p><span id="input-selection" label="input-selection">[input-selection]</span>In Monero it is standard for the sets of ‘additional unrelated addresses’ to be selected from a gamma[1.2cm] distribution across the range of historical outputs (RingCT outputs only, a triangle distribution is used for pre-RingCT outputs). This method uses a binning procedure to smooth out differences in block densities. First calculate the average time between transaction outputs over up to a year ago of RingCT outputs (avg time = [#outputs/#blocks]*blocktime). Select an output via the gamma distribution, then look inside its block and grab a random output to be a member of the set. <span class="citation" data-cites="AnalysisOfLinkability"></span><a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6" role="doc-endnote"><p>As of protocol v12, all transaction inputs must be at least 10 blocks old (<span><code>CRYPTONOTE_DEFAULT_TX _SPENDABLE_AGE</code></span>). Prior to v12 the core implementation used 10 blocks by default, but it was not required so an alternate wallet could make different choices, and some apparently did <span class="citation" data-cites="visualizing-monero-vid"></span>.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7" role="doc-endnote"><p>In Monero each of a transaction’s rings must have the same size, and the protocol controls how many ring members there can be per output-to-be-spent. It has changed with different protocol versions: v2 March 2016 <span class="math inline">\(\geq\)</span> 3, v6 Sept. 2017 <span class="math inline">\(\geq\)</span> 5, v7 April 2018 <span class="math inline">\(\geq\)</span> 7, v8 Oct. 2018 11-only. Since v6 each individual ring can not contain duplicate members, though there may be duplicates between rings to allow multiple inputs when there are insufficient total outputs in the transaction history (i.e. to assemble rings without cross-over) <span class="citation" data-cites="duplicate-ring-members"></span>.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8" role="doc-endnote"><p>Building and verifying the signature excludes the term <span class="math inline">\(r_{i,2} \mathcal{H}_p(C_{i, j} - C&#39;^a_{\pi, j}) + c_i \tilde{K}_{z_j}\)</span>.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9" role="doc-endnote"><p>The advantage of signing inputs individually is that the set of real inputs and commitments to zero need not be placed at the same index <span class="math inline">\(\pi\)</span>, as they would be in the aggregated case. This means even if one input’s origin becomes identifiable, the other inputs’ origins would not. The old transaction type <span><code>RCTTypeFull</code></span> used aggregated ring signatures, combining all rings into one, and as we understand it was deprecated for that reason.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10" role="doc-endnote"><p>The actual message is <span class="math inline">\(\mathfrak{m} = \mathcal{H}(\mathcal{H}(tx\textunderscore prefix),\mathcal{H}(ss),\mathcal{H}(\text{range proofs}))\)</span> where:</p>
+<p><span class="math inline">\(tx\textunderscore prefix =\)</span>{transaction era version (i.e. RingCT = 2), inputs {ring member key offsets, key images}, outputs {one-time addresses}, extra {transaction public key, payment ID or encoded payment ID, misc.}}</p>
+<p><span class="math inline">\(ss =\)</span>{transaction type (<span><code>RCTTypeBulletproof2</code></span> = ‘4’), transaction fee, pseudo output commitments for inputs, ecdhInfo (encrypted amounts), output commitments}.</p>
+<p>See Appendix <a href="#appendix:RCTTypeBulletproof2" data-reference-type="ref" data-reference="appendix:RCTTypeBulletproof2">[appendix:RCTTypeBulletproof2]</a> regarding this terminology.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11" role="doc-endnote"><p>Verifiers must also check the key image is a member of the generator’s subgroup (recall Section <a href="#blsag_note" data-reference-type="ref" data-reference="blsag_note">[blsag_note]</a>).<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12" role="doc-endnote"><p>See <span class="citation" data-cites="varint-description"></span> or <span class="citation" data-cites="varint-spec"></span> for an explanation of Monero’s varint data type. It is an integer type that uses up to 9 bytes, and stores up to 63 bits of information.<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13" role="doc-endnote"><p>Imagine the blockchain contains a long list of transaction outputs. We report the indices of outputs we want to use in rings. Now, bigger indexes require more storage space. We just need the ‘absolute’ position of <span><em>one</em></span> index from each ring, and the ‘relative’ positions of the other ring members’ indices. For example, with real indices {7,11,15,20} we just need to report {7,4,4,5}. Verifiers can compute the last index with (7+4+4+5 = 20). Ring members are organized in ascending order of blockchain index within rings.<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn14" role="doc-endnote"><p>A transaction with 10 inputs using rings with 11 total members will need <span class="math inline">\(((11 \cdot 2 + 3) \cdot 32) \cdot 10 = 8000\)</span> bytes for its inputs, with around 110 to 330 bytes for the offsets (there are 110 ring members).<a href="#fnref14" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn15" role="doc-endnote"><p>No information stored in the ‘extra’ field is verified, though it <span><em>is</em></span> signed by input MLSAGs, so no tampering is possible (except with negligible probability). The field has no limit on how much data it can store, so long as the maximum transaction weight is respected. See <span class="citation" data-cites="extra-field-stackexchange"></span> for more details.<a href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn16" role="doc-endnote"><p>The amount of transaction content is limited by a maximum so-called ‘transaction weight’. Before Bulletproofs were added in protocol v8 (and indeed currently when transactions have only two outputs) the transaction weight and size in bytes were equivalent. The maximum weight is (0.5*300kB - <span><code>CRYPTONOTE_COINBASE_BLOB_RESERVED_SIZE</code></span>), where the blob reserve (600 bytes) is intended to leave room for the miner transaction within blocks. Before v8 the 0.5x multiplier was not included, and the 300kB term was smaller in earlier protocol versions (20kB v1, 60kB v2, 300kB v5). We elaborate on these topics in Section <a href="#subsec:dynamic-block-weight" data-reference-type="ref" data-reference="subsec:dynamic-block-weight">[subsec:dynamic-block-weight]</a>.<a href="#fnref16" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn17" role="doc-endnote"><p>Any transaction’s author can lock its outputs, rendering them unspendable until a specified block height where it may be spent (or until a UNIX timestamp, at which time its outputs may be included in a block’s transaction’s ring members). He only has the option to lock all outputs to the same block height. It is not clear if this offers any meaningful utility to transaction authors (perhaps smart contracts). Miner transactions have a mandatory 60-block lock time. As of protocol v12 normal outputs can’t be spent until after the default spendable age (10 blocks) which is functionally equivalent to a mandatory minimum 10-block lock time. If a transaction is published in the 10block with an unlock time of 25, it may be spent in the 25block or later. Unlock time is probably the least used of all transaction features for normal transactions.<a href="#fnref17" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+</body>
+</html>

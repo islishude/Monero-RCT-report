@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>blockchain.tex</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">blockchain.tex</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#chapter:blockchain">The Monero Blockchain</a>
+<ul>
+<li><a href="#sec:digital-currency">Digital currency</a>
+<ul>
+<li><a href="#subsec:shared-version-events">Distributed/shared version of events</a></li>
+<li><a href="#subsec:simple-blockchain">Simple blockchain</a></li>
+</ul></li>
+<li><a href="#sec:difficulty">Difficulty</a>
+<ul>
+<li><a href="#mining-a-block">Mining a block</a></li>
+<li><a href="#mining-speed">Mining speed</a></li>
+<li><a href="#consensus-largest-cumulative-difficulty">Consensus: largest cumulative difficulty</a></li>
+<li><a href="#mining-in-monero">Mining in Monero</a></li>
+<li><a href="#monero-proof-of-work-pow">Monero proof of work (PoW)</a></li>
+</ul></li>
+<li><a href="#sec:money-supply">Money supply</a>
+<ul>
+<li><a href="#subsec:block-reward">Block reward</a></li>
+<li><a href="#subsec:dynamic-block-weight">Dynamic block weight</a></li>
+<li><a href="#subsec:penalty">Block reward penalty</a></li>
+<li><a href="#subsec:dynamic-minimum-fee">Dynamic minimum fee</a></li>
+<li><a href="#subsec:emission-tail">Emission tail</a></li>
+<li><a href="#subsec:miner-transaction">Miner transaction: <span><code>RCTTypeNull</code></span></a></li>
+</ul></li>
+<li><a href="#sec:blockchain-structure">Blockchain structure</a>
+<ul>
+<li><a href="#subsec:transaction-id">Transaction ID</a></li>
+<li><a href="#subsec:merkle-tree">Merkle tree</a></li>
+<li><a href="#subsec:blocks">Blocks</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="chapter:blockchain">The Monero Blockchain</h1>
+<p>The Internet Age has brought a new dimension to the human experience. We can correspond with people on every corner of the planet, and an unimaginable wealth of information is at our fingertips. Exchanging goods and services is fundamental to a peaceful and prosperous society <span class="citation" data-cites="human-action"></span>, and in the digital realm we can offer our productivity to the whole world.</p>
+<p>Media of exchange (moneys) are essential, giving us a point of reference to an immense diversity of economic goods that would otherwise be impossible to evaluate, and enabling mutually beneficial interactions between people with nothing in common <span class="citation" data-cites="human-action"></span>. Throughout history there have been many kinds of money, from seashells to paper to gold. Those were exchanged by hand, and now money can be exchanged electronically.</p>
+<p>In the current, by far most pervasive, model, electronic transactions are handled by third-party financial institutions. These institutions are given custody of money and trusted to transfer it upon request. Such institutions must mediate disputes, their payments are reversible, and they can be censored or controlled by powerful organizations. <span class="citation" data-cites="Nakamoto_bitcoin"></span></p>
+<p>To alleviate these drawbacks decentralized digital currencies have been engineered.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<h2 id="sec:digital-currency">Digital currency</h2>
+<p>Designing a digital currency is non-trivial. There are three types: personal, centralized, or distributed. Keep in mind that a digital currency is just a collection of messages, and the ‘amounts’ recorded in those messages are interpreted as monetary quantities.</p>
+<p>In the <strong>email model</strong> anyone can make coins (e.g. a message saying ‘I own 5 coins’), and anyone can send their coins over and over to whoever has an email address. It does not have a limited supply, nor does it prevent spending the same coins over and over (double spending).</p>
+<p>In the <strong>video game model</strong>, where the entire currency is stored/recorded on one central database, users rely on the custodian to be honest. The currency’s supply is unverifiable for observers, and the custodian can change the rules at any time, or be censored by powerful outsiders.</p>
+<h3 id="subsec:shared-version-events">Distributed/shared version of events</h3>
+<p>In digital ‘shared’ money, many computers each have a record of every currency transaction. When a new transaction is made on one computer it is broadcast to the other computers, and accepted if it follows predefined rules.</p>
+<p>Users only benefit from coins when other users accept them in exchange, and users only accept coins they feel are legitimate. To maximize the utility of their coins, users are naturally inclined to settle on one commonly accepted rule-set, without the presence of a central authority.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<ul>
+<li><p><strong>Rule 1</strong>: Money can only be created in clearly defined scenarios.</p></li>
+<li><p><strong>Rule 2</strong>: Transactions spend money that already exists.</p></li>
+<li><p><strong>Rule 3</strong>: A person can only spend a piece of money once.</p></li>
+<li><p><strong>Rule 4</strong>: Only the person who owns a piece of money can spend it.</p></li>
+<li><p><strong>Rule 5</strong>: Transactions output money equal to the money spent.</p></li>
+<li><p><strong>Rule 6</strong>: Transactions are formatted correctly.</p></li>
+</ul>
+<p>Rules 2-6 are covered by the transaction scheme discussed in Chapter <a href="#chapter:transactions" data-reference-type="ref" data-reference="chapter:transactions">[chapter:transactions]</a>, which adds the fungibility and privacy-related benefits of ambiguous signing, anonymous receipt of funds, and unreadable amount transfers. We explain Rule 1 later in this chapter.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> Transactions use cryptography, so we call their content a <span><em>cryptocurrency</em></span>.</p>
+<p>If two computers receive different legitimate transactions spending the same money before they have a chance to send the information to each other, how do they decide which is correct? There is a ‘fork’ in the currency, because two different copies that follow the same rules exist.</p>
+<p>Clearly the earliest legitimate transaction spending a piece of money should be canonical. This is easier said than done. As we will see, obtaining consensus for transaction histories constitutes the raison d’être of blockchain technology.</p>
+<h3 id="subsec:simple-blockchain">Simple blockchain</h3>
+<p>First we need all computers, henceforth referred to as <span><em>nodes</em></span>, to agree on the order of transactions.</p>
+<p>Let’s say a currency started with a ‘genesis’ declaration: “Let the SampleCoin begin!". We call this message a ‘block’, and its block hash is <span class="math display">\[\mathit{BH}_G = \mathcal{H}(\textrm{``Let the SampleCoin begin!&quot;})\]</span></p>
+<p>Every time a node receives some transactions, they use hashes of those transactions, <span class="math inline">\(\mathit{TH}\)</span>, like messages, along with the previous block’s hash, and compute new block hashes <span class="math display">\[\mathit{BH}_1 = \mathcal{H}(\mathit{BH}_G, \mathit{TH}_1, \mathit{TH}_2,...)\]</span> <span class="math display">\[\mathit{BH}_2 = \mathcal{H}(\mathit{BH}_1, \mathit{TH}_3, \mathit{TH}_4,...)\]</span></p>
+<p>And so on, publishing each new block of messages as it’s made. Each new block references the previous, most recently published block. In this way a clear order of events extends/chains all the way back to the genesis message. We have a very simple ‘blockchain’.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<p>Nodes can include a timestamp in their blocks to aid record keeping. If most nodes are honest with timestamps then the blockchain provides a decent picture of when each transaction was recorded.</p>
+<p>If different blocks referencing the same previous block are published at the same time, then the network of nodes will fork as each node receives one of the new blocks before the other (for simplicity, imagine about half the nodes end up with each side of the fork).</p>
+<h2 id="sec:difficulty">Difficulty</h2>
+<p>If nodes can publish new blocks whenever they want, the network might fracture and diverge into many different, equally legitimate, chains. Say it takes 30 seconds to make sure everyone in the network gets a new block. What if new blocks are sent out every 31, 15 seconds, 10 seconds, etc?</p>
+<p>We can control how fast the entire network makes new blocks. If the time it takes to make a new block is much higher than the time for the previous block to reach most nodes, the network will tend to remain intact.</p>
+<h3 id="mining-a-block">Mining a block</h3>
+<p>The output of a cryptographic hash function is uniformly distributed and apparently independent of the input. This means, given a potential input, its hash is equally likely to be every single possible output. Furthermore, it takes a certain amount of time to compute a single hash.</p>
+<p>Let’s imagine a hash function <span class="math inline">\(\mathcal{H}_i(x)\)</span> which outputs a number from 1 to 100: <span class="math inline">\(\mathcal{H}_i(x) \in^D_R \{1,...,100\}\)</span>.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> Given some <span class="math inline">\(x\)</span>, <span class="math inline">\(\mathcal{H}_i(x)\)</span> selects the same ‘random’ number from {<span class="math inline">\(1,...,100\)</span>} every time you calculate it. It takes 1 minute to calculate <span class="math inline">\(\mathcal{H}_i(x)\)</span>.</p>
+<p>Say we are given a message <span class="math inline">\(\mathfrak{m}\)</span>, and told to find a ‘nonce’ <span class="math inline">\(n\)</span> (some integer) such that <span class="math inline">\(\mathcal{H}_i(\mathfrak{m},n)\)</span> outputs a number less than or equal to the <span><em>target</em></span> <span class="math inline">\(t = 5\)</span> (i.e. <span class="math inline">\(\mathcal{H}_i(\mathfrak{m},n) \in \{1,...,5\}\)</span>).</p>
+<p>Since only <span class="math inline">\(1/20\)</span>of outputs from <span class="math inline">\(\mathcal{H}_i(x)\)</span> will meet the target, it should take around 20 guesses of <span class="math inline">\(n\)</span> to find one that works (and hence 20 minutes of computing time).</p>
+<p>Searching for a useful nonce is called <span><em>mining</em></span>, and publishing the message with its nonce is a <span><em>proof of work</em></span> because it proves we found a useful nonce (even if we were lucky and found it with just one hash, or even blindly published a good nonce), which anyone can verify by computing <span class="math inline">\(\mathcal{H}_i(\mathfrak{m},n)\)</span>.</p>
+<p>Now say we have a hash function for generating proofs of work, <span class="math inline">\(\mathcal{H}_{PoW} \in^D_R \{0,...,m\}\)</span>, where <span class="math inline">\(m\)</span> is its maximum possible output. Given a message <span class="math inline">\(\mathfrak{m}\)</span> (a block of information), a nonce <span class="math inline">\(n\)</span> to mine, and a target <span class="math inline">\(t\)</span>, we can define the expected average number of hashes, the <span><em>difficulty</em></span> <span class="math inline">\(d\)</span>, like this: <span class="math inline">\(d = m/t\)</span>. If <span class="math inline">\(\mathcal{H}_{PoW}(\mathfrak{m},n)*d \leq m\)</span>, then <span class="math inline">\(\mathcal{H}_{PoW}(\mathfrak{m},n) \leq t\)</span> and <span class="math inline">\(n\)</span> is acceptable.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
+<p>With smaller targets the difficulty rises and it takes a computer more and more hashes, and therefore longer and longer periods of time, to find useful nonces.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
+<h3 id="mining-speed">Mining speed</h3>
+<p>Assume all nodes are mining at the same time, but quit on their ‘current’ block when they receive a new one from the network. They immediately start mining a fresh block that references the new one.</p>
+<p>Suppose we collect a bunch <span class="math inline">\(b\)</span> of recent blocks from the blockchain (say, with index <span class="math inline">\(u \in \{1,...,b\}\)</span>) which each had a difficulty <span class="math inline">\(d_u\)</span>. For now, assume the nodes who mined them were honest, so each block timestamp <span class="math inline">\({TS}_u\)</span> is accurate.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> The total time between the earliest block and most recent block is <span class="math inline">\(\mathit{totalTime} = {TS}_b - {TS}_1\)</span>. The approximate number of hashes it took to mine all the blocks is <span class="math inline">\(\mathit{totalDifficulty} = \sum_u d_u\)</span>.</p>
+<p>Now we can guess how fast the network, with all its nodes, can compute hashes. If the actual speed didn’t change much while the bunch of blocks was being produced, it should be effectively<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> <span class="math display">\[\mathit{hashSpeed} \approx \mathit{totalDifficulty}/\mathit{totalTime}\]</span></p>
+<p>If we want to set the target time to mine new blocks so blocks are produced at a rate<br />
+<span class="math inline">\(\textrm{(one block)/(target time)}\)</span>, then we calculate how many hashes it should take for the network to spend that amount of time mining. Note: we round up so the difficulty never equals zero. <span class="math display">\[\mathit{newDifficulty} = \mathit{hashSpeed}*\mathit{targetTime}\]</span></p>
+<p>There is no guarantee the next block will take <span class="math inline">\(\mathit{newDifficulty}\)</span> amount of total network hashes to mine, but over time and many blocks and constantly re-calibrating, the difficulty will track with the network’s real hash speed and blocks will tend to take <span class="math inline">\(\mathit{targetTime}\)</span>.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></p>
+<h3 id="consensus-largest-cumulative-difficulty">Consensus: largest cumulative difficulty</h3>
+<p>Now we can resolve conflicts between chain forks.</p>
+<p>By convention, the chain with highest cumulative difficulty (from all blocks in the chain), and therefore with most work (network hashes) spent constructing, is considered the real, legitimate version. If a chain splits and each fork has the same cumulative difficulty, nodes continue mining on the branch they received first. When one branch gets ahead of the other they discard (‘orphan’) the weaker branch.</p>
+<p>If nodes wish to change or upgrade the basic protocol, i.e. the set of rules a node considers when deciding if a blockchain copy or new block is legitimate, they may easily do so by forking the chain. Whether the new branch has any impact on users depends on how many nodes switch and how much software infrastructure is modified.<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a></p>
+<p>For an attacker to convince honest nodes to alter the transaction history, perhaps in order to respend/unspend funds, he must create a chain fork (on the current protocol) with higher total difficulty than the main chain (which meanwhile continues to grow). This is very hard to do unless you control over 50% of the network hash speed and can outwork other miners. <span class="citation" data-cites="Nakamoto_bitcoin"></span></p>
+<h3 id="mining-in-monero">Mining in Monero</h3>
+<p>To make sure chain forks are on an even footing, we don’t sample the most recent blocks (for calculating new difficulties), instead lagging our bunch <span class="math inline">\(b\)</span> by <span class="math inline">\(l\)</span>. For example, if there are 29 blocks in the chain (blocks <span class="math inline">\(1,...,29\)</span>), <span class="math inline">\(b = 10\)</span>, and <span class="math inline">\(l = 5\)</span>, we sample blocks 15-24 in order to compute block 30’s difficulty.</p>
+<p>If mining nodes are dishonest they can manipulate timestamps so new difficulties don’t match the network’s real hash speed. We get around this by sorting timestamps chronologically, then chopping off the first <span class="math inline">\(o\)</span> outliers and last <span class="math inline">\(o\)</span> outliers. Now we have a ‘window’ of blocks <span class="math inline">\(w = b-2*o\)</span>. From the previous example, if <span class="math inline">\(o = 3\)</span> and timestamps are honest then we would chop blocks 15-17 and 22-24, leaving blocks 18-21 to compute block 30’s difficulty from.</p>
+<p>Before chopping outliers we sorted timestamps, but <span><em>only</em></span> timestamps. Block difficulties are left unsorted. We use the cumulative difficulty for each block, which is that block’s difficulty plus the difficulty of all previous blocks in the chain.</p>
+<p>Using[-1.8cm] the chopped arrays of <span class="math inline">\(w\)</span> sorted timestamps and unsorted cumulative difficulties (indexed from <span class="math inline">\(1,...,w\)</span>), we define <span class="math display">\[\mathit{totalTime} = \mathit{choppedSortedTimestamps}[w] - \mathit{choppedSortedTimestamps}[1]\]</span> <span class="math display">\[\mathit{totalDifficulty} = \mathit{choppedCumulativeDifficulties}[w] - \mathit{choppedCumulativeDifficulties}[1]\]</span></p>
+<p>In Monero the target time is 120 seconds (2 minutes), <span class="math inline">\(l = 15\)</span> (30 mins), <span class="math inline">\(b = 720\)</span> (one day), and <span class="math inline">\(o = 60\)</span> (2 hours).<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a><a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a></p>
+<p>Block difficulties are not stored in the blockchain, so someone downloading a copy of the blockchain and verifying all blocks are legitimate needs to recalculate difficulties from recorded timestamps. There are a few rules to consider for the first <span class="math inline">\(b+l = 735\)</span> blocks.</p>
+<ul>
+<li><p><strong>Rule 1</strong>: Ignore the genesis block (block 0, with <span class="math inline">\(d = 1\)</span>) completely. Blocks 1 and 2 have <span class="math inline">\(d = 1\)</span>.</p></li>
+<li><p><strong>Rule 2</strong>: Before chopping off outliers, try to get the window <span class="math inline">\(w\)</span> to compute totals from.</p></li>
+<li><p><strong>Rule 3</strong>: After <span class="math inline">\(w\)</span> blocks, chop off high and low outliers, scaling the amount chopped until <span class="math inline">\(b\)</span> blocks. If the amount of previous blocks (minus <span class="math inline">\(w\)</span>) is odd, remove one more low outlier than high.</p></li>
+<li><p><strong>Rule 4</strong>: After <span class="math inline">\(b\)</span> blocks, sample the earliest <span class="math inline">\(b\)</span> blocks until <span class="math inline">\(b+l\)</span> blocks, after which everything proceeds normally - lagging by <span class="math inline">\(l\)</span>.</p></li>
+</ul>
+<h3 class="unnumbered" id="monero-proof-of-work-pow">Monero proof of work (PoW)</h3>
+<p>Monero has used a few different proof of work hash algorithms (with 32 byte outputs) in different protocol versions. The original, known as Cryptonight, was designed to be relatively inefficient on GPU, FPGA, and ASIC architectures <span class="citation" data-cites="CryptoNight"></span> compared to standard hash functions like SHA256. In April 2018 (v7 of the protocol), new blocks were required to begin using a slightly modified variant that countered the advent of Cryptonight ASICs <span class="citation" data-cites="cryptonight7"></span>. Another slight variant, named Cryptonight V2, was implemented in October 2018 (v8) <span class="citation" data-cites="berylliumbullet-v8"></span>, and Cryptonight-R (based on Cryptonight but with more substantial changes than just a tweak) started being used for new blocks in March 2019 (v10) <span class="citation" data-cites="boronbutterfly-v10"></span>. A radical new proof of work called RandomX <span class="citation" data-cites="randomx-pr-5549"></span> was designed and made mandatory for new blocks in November 2019 (v12) with the intention of long-term ASIC resistance <span class="citation" data-cites="randomx"></span>.</p>
+<h2 id="sec:money-supply">Money supply</h2>
+<p>There are two basic mechanisms for creating money in a blockchain-based cryptocurrency.</p>
+<p>First, the currency’s creators can conjure coins and distribute them to people in the genesis message. This is often called an ‘airdrop’. Sometimes creators give themselves a large amount in a so-called ‘pre-mine’. <span class="citation" data-cites="premine-description"></span></p>
+<p>Second, the currency can be automatically distributed as reward for mining a block, much like mining for gold. There are two types here. In the Bitcoin model the total possible supply is capped. Block rewards slowly decline to zero, after which no more money is ever made. In the inflation model supply increases indefinitely.</p>
+<p>Monero is based on a currency known as Bytecoin that had a sizeable pre-mine, followed by block rewards <span class="citation" data-cites="monero-history"></span>. Monero had no pre-mine, and as we will see, its block rewards slowly decline to a small amount after which all new blocks reward that same amount, making Monero inflationary.</p>
+<h3 id="subsec:block-reward">Block reward</h3>
+<p>Block miners, before mining for a nonce, make a ‘miner transaction’ with no inputs and at least one output.<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a> The total output amount is equal to the block reward, plus transaction fees from all transactions to be included in the block, and is communicated in clear text. Nodes who receive a mined block must verify the block reward is correct, and can calculate the current money supply by summing all past block rewards together.</p>
+<p>Besides distributing money, block rewards incentivize mining. If there were no block rewards (and no other mechanism), why would anyone mine new blocks? Perhaps altruism or curiosity. However, few miners makes it easy for a malicious actor to assemble <span class="math inline">\(&gt;\)</span>50% of the network’s hash rate and easily rewrite recent chain history.<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a> This is also why in Monero block rewards do not fall all the way to zero.</p>
+<p>With block rewards, competition between miners drives total hash rate up until the marginal cost of adding more hash rate is higher than the marginal reward of obtaining that proportion of mined blocks (which appear at a constant rate) (plus some premiums like risk and opportunity cost). This means as a cryptocurrency becomes more valuable, its total hash rate will increase and it becomes progressively more difficult and expensive to gather <span class="math inline">\(&gt;\)</span>50%.</p>
+<h4 class="unnumbered" id="bit-shifting">Bit shifting</h4>
+<p>Bit shifting is used for calculating the base block reward (as we will see in Section <a href="#subsec:penalty" data-reference-type="ref" data-reference="subsec:penalty">1.3.3</a>, the actual block reward can sometimes be reduced below the base amount).</p>
+<p>Suppose we have an integer A = 13 with bit representation [1101]. If we shift the bits of A down by 2 using the bitwise shift right operator, denoted A <span class="math inline">\(&gt;&gt;\)</span> 2, we get [0011].01, which equals 3.25. In reality that last part gets thrown away - ‘shifted’ into oblivion, leaving us with [0011] = 3.<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a></p>
+<h4 class="unnumbered" id="calculating-base-block-reward-for-monero">Calculating base block reward for Monero</h4>
+<p>Let’s call the current total money supply M, and the ‘limit’ of the money supply L = <span class="math inline">\(2^{64} - 1\)</span> (in binary it is [11....11], with 64 bits).<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a> In the beginning of Monero the base block reward was <span class="math inline">\(\textrm{B = (L-M) $&gt;&gt;$ 20}\)</span>. If M = 0, then, in decimal format, <span class="math display">\[\textrm{L} = 18,446,744,073,709,551,615\]</span> <span class="math display">\[\textrm{B}_0 = (L-0) &gt;&gt; 20 = 17,592,186,044,415\]</span></p>
+<p>These numbers are in ‘atomic units’ - 1 atomic unit of Monero can’t be divided. Clearly atomic units are ridiculous - L is over 18 quintillion! We can divide everything by <span class="math inline">\(10^{12}\)</span> to move the decimal point over, giving us the standard units of Monero (a.k.a. XMR, Monero’s so-called ‘stock ticker’). <span class="math display">\[\frac{\textrm{L}}{10^{12}} = 18,446,744.073709551615\]</span> <span class="math display">\[\textrm{B}_0 = \frac{(L-0) &gt;&gt; 20}{10^{12}} = 17.592186044415\]</span></p>
+<p>And there it is, the very first block reward, dispersed to pseudonymous thankful_for_today (who was responsible for starting the Monero project) in Monero’s genesis block <span class="citation" data-cites="bitmonero-launched"></span>, was about 17.6 Moneroj! See Appendix <a href="#appendix:genesis-block" data-reference-type="ref" data-reference="appendix:genesis-block">[appendix:genesis-block]</a> to confirm this for yourself.<a href="#fn18" class="footnote-ref" id="fnref18" role="doc-noteref"><sup>18</sup></a></p>
+<p>As blocks are mined M grows, lowering subsequent block rewards. Initially (since the genesis block in April 2014) Monero blocks were mined once per minute, but in March 2016, it became two minutes per block <span class="citation" data-cites="monero-0.9.3"></span>. To keep the rate of money creation, i.e. the ‘emission schedule’,<a href="#fn19" class="footnote-ref" id="fnref19" role="doc-noteref"><sup>19</sup></a> the same, block rewards were doubled. This just means, after the change, we use (L-M) <span class="math inline">\(&gt;&gt;\)</span> 19 instead of <span class="math inline">\(&gt;&gt;\)</span> 20 for new blocks. Currently the base block reward is <span class="math display">\[\textrm{B} = \frac{(L-M) &gt;&gt; 19}{10^{12}}\]</span></p>
+<h3 id="subsec:dynamic-block-weight">Dynamic block weight</h3>
+<p>It would be nice to mine every new transaction into a block right away. What if someone submits a lot of transactions maliciously? The blockchain, storing every transaction, would quickly grow enormous.</p>
+<p>One mitigation is a fixed block size (in bytes), so the number of transactions per block is limited. What if honest transaction volume rises? Each transaction author would bid for a spot in new blocks by offering fees to miners. Miners would focus on mining transactions with the highest fees. As transaction volume increases, fees would become prohibitively large for transactions of small amounts (such as Alice buying an apple from Bob). Only people willing to outbid everyone else would get their transactions into the blockchain.<a href="#fn20" class="footnote-ref" id="fnref20" role="doc-noteref"><sup>20</sup></a><br />
+Monero avoids those extremes (unlimited vs fixed) with a dynamic block weight.</p>
+<h4 class="unnumbered" id="size-vs-weight">Size vs Weight</h4>
+<p>Since Bulletproofs were added (v8), transaction and block sizes are no longer considered strictly. The term used now is <span><em>transaction weight</em></span>. Transaction weight for a miner transaction (see Section <a href="#subsec:miner-transaction" data-reference-type="ref" data-reference="subsec:miner-transaction">1.3.6</a>), or a normal transaction with two outputs, is equal to the size in bytes. When a normal transaction has more than two outputs the weight is somewhat higher than the size.</p>
+<p>Recalling Section <a href="#sec:range_proofs" data-reference-type="ref" data-reference="sec:range_proofs">[sec:range_proofs]</a>, a Bulletproof occupies <span class="math inline">\((2 \cdot \lceil \textrm{log}_2(64 \cdot p) \rceil + 9) \cdot 32\)</span> bytes, so as more outputs are added the additional storage for range proofs is sub-linear. However, Bulletproof verification is linear, so artificially increasing transaction weights ‘prices in’ that extra verification time (it’s called a ‘clawback’).</p>
+<p>Suppose we have a transaction with <span class="math inline">\(p\)</span> outputs, and imagine that if <span class="math inline">\(p\)</span> isn’t a power of 2 we create enough dummy outputs to fill the gap. We find the difference between the actual Bulletproof size, and the size of all the Bulletproofs if those <span class="math inline">\(p\)</span> + ‘dummy outputs’ had been in 2-out transactions (it’s 0 if <span class="math inline">\(p = 2\)</span>). We only claw back 80% of the difference.<a href="#fn21" class="footnote-ref" id="fnref21" role="doc-noteref"><sup>21</sup></a> <span class="math display">\[\textrm{transaction\_clawback} = 0.8*[(23*(p + \textrm{num\_dummy\_outs})/2) \cdot 32 - (2 \cdot \lceil \textrm{log}_2(64 \cdot p) \rceil + 9) \cdot 32]\]</span></p>
+<p>Therefore the transaction weight is <span class="math display">\[\textrm{transaction\_weight} = \textrm{transaction\_size} + \textrm{transaction\_clawback}\]</span></p>
+<p>A block’s weight is equal to the sum of its component transactions’ weights plus the miner transaction’s weight.</p>
+<h4 class="unnumbered" id="long-term-block-weight">Long term block weight</h4>
+<p>If dynamic blocks are allowed to grow at a rapid pace the blockchain can quickly become unmanageable <span class="citation" data-cites="big-bang-github"></span>. To mitigate this, maximum block weights are tethered by <span><em>long term block weights</em></span>. Each block has, in addition to its normal weight, a ‘long term weight’ calculated based on the previous block’s effective median long term weight.<a href="#fn22" class="footnote-ref" id="fnref22" role="doc-noteref"><sup>22</sup></a> A block’s effective median long term weight is related to the median of the most recent 100000 blocks’ long term weights (including its own).<a href="#fn23" class="footnote-ref" id="fnref23" role="doc-noteref"><sup>23</sup></a><a href="#fn24" class="footnote-ref" id="fnref24" role="doc-noteref"><sup>24</sup></a></p>
+<p><span class="math display">\[\begin{aligned}
+    \textrm{longterm\_block\_weight} &amp;= min\{\textrm{block\_weight}, 1.4*\textrm{previous\_effective\_longterm\_median}\}\\
+    \textrm{effective\_longterm\_median} &amp;= max\{\textrm{300kB}, \textrm{median\_100000blocks\_longterm\_weights}\}%m_long_term_effective_median_block_weight\end{aligned}\]</span></p>
+<p>If normal block weights stay large for a long time, then it will take at least 50,000 blocks (about 69 days) for the effective long term median to rise by 40% (that’s how long it takes a given long term weight to become the median).</p>
+<h4 class="unnumbered" id="cumulative-median-weight">Cumulative median weight</h4>
+<p>Transaction volume can change dramatically in a short period of time, especially around holidays <span class="citation" data-cites="visa-seasonality"></span>. To accommodate this, Monero allows short term flexibility in block weights. To smooth out transient variability, a block’s cumulative median uses the median of the last 100 blocks’ normal block weights (including its own). <span class="math display">\[\begin{aligned}
+    \textrm{cumulative\_weights\_median} = max\{\textrm{300kB}, min\{&amp;max\{\textrm{300kB}, \textrm{median\_100blocks\_weights}\},\\
+    &amp;50*\textrm{effective\_longterm\_median}\}\}%HF_VERSION_EFFECTIVE_SHORT_TERM_MEDIAN_IN_PENALTY %update_next_cumulative_weight_limit() %m_current_block_cumul_weight_median %CRYPTONOTE_SHORT_TERM_BLOCK_WEIGHT_SURGE_FACTOR = 50\end{aligned}\]</span></p>
+<p>The next block to be added to the blockchain is constrained in this way:<a href="#fn25" class="footnote-ref" id="fnref25" role="doc-noteref"><sup>25</sup></a> <span class="math display">\[\textrm{max\_next\_block\_weight}\marginnote{src/crypto- note\_basic/ cryptonote\_ basic\_ impl.cpp {\tt get\_block\_ reward()}} = 2*\textrm{cumulative\_weights\_median}\]</span></p>
+<p>While the maximum block weight can rise up to 100 times the effective median long term weight after a few hundred blocks, it cannot rise more than 40% beyond that over the next 50,000 blocks. Therefore long-term block weight growth is tethered by the long term weights, and in the short term weights may surge above their steady-state values.</p>
+<h3 id="subsec:penalty">Block reward penalty</h3>
+<p>To mine blocks bigger than the cumulative median, miners have to pay a price, or penalty, in the form of reduced block reward. This means there are functionally two zones within the maximum block weight: the penalty-free zone, and the penalty zone. The median can slowly rise, allowing progressively larger blocks with no penalty.</p>
+<p>If the intended block weight is greater than the cumulative median, then, given base block reward B, the block reward penalty is <span class="math display">\[\textrm{P} = \textrm{B}*((\textrm{block\_weight}/\textrm{cumulative\_weights\_median}) - 1)^2\]</span></p>
+<p>The actual block reward is therefore<a href="#fn26" class="footnote-ref" id="fnref26" role="doc-noteref"><sup>26</sup></a> <span class="math display">\[\begin{aligned}
+    \textrm{B}^{\textrm{actual}} &amp;= \textrm{B} - \textrm{P} \\
+    \textrm{B}^{\textrm{actual}} &amp;= \textrm{B}*(1-((\textrm{block\_weight}/\textrm{cumulative\_weights\_median}) - 1)^2)\end{aligned}\]</span></p>
+<p>Using the ^2 operation means penalties are sub-proportional to block weight. A block weight 10% larger than the previous cumulative_weights_median has just a 1% penalty, 50% larger is 25% penalty, 90% larger is 81% penalty, and so on. <span class="citation" data-cites="monero-coin-emission"></span><br />
+We can expect miners to create blocks larger than the cumulative median when the fee from adding another transaction is bigger than the penalty incurred.</p>
+<h3 id="subsec:dynamic-minimum-fee">Dynamic minimum fee</h3>
+<p>To prevent malicious actors from flooding the blockchain with transactions that could be used to pollute ring signatures, and generally bloat it unnecessarily, Monero has a minimum fee per byte of transaction data.<a href="#fn27" class="footnote-ref" id="fnref27" role="doc-noteref"><sup>27</sup></a> Originally this was 0.01 XMR/KiB (added early during protocol v1) <span class="citation" data-cites="fee-old-stackexchange"></span>, then it became 0.002 XMR/KiB in September 2016 (v3).<a href="#fn28" class="footnote-ref" id="fnref28" role="doc-noteref"><sup>28</sup></a></p>
+<p>In January 2017 (v4), a dynamic fee per KiB algorithm <span class="citation" data-cites="articmine-fee-video articmine-36c3-dynamics articmine-defcon27-video jollymore-old-analysis"></span> was added,<a href="#fn29" class="footnote-ref" id="fnref29" role="doc-noteref"><sup>29</sup></a> and then along with transaction weight reductions due to Bulletproofs (v8) it changed from per KiB to per byte. The most important feature of the algorithm is that it prevents minimum possible total fees from exceeding the block reward (even with small block rewards and large block weights), which is thought to cause instability <span class="citation" data-cites="fee-reward-instability no-reward-instability selfish-miner"></span>.<a href="#fn30" class="footnote-ref" id="fnref30" role="doc-noteref"><sup>30</sup></a></p>
+<h4 class="unnumbered" id="the-fee-algorithm">The fee algorithm</h4>
+<p>We base our fee algorithm around a reference transaction <span class="citation" data-cites="jollymore-old-analysis"></span> of weight 3000 bytes (similar to a basic <span><code>RCTTypeBulletproof2</code></span> 2-input, 2-output transaction, which is usually about 2600 bytes)<a href="#fn31" class="footnote-ref" id="fnref31" role="doc-noteref"><sup>31</sup></a>, and the fees it would take to offset the penalty when the median is at its minimum (the smallest penalty-free zone, 300kB) <span class="citation" data-cites="articmine-36c3-dynamics"></span>. In other words, the penalty induced by a 303kB block weight.</p>
+<p>Firstly, the fee F to balance the marginal penalty MP from adding a transaction with weight TW to a block with weight BW, is <span class="math display">\[\begin{aligned}
+    \textrm{F} = \textrm{MP} = \textrm{B}&amp;*(([\textrm{BW} + \textrm{TW}]/\textrm{cumulative\_median} - 1)^2 -\\ \textrm{B}&amp;*((\textrm{BW}/\textrm{cumulative\_median} - 1)^2\end{aligned}\]</span></p>
+<p>Defining the block weight factor <span class="math inline">\(\textrm{WF}_b = (\textrm{BW}/\textrm{cumulative\_median} - 1)\)</span>, and transaction weight factor <span class="math inline">\(\textrm{WF}_t = (\textrm{TW}/\textrm{cumulative\_median})\)</span>, lets us simplify <span class="math display">\[\textrm{F} = \textrm{B}*(2*\textrm{WF}_b*\textrm{WF}_t + \textrm{WF}_t^2)\]</span></p>
+<p>Using a block weighing 300kB (with a cumulative median at the default 300kB) and our reference transaction with 3000 bytes, <span class="math display">\[\begin{aligned}
+    \textrm{F}_{\textrm{ref}} &amp;= \textrm{B}*(2*0*\textrm{WF}_t + \textrm{WF}_t^2)\\
+    \textrm{F}_{\textrm{ref}} &amp;= \textrm{B}*\textrm{WF}_t^2\\
+    \textrm{F}_{\textrm{ref}} &amp;= \textrm{B}*(\frac{\textrm{TW}_{\textrm{ref}}}{\textrm{cumulative\_median}_{\textrm{ref}}})^2\end{aligned}\]</span></p>
+<p>This fee is spread out over 1% of the penalty zone (3000 out of 300000). We can spread the same fee over 1% of any penalty zone with a generalized reference transaction. <span class="math display">\[\begin{aligned}
+    \frac{\textrm{TW}_{\textrm{ref}}}{\textrm{cumulative\_median}_{\textrm{ref}}} &amp;= \frac{\textrm{TW}_{\textrm{general-ref}}}{\textrm{cumulative\_median}_{\textrm{general}}}\\
+    1 &amp;= (\frac{\textrm{TW}_{\textrm{general-ref}}}{\textrm{cumulative\_median}_{\textrm{general}}}) * (\frac{\textrm{cumulative\_median}_{\textrm{ref}}}{\textrm{TW}_{\textrm{ref}}})\\
+    \textrm{F}_{\textrm{general-ref}} &amp;= \textrm{F}_{\textrm{ref}}\\
+    &amp;= \textrm{F}_{\textrm{ref}}*(\frac{\textrm{TW}_{\textrm{general-ref}}}{\textrm{cumulative\_median}_{\textrm{general}}}) * (\frac{\textrm{cumulative\_median}_{\textrm{ref}}}{\textrm{TW}_{\textrm{ref}}})\\
+    \textrm{F}_{\textrm{general-ref}} &amp;= \textrm{B}*(\frac{\textrm{TW}_{\textrm{general-ref}}}{\textrm{cumulative\_median}_{\textrm{general}}}) * (\frac{\textrm{TW}_{\textrm{ref}}}{\textrm{cumulative\_median}_{\textrm{ref}}})\end{aligned}\]</span></p>
+<p>Now we can scale the fee based on a real transaction weight at a given median, so e.g. if the transaction is 2% of the penalty zone the fee gets doubled. <span class="math display">\[\begin{aligned}
+    \textrm{F}_{\textrm{general}} &amp;= \textrm{F}_{\textrm{general-ref}} * \frac{\textrm{TW}_{\textrm{general}}}{\textrm{TW}_{\textrm{general-ref}}}\\
+    \textrm{F}_{\textrm{general}} &amp;= \textrm{B}*(\frac{\textrm{TW}_{\textrm{general}}}{\textrm{cumulative\_median}_{\textrm{general}}}) * (\frac{\textrm{TW}_{\textrm{ref}}}{\textrm{cumulative\_median}_{\textrm{ref}}})\end{aligned}\]</span></p>
+<p>This rearranges to the default fee per byte, which we have been working toward. <span class="math display">\[\begin{aligned}
+    f^{B}_{default} &amp;= \textrm{F}_{\textrm{general}}/\textrm{TW}_{\textrm{general}}\\
+    f^{B}_{default} &amp;= \textrm{B}*(\frac{1}{\textrm{cumulative\_median}_{\textrm{general}}}) * (\frac{3000}{300000})\end{aligned}\]</span></p>
+<p>When transaction volume is below the median there is no real reason for fees to be at the reference level <span class="citation" data-cites="jollymore-old-analysis"></span>. We set the minimum to be 1/5the default. <span class="math display">\[\begin{aligned}
+    f^{B}_{min} &amp;= \textrm{B}*(\frac{1}{\textrm{cumulative\_weights\_median}}) * (\frac{3000}{300000}) * (\frac{1}{5})\\
+    f^{B}_{min} &amp;= \textrm{B}*(\frac{1}{\textrm{cumulative\_weights\_median}}) * 0.002\end{aligned}\]</span></p>
+<h4 class="unnumbered" id="the-fee-median">The fee median</h4>
+<p>It turns out using the cumulative median for fees enables a spam attack. By raising the short term median to its highest value (50 x long term median), an attacker can use minimum fees to maintain high block weights (relative to organic transaction volume) with very low cost.</p>
+<p>To avoid this we limit fees for transactions to go in the next block with the smallest median available, which favors higher fees in all cases.<a href="#fn32" class="footnote-ref" id="fnref32" role="doc-noteref"><sup>32</sup></a> <span class="math display">\[\textrm{smallest\_median}\marginnote{src/crypto- note\_core\ block- chain.cpp {\tt check\_fee()}} = max\{\textrm{300kB}, min\{\textrm{median\_100blocks\_weights}, \textrm{effective\_longterm\_median}\}\}\]</span></p>
+<p>Favoring higher fees during rising transaction volume also facilitates adjusting the short term median and ensuring transactions aren’t left pending, as miners are more likely to mine into the penalty zone.</p>
+<p>The actual minimum fee is therefore<a href="#fn33" class="footnote-ref" id="fnref33" role="doc-noteref"><sup>33</sup></a><a href="#fn34" class="footnote-ref" id="fnref34" role="doc-noteref"><sup>34</sup></a></p>
+<p><span class="math display">\[f^{B}_{min-actual}\marginnote{src/crypto- note\_core\ block- chain.cpp {\tt get\_dyna- mic\_base\_ fee()}} = \textrm{B}*(\frac{1}{\textrm{smallest\_median}}) * 0.002\]</span></p>
+<h4 class="unnumbered" id="transaction-fees">Transaction fees</h4>
+<p>As Caba<span class="math inline">\(\tilde{\textrm{n}}\)</span>as said in his insightful presentation on this topic <span class="citation" data-cites="articmine-36c3-dynamics"></span>, “[f]ees tell the miner how deep into the penalty [transaction authors are] willing to pay for, in order to get a transaction mined." Miners will fill up their blocks by adding transactions in descending order of fee amount <span class="citation" data-cites="articmine-36c3-dynamics"></span> (assuming all transactions have the same weight), so to move into the penalty zone there must be numerous transactions with large fees. This means it is likely the block weight cap can only be reached if total fees are at least about 3-4 times the base block reward (at which point the actual block reward is zero).<a href="#fn35" class="footnote-ref" id="fnref35" role="doc-noteref"><sup>35</sup></a></p>
+<p>To calculate fees for a transaction, Monero’s core implementation wallet uses ‘priority’ multipliers. A ‘slow’ transaction uses the minimum fee directly, ‘normal’ is the default fee (5x), if all transactions use ‘fast’ (25x) they can reach 2.5% of the penalty zone, and a block with ‘super urgent’ (1000x) transactions can fill 100% of the penalty zone.</p>
+<p>One important consequence of dynamic block weights is average total block fees will tend to be of a magnitude lower than, or at least the same as, the block reward (total fees can be expected to equal the base block reward at about 37% of the penalty zone [68.5% of the maximum block weight], when the penalty is 13%). Transactions competing for block space with higher fees leads to a bigger supply of block space, and lower fees.<a href="#fn36" class="footnote-ref" id="fnref36" role="doc-noteref"><sup>36</sup></a> This feedback mechanism is a strong counter to the renowned ‘selfish miner’ <span class="citation" data-cites="selfish-miner"></span> threat.</p>
+<h3 id="subsec:emission-tail">Emission tail</h3>
+<p>Let’s suppose a cryptocurrency with fixed maximum supply and dynamic block weight. After a while its block rewards fall to zero. With no more penalty on increasing block weight, miners add any transaction with a non-zero fee to their blocks.</p>
+<p>Block weights stabilize around the average rate of transactions submitted to the network, and transaction authors have no compelling reason to use transaction fees above the minimum, which would be zero according to Section <a href="#subsec:dynamic-minimum-fee" data-reference-type="ref" data-reference="subsec:dynamic-minimum-fee">1.3.4</a>.</p>
+<p>This introduces an unstable, insecure situation. Miners have little to no incentive to mine new blocks, leading to a fall in network hash rate as returns on investment decline. Block times remain the same as difficulties adjust, but the cost of performing a double-spend attack may become feasible.<a href="#fn37" class="footnote-ref" id="fnref37" role="doc-noteref"><sup>37</sup></a> If minimum fees are forced to be non-zero then the ‘selfish miner’ <span class="citation" data-cites="selfish-miner"></span> threat becomes realistic <span class="citation" data-cites="no-reward-instability"></span>.<br />
+Monero prevents this by not allowing the block reward to fall below 0.6 XMR (0.3 XMR per minute). When the following condition is met, <span class="math display">\[\begin{aligned}
+               0.6 &amp;&gt; ((L-M) &gt;&gt; 19)/10^{12} \\
+        \textrm{M} &amp;&gt; \textrm{L} - 0.6*2^{19}*10^{12} \\
+\textrm{M}/10^{12} &amp;&gt; \textrm{L}/10^{12} - 0.6*2^{19} \\
+\textrm{M}/10^{12} &amp;&gt; 18,132,171.273709551615\end{aligned}\]</span></p>
+<p>the Monero chain will enter a so-called ‘emission tail’, with constant 0.6 XMR (0.3 XMR/minute) block rewards forever after.<a href="#fn38" class="footnote-ref" id="fnref38" role="doc-noteref"><sup>38</sup></a> This corresponds with about 0.9% yearly inflation to begin with, steadily declining thereafter.</p>
+<h3 id="subsec:miner-transaction">Miner transaction: <span><code>RCTTypeNull</code></span></h3>
+<p>A block’s miner has the right to claim ownership of the fees provided in its transactions, and to mint new money in the form of a block reward. The mechanism is a miner transaction (a.k.a. coinbase transaction), which is similar to a normal transaction.<a href="#fn39" class="footnote-ref" id="fnref39" role="doc-noteref"><sup>39</sup></a></p>
+<p>The output amount(s) of a miner transaction must be no more than the sum of transaction fees and block reward, and are communicated in clear text.<a href="#fn40" class="footnote-ref" id="fnref40" role="doc-noteref"><sup>40</sup></a> In place of an input, the block’s height is recorded (i.e. “I claim the block reward and fees for the nblock").</p>
+<p>Ownership of the miner output(s) is assigned to a standard one-time address<a href="#fn41" class="footnote-ref" id="fnref41" role="doc-noteref"><sup>41</sup></a>, with a corresponding transaction public key stored in the extra field. The funds are locked, unspendable, until the 60block after it is published <span class="citation" data-cites="transaction-lock"></span>.<a href="#fn42" class="footnote-ref" id="fnref42" role="doc-noteref"><sup>42</sup></a></p>
+<p>Since RingCT was implemented in January 2017 (v4 of the protocol) <span class="citation" data-cites="ringct-dates"></span>, people downloading a new copy of the blockchain compute a commitment to the miner transaction (a.k.a. tx) amount <span class="math inline">\(a\)</span>, as <span class="math inline">\(C = 1G + aH\)</span>, and store it for referral. This allows block miners to spend their miner transaction outputs just like a normal transaction’s outputs, putting them in MLSAG rings with other normal and miner tx outputs.<br />
+Blockchain verifiers store each post-RingCT block’s miner tx amount commitment, for 32 bytes each.</p>
+<h2 id="sec:blockchain-structure">Blockchain structure</h2>
+<p>Monero’s blockchain style is simple.</p>
+<p>It starts with a genesis message[-.8cm] of some kind (in our case basically a miner transaction dispersing the first block reward), which constitutes the genesis block (see Appendix <a href="#appendix:genesis-block" data-reference-type="ref" data-reference="appendix:genesis-block">[appendix:genesis-block]</a>). The next block contains a reference to the previous block, in the form of block ID.</p>
+<p>A block ID is simply a hash of[1.2cm] the block’s header (a list of information about a block), a so-called ‘Merkle root’ that attaches all the block’s transaction IDs (which are hashes of each transaction), and the number of transactions (including the miner transaction).[4.5cm]<a href="#fn43" class="footnote-ref" id="fnref43" role="doc-noteref"><sup>43</sup></a> <span class="math display">\[\textrm{Block ID} = \mathcal{H}_n(\textrm{Block header}, \textrm{Merkle root}, \# \textrm{transactions} + 1)\]</span></p>
+<p>To produce a new block, one must do proof of work hashes by changing a nonce value stored in the block header until the difficulty target condition is met.<a href="#fn44" class="footnote-ref" id="fnref44" role="doc-noteref"><sup>44</sup></a> The proof of work and block ID hash the same information, except use different hash functions. Blocks are mined[5.55cm] by, while <span class="math inline">\(({PoW}_{output} * {difficulty}) &gt; 2^{256}-1\)</span>, repeatedly changing the nonce and recalculating <span class="math display">\[{PoW}_{output} = \mathcal{H}_{PoW}(\textrm{Block header}, \textrm{Merkle root}, \# \textrm{transactions} + 1)\]</span></p>
+<h3 id="subsec:transaction-id">Transaction ID</h3>
+<p>Transaction IDs are similar to the message signed by input MLSAG signatures (Section <a href="#full-signature" data-reference-type="ref" data-reference="full-signature">[full-signature]</a>), but include the MLSAG signatures too.</p>
+<p>The following information is hashed:</p>
+<ul>
+<li><p>TX Prefix = {transaction era version (e.g. ringCT = 2), inputs {key offsets, key images}, outputs {one-time addresses}, extra {transaction public key, encoded payment ID, misc.}}</p></li>
+<li><p>TX Stuff = {signature type (<span><code>RCTTypeNull</code></span> or <span><code>RCTTypeBulletproof2</code></span>), transaction fee, pseudo output commitments for inputs, ecdhInfo (encrypted or cleartext amounts), output commitments}</p></li>
+<li><p>Signatures = {MLSAGs, range proofs}</p></li>
+</ul>
+<p>In this tree diagram the black arrow indicates a hash of inputs.</p>
+<div class="center">
+<p>forked edges, for tree = <span>grow’=90, edge = <span>&lt;-, &gt; = triangle 60</span>, fork sep = 4.5 mm, l sep = 8 mm, rectangle, draw </span>, sn edges, where n children=0<span>tier=terminus</span>, [Transaction ID [<span class="math inline">\(\mathcal{H}_n\)</span>(TX Prefix)] [<span class="math inline">\(\mathcal{H}_n\)</span>(TX Stuff)] [<span class="math inline">\(\mathcal{H}_n\)</span>(Signatures)] ]</p>
+</div>
+<p>In place of an ‘input’, a miner transaction records the block height of its block. This ensures the miner transaction’s ID, which is simply a normal transaction ID except with <span class="math inline">\(\mathcal{H}_n\)</span>(Signatures) <span class="math inline">\(\rightarrow\)</span> 0, is always unique, for simpler ID-searching.</p>
+<h3 id="subsec:merkle-tree">Merkle tree</h3>
+<p>Some users may want to discard data from their copy of the blockchain. For example, once you verify a transaction’s range proofs and input signatures, the only reason to keep that signature information is so users who obtain it from you can verify it for themselves.</p>
+<p>To facilitate ‘pruning’ transaction data, and to more generally organize it within a block, we use a Merkle tree <span class="citation" data-cites="merkle-tree"></span>, which is just a binary hash tree. Any branch in a Merkle tree can be pruned if you keep its root hash.<a href="#fn45" class="footnote-ref" id="fnref45" role="doc-noteref"><sup>45</sup></a><br />
+An example Merkle tree based on four transactions and a miner transaction is diagrammed in Figure <a href="#chapter:blockchain" data-reference-type="ref" data-reference="chapter:blockchain">1</a>.1.<a href="#fn46" class="footnote-ref" id="fnref46" role="doc-noteref"><sup>46</sup></a></p>
+<div class="center">
+<p>forked edges, for tree = <span>grow’=90, edge = <span>&lt;-, &gt; = triangle 60</span>, fork sep = 4.5 mm, l sep = 8 mm, rectangle, draw </span>, sn edges, where n children=0<span>tier=terminus</span>, [Merkle Root [<span class="math inline">\(Hash\)</span> B [Transaction ID<br />
+1] [Transaction ID<br />
+2] ] [<span class="math inline">\(Hash\)</span> C [Transaction ID<br />
+3] [<span class="math inline">\(Hash\)</span> A [Transaction ID<br />
+4] [Miner Transaction ID] ] ] ] at (current bounding box.south) [below=3ex,thick,draw,rectangle] <span><em>Figure <a href="#chapter:blockchain" data-reference-type="ref" data-reference="chapter:blockchain">1</a>.1: Merkle Tree</em></span>;</p>
+</div>
+<p>A Merkle root is inherently a reference to all its included transactions.</p>
+<h3 id="subsec:blocks">Blocks</h3>
+<p>A block is basically a block header and some transactions. Block headers record important information about each block. A block’s transactions can be referenced with their Merkle root. We present here the outline of a block’s content. Our readers can find a real block example in Appendix <a href="#appendix:block-content" data-reference-type="ref" data-reference="appendix:block-content">[appendix:block-content]</a>.</p>
+<ul>
+<li><p><u>Block header</u>:</p>
+<ul>
+<li><p><strong>Major version</strong>: Used to track hard forks (changes to the protocol).</p></li>
+<li><p><strong>Minor version</strong>: Once used for voting, now it just displays the major version again.</p></li>
+<li><p><strong>Timestamp</strong>: UTC (Coordinated Universal Time) time of the block. Added by miners, timestamps are unverified but they won’t be accepted if lower than the median timestamp of the previous 60 blocks.</p></li>
+<li><p><strong>Previous block’s ID</strong>: Referencing the previous block, this is the essential feature of a blockchain.</p></li>
+<li><p><strong>Nonce</strong>: A 4-byte integer that miners change over and over until the PoW hash meets the difficulty target. Block verifiers can easily recalculate the PoW hash.</p></li>
+</ul></li>
+<li><p><u>Miner transaction</u>: Disperses the block reward and transaction fees to the block’s miner.</p></li>
+<li><p><u>Transaction IDs</u>: References to non-miner transactions added to the blockchain by this block. Tx IDs can, in combination with the miner tx ID, be used to calculate the Merkle root, and to find the actual transactions wherever they are stored.<br />
+</p></li>
+</ul>
+<p>In addition to the data in each transaction (Section <a href="#sec:transaction_summary" data-reference-type="ref" data-reference="sec:transaction_summary">[sec:transaction_summary]</a>), we store the following information:</p>
+<ul>
+<li><p>Major and minor versions: variable integers <span class="math inline">\(\leq 9\)</span> bytes</p></li>
+<li><p>Timestamp: variable integer <span class="math inline">\(\leq 9\)</span> bytes</p></li>
+<li><p>Previous block’s ID: 32 bytes</p></li>
+<li><p>Nonce: 4 bytes, can extend its effective size with the miner tx extra field’s extra nonce<a href="#fn47" class="footnote-ref" id="fnref47" role="doc-noteref"><sup>47</sup></a></p></li>
+<li><p>Miner transaction: 32 bytes for a one-time address, 32 bytes for a transaction public key (+1 byte for its ‘extra’ tag), and variable integers for the unlock time, corresponding block’s height, and amount. After downloading the blockchain, we also need 32 bytes to store an amount commitment <span class="math inline">\(C = 1G + a H\)</span> (only for post-RingCT miner tx amounts).</p></li>
+<li><p>Transaction IDs: 32 bytes each</p></li>
+</ul>
+<section class="footnotes" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1" role="doc-endnote"><p>This chapter includes more implementation details than previous chapters, as a blockchain’s nature depends heavily on its specific structure.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>In political science this is called a Schelling Point <span class="citation" data-cites="friedman-schelling"></span>, social minima, or social contract.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>In commodity money like gold these rules are met by physical reality.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4" role="doc-endnote"><p>A blockchain is technically a ‘directed acyclic graph’ (DAG), with Bitcoin-style blockchains a one-dimensional variant. DAGs contain a finite number of nodes and one-directional edges (vectors) connecting nodes. If you start at one node, you will never loop back to it no matter what path you take. <span class="citation" data-cites="DAG-wikipedia"></span><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5" role="doc-endnote"><p>We use <span class="math inline">\(\in^D_R\)</span> to say the output is deterministically random.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6" role="doc-endnote"><p>In Monero only difficulties are recorded/computed since <span class="math inline">\(\mathcal{H}_{PoW}(\mathfrak{m},n)*d \leq m\)</span> doesn’t need <span class="math inline">\(t\)</span>.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7" role="doc-endnote"><p>Mining and verifying are asymmetric since it takes the same time to verify a proof of work (one computation of the proof of work algorithm) no matter what the difficulty is.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8" role="doc-endnote"><p>Timestamps are determined when a miner <span><em>starts</em></span> mining a block, so they are likely to lag behind the actual publication moment. The next block starts mining right away, so the timestamp that appears <span><em>after</em></span> a given block indicates how long miners spent on it.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9" role="doc-endnote"><p>If node 1 tries nonce <span class="math inline">\(n = 23\)</span> and later node 2 also tries <span class="math inline">\(n = 23\)</span>, node 2’s effort is wasted because the network already ‘knows’ <span class="math inline">\(n = 23\)</span> doesn’t work (otherwise node 1 would have published that block). The network’s <span><em>effective</em></span> hash rate depends on how fast it hashes <span><em>unique</em></span> nonces for a given block of messages. As we will see, since miners include a miner transaction with one-time address <span class="math inline">\(K^o \in_{ER} \mathbb{Z}_l\)</span> (ER = effectively random) in their blocks, blocks are always unique between miners except with negligible probability, so trying the same nonces doesn’t matter.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10" role="doc-endnote"><p>If we assume network hash rate is constantly, gradually, increasing, then since new difficulties depend on <span><em>past</em></span> hashes (i.e. before the hash rate increased a tiny bit) we should expect actual block times to, on average, be slightly less than <span class="math inline">\(\mathit{targetTime}\)</span>. The effect of this on the emission schedule (Section <a href="#subsec:block-reward" data-reference-type="ref" data-reference="subsec:block-reward">1.3.1</a>) could be canceled out by penalties from increasing block weights, which we explore in Section <a href="#subsec:penalty" data-reference-type="ref" data-reference="subsec:penalty">1.3.3</a>.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11" role="doc-endnote"><p>Monero developers have successfully changed its protocol 11 times, with nearly all users and miners adopting each fork: v1 April 18, 2014 (genesis version) <span class="citation" data-cites="bitmonero-launched"></span>; v2 March 2016; v3 September 2016; v4 January 2017; v5 April 2017; v6 September 2017; v7 April 2018; v8 and v9 October 2018; v10 and v11 March 2019; v12 November 2019. The core git repository’s README contains a summary of protocol changes in each version.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12" role="doc-endnote"><p>In March 2016 (v2 of the protocol), Monero changed from 1 minute target block times to 2 minute target block times <span class="citation" data-cites="monero-0.9.3"></span>. Other difficulty parameters have always been the same.<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13" role="doc-endnote"><p>Monero’s difficulty algorithm may be suboptimal compared to state of the art algorithms <span class="citation" data-cites="difficuly-algorithm-summary"></span>. Fortunately it is ‘fairly resilient to selfish mining’ <span class="citation" data-cites="selfish-miner-profitability-algorithm-analysis"></span>, an essential feature.<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn14" role="doc-endnote"><p>A miner transaction can have any number of outputs, although currently the core implementation is only able to make one. Moreover, unlike normal transactions there are no explicit restrictions on miner transaction weight. They are functionally limited by the maximum block weight.<a href="#fnref14" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn15" role="doc-endnote"><p>As an attacker gets higher shares of the hash rate (beyond 50%), it takes less time to rewrite older and older blocks. Given a block <span class="math inline">\(x\)</span> days old, owned hash speed <span class="math inline">\(v\)</span>, and honest hash speed <span class="math inline">\(v_h\)</span> (<span class="math inline">\(v &gt; v_h\)</span>), it will take <span class="math inline">\(y = x*(v_h/(v-v_h))\)</span> days to rewrite.<a href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn16" role="doc-endnote"><p>Bitwise shift right by <span class="math inline">\(n\)</span> bits is equivalent to integer division by <span class="math inline">\(2^n\)</span>.<a href="#fnref16" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn17" role="doc-endnote"><p>Perhaps now it is clear why range proofs (Section <a href="#sec:range_proofs" data-reference-type="ref" data-reference="sec:range_proofs">[sec:range_proofs]</a>) limit transaction amounts to 64 bits.<a href="#fnref17" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn18" role="doc-endnote"><p>Monero amounts are stored in atomic-unit format in the blockchain.<a href="#fnref18" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn19" role="doc-endnote"><p>For an interesting comparison of Monero and Bitcoin’s emission schedules see <span class="citation" data-cites="monero-coin-emission"></span>.<a href="#fnref19" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn20" role="doc-endnote"><p>Bitcoin has a history of overloaded transaction volume. This website (<a href="https://bitcoinfees.info/">https://bitcoinfees.info/</a>) charts the ridiculous fee levels encountered (up to the equivalent of 35$ per transaction at one point).<a href="#fnref20" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn21" role="doc-endnote"><p>Note that <span class="math inline">\(\textrm{log}_2(64 \cdot 2) = 7\)</span>, and <span class="math inline">\(2*7 + 9 = 23\)</span>.<a href="#fnref21" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn22" role="doc-endnote"><p>Similar to block difficulties, block weights and long term block weights are calculated and stored by blockchain verifiers rather than being included in blockchain data.<a href="#fnref22" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn23" role="doc-endnote"><p>Blocks made before long term weights were implemented have long term weights equal to their normal weights, so there is no concern for us about details surrounding the genesis block or early blocks. A brand new chain could easily make sensible choices.<a href="#fnref23" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn24" role="doc-endnote"><p>In the beginning of Monero the ‘300kB’ term was 20kB, then increased to 60kB in March 2016, (v2 of the protocol) <span class="citation" data-cites="monero-0.9.3"></span>, and has been 300kB since April 2017 (v5 of the protocol) <span class="citation" data-cites="monero-v5"></span>. This non-zero ‘floor’ within the dynamic block weight medians helps transient transaction volume changes when the absolute volume is low, especially in the early stages of Monero adoption.<a href="#fnref24" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn25" role="doc-endnote"><p>The cumulative median replaced ‘M100’ (a similar median term) in protocol v8. Penalties and fees described in the first edition of this report <span class="citation" data-cites="ztm-1"></span> used M100.<a href="#fnref25" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn26" role="doc-endnote"><p>Before confidential transactions (RingCT) were implemented (v4), all amounts were communicated in clear text and in some early protocol versions split into chunks (e.g. 1244 <span class="math inline">\(\rightarrow\)</span> 1000 + 200 + 40 + 4). To reduce miner tx size, the core implementation chopped off the lowest significant digits of block rewards (anything less than 0.0001 Moneroj; see <span><code>BASE_REWARD_CLAMP_THRESHOLD</code></span>) in v2-v3. The extra little bit was not lost, just made available for future block rewards. More generally, since v2 the block reward calculation here is just an upper limit on the real block reward that can be dispersed in a miner tx’s outputs. Also of note, very early transactions’ outputs with cleartext amounts <span><em>not</em></span> split into chunks can’t be used in ring signatures in the current implementation, so to spend them they are migrated into chunked, ‘mixable’, outputs, which can then be spent in normal RingCT transactions by creating rings out of other chunks with the same amount. Exact modern protocol rules around these ancient pre-RingCT outputs are not clear.<a href="#fnref26" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn27" role="doc-endnote"><p>This minimum is enforced by the node consensus protocol, not the blockchain protocol. Most nodes won’t relay a transaction to other nodes if it has a fee below the minimum (at least in part so only transactions likely to be mined by someone are passed along <span class="citation" data-cites="articmine-36c3-dynamics"></span>), but they <span><em>will</em></span> accept a new block containing that transaction. In particular, this means there is no need to maintain backward compatibility with fee algorithms.<a href="#fnref27" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn28" role="doc-endnote"><p>The unit KiB (kibibyte, 1 KiB = 1024 bytes) is different from kB (kilobyte, 1 kB = 1000 bytes).<a href="#fnref28" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn29" role="doc-endnote"><p>The base fee was changed from 0.002 XMR/KiB to 0.0004 XMR/KiB in April 2017 (v5 of the protocol) <span class="citation" data-cites="monero-v5"></span>. The first edition of this report described the original dynamic fee algorithm <span class="citation" data-cites="ztm-1"></span>.<a href="#fnref29" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn30" role="doc-endnote"><p>Credit for the concepts in this section largely belongs to Francisco Caba<span class="math inline">\(\tilde{\textrm{n}}\)</span>as (a.k.a. ‘ArticMine’), the architect of Monero’s dynamic block and fee system. See <span class="citation" data-cites="articmine-fee-video articmine-36c3-dynamics articmine-defcon27-video"></span>.<a href="#fnref30" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn31" role="doc-endnote"><p>A basic 1-input, 2-output Bitcoin transaction is 250 bytes <span class="citation" data-cites="bitcoin-txsizes-2015"></span>, or 430 bytes for 2-in/2-out.<a href="#fnref31" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn32" role="doc-endnote"><p>An attacker can spend just enough in fees for the short term median to hit 50*long-term-median. With current (as of this writing) block rewards at 2 XMR, an optimized attacker can increase the short term median by 17% every 50 blocks, and reach the upper bound after about 1300 blocks (about 43 hours), spending 0.39*2 XMR per block, for a total setup cost of about 1000 XMR (or around 65k USD at current valuations), and then go back to the minimum fee. When the fee median equals the penalty-free zone, then the minimum total fee to fill the penalty-free zone is 0.004 XMR (about 0.26 USD at current valuations). If the fee median equals the long term median, it would in the spam scenario be 1/50th the penalty-free zone. Therefore it would just be 50x the short-median case, for 0.2 XMR per block (13 USD per block). This comes out to 2.88 XMR per day vs 144 XMR per day (for 69 days, until the long term median rises by 40%) to maintain every block with 50*long-term-median block weight. The 1000 XMR setup cost would be worthwhile in the former case, but not the latter. This will reduce to 300 XMR setup, and 43 XMR maintenance, at the emission tail.<a href="#fnref32" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn33" role="doc-endnote"><p>To check if a given fee is correct, we allow a 2% buffer on <span class="math inline">\(f^{B}_{min-actual}\)</span> in case of integer overflow (we must compute fees before tx weights are completely determined). This means the effective minimum fee is 0.98*<span class="math inline">\(f^{B}_{min-actual}\)</span>.<a href="#fnref33" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn34" role="doc-endnote"><p>Research to improve minimum fees even further is ongoing. <span class="citation" data-cites="min-fee-research-issue-70"></span><a href="#fnref34" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn35" role="doc-endnote"><p><span id="penaltyzonecost_footnote" label="penaltyzonecost_footnote">[penaltyzonecost_footnote]</span>The marginal penalty from the last bytes to fill up a block can be considered a ‘transaction’ comparable to other transactions. In order for a clump of transactions to buy that transaction space from a miner, all its individual transaction fees should be higher than the penalty, since if any one of them is lower then the miner will keep the marginal reward instead. This last marginal reward, assuming a block filled with small transactions, requires at least 4x the base block reward in total fees to be purchased. If transaction weights are maximized (50% of the minimum penalty-free zone, i.e. 150kB) then if the median is minimized (300kB) the last marginal transaction requires at least 3x in total fees.<a href="#fnref35" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn36" role="doc-endnote"><p>As block rewards decline over time, and the median rises due to increased adoption (theoretically), fees should steadily become smaller and smaller. In ‘real purchasing power’ terms, this may be less impactful on transaction costs if the value of Moneroj rises due to adoption and economic deflation.<a href="#fnref36" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn37" role="doc-endnote"><p>The case of fixed supply and fixed block weight, as in Bitcoin, is also thought to be unstable. <span class="citation" data-cites="no-reward-instability"></span><a href="#fnref37" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn38" role="doc-endnote"><p>The Monero emission tail’s estimated arrival is May 2022 <span class="citation" data-cites="monero-tail-emission"></span>. The money supply limit L will be reached in May 2024, but since coin emission will no longer depend on the supply it will have no effect. Based on Monero’s range proof, it will be impossible to send more money than L in one output, even if someone manages to accumulate more than that (and assuming they have wallet software that can handle that much).<a href="#fnref38" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn39" role="doc-endnote"><p>Apparently, at one point miner transactions could be constructed using deprecated transaction format versions, and could include some normal transaction (RingCT) components. The issues were fixed in protocol v12 after this hackerone report was published: <span class="citation" data-cites="miner-tx-checks"></span>.<a href="#fnref39" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn40" role="doc-endnote"><p>In the current version miners may claim less than the calculated block reward. The leftovers are pushed back into the emission schedule for future miners.<a href="#fnref40" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn41" role="doc-endnote"><p>The miner transaction output can theoretically be sent to a subaddress and/or use multisig and/or an encoded payment ID. We don’t know if any implementations have any of those features.<a href="#fnref41" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn42" role="doc-endnote"><p>The miner tx can’t be locked for more or less than 60 blocks. If it is published in the 10block, its unlock height is 70, and it may be spent in the 70block or later.[.5cm]<a href="#fnref42" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn43" role="doc-endnote"><p>+1 accounts for the miner tx.<a href="#fnref43" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn44" role="doc-endnote"><p>In Monero a typical miner (from <a href="https://monerobenchmarks.info/">https://monerobenchmarks.info/</a> as of this writing) can do less than 50,000 hashes per second, so less than 6 million hashes per block. This means the nonce variable doesn’t need to be that big. Monero’s nonce is 4 bytes (max 4.3 billion), and it would be strange for any miner to require all the bits.<a href="#fnref44" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn45" role="doc-endnote"><p>The first known pruning method was added in v0.14.1 of the core Monero implementation (March 2019, coinciding with protocol v10). After verifying a transaction, full nodes can delete all its signature data (including Bulletproofs, MLSAGS, and pseudo output commitments) while keeping <span class="math inline">\(\mathcal{H}_n\)</span>(Signatures) for computing the transaction ID. They only do this with 7/8of all transactions, so every transaction is fully stored by at least 1/8of the network’s full nodes. This reduces blockchain storage by about 2/3. <span class="citation" data-cites="monero-pruning-1/8"></span><a href="#fnref45" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn46" role="doc-endnote"><p>A bug in Monero’s Merkle tree code led to a serious, though apparently non-critical, real-world attack on September 4, 2014 <span class="citation" data-cites="MRL-0002-merkle-problem"></span>.<a href="#fnref46" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn47" role="doc-endnote"><p>Within each transaction is an ‘extra’ field which can contain more-or-less arbitrary data. If a miner needs a wider range of nonces than just 4 bytes, they can add or alter data in their miner tx’s extra field to ‘extend’ the nonce size. <span class="citation" data-cites="extra-field-stackexchange"></span><a href="#fnref47" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+</body>
+</html>

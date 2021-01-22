@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>txKnowledgeProofs.tex</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">txKnowledgeProofs.tex</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#chapter:tx-knowledge-proofs">Monero Transaction-Related Knowledge Proofs</a>
+<ul>
+<li><a href="#sec:proofs-monero-proofs">Transaction proofs in Monero</a>
+<ul>
+<li><a href="#subsec:proofs-multi-base-monero">Multi-base Monero transaction proofs</a></li>
+<li><a href="#subsec:proofs-input-creation-spendproof">Prove creation of a transaction input (<span><code>SpendProofV1</code></span>)</a></li>
+<li><a href="#subsec:proofs-output-creator-outproof">Prove creation of a transaction output (<span><code>OutProofV2</code></span>)</a></li>
+<li><a href="#subsec:proofs-output-ownership-inproof">Prove ownership of an output (<span><code>InProofV2</code></span>)</a></li>
+<li><a href="#subsec:proofs-owned-output-spent-unspentproof">Prove an owned output was not spent in a transaction (UnspentProof)</a></li>
+<li><a href="#subsec:proofs-minimum-balance-reserveproof">Prove an address has a minimum unspent balance (<span><code>ReserveProofV2</code></span>)</a></li>
+</ul></li>
+<li><a href="#sec:proofs-monero-audit-framework">Monero audit framework</a>
+<ul>
+<li><a href="#subsec:proofs-address-subaddress-correspond-subaddressproof">Prove an address and subaddress correspond (SubaddressProof)</a></li>
+<li><a href="#subsec:audit-framework">The audit framework</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="chapter:tx-knowledge-proofs">Monero Transaction-Related Knowledge Proofs</h1>
+<p>https://github.com/monero-project/monero/pull/6329/files</p>
+<p>https://monero.stackexchange.com/questions/8122/what-is-the-spendproofv1-or-outproofv1-in-the-details-of-a-sent-transa</p>
+<p>https://monero.stackexchange.com/questions/9991/how-does-the-get-reserve-proof-command-work</p>
+<p>https://github.com/monero-project/research-lab/issues/68</p>
+<p>Monero is a currency, and like any currency its uses are complex. From corporate accounting, to market exchange, to legal arbitration, different interested parties may want to know detailed information about transactions made.</p>
+<p>How can you know for sure that money you received came from a specific person? Or prove that you did in fact send a certain output or transaction to someone despite claims to the contrary? Senders and recipients in the Monero public ledger are ambiguous. How can you prove you have a certain amount of money, without compromising your private keys? Amounts in Monero are completely hidden from observers.</p>
+<p>We consider several types of transaction assertions, a few of which are implemented in Monero and available with built-in wallet tools. We also outline a framework for auditing the full balance owned by a person or organization, that doesn’t require leaking information about future transactions they might make.</p>
+<h2 id="sec:proofs-monero-proofs">Transaction proofs in Monero</h2>
+<p>Monero transaction proofs are in the process of being updated <span class="citation" data-cites="sarang-txproofs-updates-issue"></span>. The currently implemented proofs are all ‘version 1’, and don’t include domain separation. We describe only the most advanced proofs, whether they be currently implemented, slated for implementation in future releases <span class="citation" data-cites="sarang-txproofs-v2-update-pr"></span>, or hypothetical proofs that may or may not get implemented (Sections <a href="#subsec:proofs-owned-output-spent-unspentproof" data-reference-type="ref" data-reference="subsec:proofs-owned-output-spent-unspentproof">1.1.5</a> <span class="citation" data-cites="unspent-proof-issue-68"></span>, and <a href="#subsec:proofs-address-subaddress-correspond-subaddressproof" data-reference-type="ref" data-reference="subsec:proofs-address-subaddress-correspond-subaddressproof">1.2.1</a>).</p>
+<h3 id="subsec:proofs-multi-base-monero">Multi-base Monero transaction proofs</h3>
+<p>There are a few details to be aware of going forward. Most Monero transaction proofs involve multi-base proofs (recall Section <a href="#sec:proofs-discrete-logarithm-multiple-bases" data-reference-type="ref" data-reference="sec:proofs-discrete-logarithm-multiple-bases">[sec:proofs-discrete-logarithm-multiple-bases]</a>). Wherever relevant, the domain separator is <span class="math inline">\(T_{txprf2} = \mathcal{H}_n(``\textrm{TXPROOF\_V2}&quot;)\)</span>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> The message being signed is usually (unless otherwise specified) <span class="math inline">\(\mathfrak{m} = \mathcal{H}_n(\texttt{tx\_hash, \texttt{message}})\)</span>, where <span><code>tx_hash</code></span> is the relevant transaction’s ID (Section <a href="#subsec:transaction-id" data-reference-type="ref" data-reference="subsec:transaction-id">[subsec:transaction-id]</a>), and <span><code>message</code></span> is an optional message that provers or third parties can provide to make sure the prover actually makes a proof and hasn’t stolen it.</p>
+<p>Proofs are encoded in base-58, a binary-to-text encoding scheme first introduced for Bitcoin <span class="citation" data-cites="base-58-encoding"></span>. Verifying these proofs always involves first decoding them from base-58 back to binary. Note that verifiers also need access to the blockchain, so they can use transaction ID references to get information like one-time addresses.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a><br />
+The structure of key prefixing in proofs is somewhat lopsided, due in part to accumulating updates that haven’t reorganized it. Challenges for 2-base ‘version 2’ proofs are assembled with this format, where if ‘base key 1’ is <span class="math inline">\(G\)</span> then its position in the challenge is filled with 32 zero bytes, <span class="math display">\[c = \mathcal{H}_n(\mathfrak{m}\textrm{, public key 2, proof part 1, proof part 2, $T_{txprf2}$, public key 1, base key 2, base key 1})\]</span></p>
+<h3 id="subsec:proofs-input-creation-spendproof">Prove creation of a transaction input (<span><code>SpendProofV1</code></span>)</h3>
+<p>Suppose we made a transaction, and want to prove it. Clearly, by remaking a transaction input’s signature on a new message, any verifier would have no choice but to conclude we made the original. Remaking <span><em>all</em></span> of a transaction’s inputs’ signatures means we must have made the entire transaction (recall Section <a href="#full-signature" data-reference-type="ref" data-reference="full-signature">[full-signature]</a>), or at the very least fully funded it.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>A so-called ‘SpendProof’ contains remade signatures for all of a transaction’s inputs. Importantly, SpendProof ring signatures re-use the original ring members to avoid identifying the true signer via ring intersections.</p>
+<p>SpendProofs are implemented in Monero, and to encode one for transmission to verifiers, the prover concatenates the prefix string “<span><code>SpendProofV1</code></span>" with the list of signatures. Note that the prefix string is not in base-58 and doesn’t need to be encoded/decoded, since its purpose is human readability.</p>
+<h4 class="unnumbered" id="the-spendproof">The SpendProof</h4>
+<p>SpendProofs unexpectedly don’t use MLSAGs, but rather Monero’s original ring signature scheme that was used in the very first transaction protocol (pre-RingCT) <span class="citation" data-cites="cryptoNoteWhitePaper"></span>.</p>
+<ol>
+<li><p>Calculate key image <span class="math inline">\(\tilde{K} = k^o_\pi \mathcal{H}_p(K^o_\pi)\)</span>.</p></li>
+<li><p>Generate random number <span class="math inline">\(\alpha \in_R \mathbb{Z}_l\)</span> and random numbers <span class="math inline">\(c_i, r_i \in_R \mathbb{Z}_l\)</span> for <span class="math inline">\(i \in \{1, 2, ..., n\}\)</span> but excluding <span class="math inline">\(i = \pi\)</span>.</p></li>
+<li><p>Compute <span class="math display">\[c_{tot} = \mathcal{H}_n(\mathfrak{m},[r_1 G + c_1 K^o_1],[r_1 \mathcal{H}_p(K^o_1) + c_1 \tilde{K}],...,[\alpha G],[\alpha \mathcal{H}_p(K^o_{\pi})],...,\textrm{etc.})\]</span></p></li>
+<li><p>Define the real challenge <span class="math display">\[c_{\pi} = c_{tot} - \sum^{n}_{i=1,i\neq \pi} c_i\]</span></p></li>
+<li><p>Define <span class="math inline">\(r_{\pi} = \alpha - c_{\pi}*k^o_{\pi} \pmod l\)</span>.</p></li>
+</ol>
+<p>The signature is <span class="math inline">\(\sigma = (c_1, r_1,c_2,r_2,...,c_n,r_n)\)</span>.</p>
+<h4 class="unnumbered" id="verification">Verification</h4>
+<p>To verify a SpendProof on a given transaction, the verifier confirms that all ring signatures are valid using information found in the relevant reference transaction (e.g. key images, and output offsets for getting one-time addresses from other transactions).</p>
+<ol>
+<li><p>Compute <span class="math display">\[c_{tot} = \mathcal{H}_n(\mathfrak{m},[r_1 G + c_1 K^o_1],[r_1 \mathcal{H}_p(K^o_1) + c_1 \tilde{K}],...,[r_n G + c_n K^o_n],[r_n \mathcal{H}_p(K^o_n) + c_n \tilde{K}])\]</span></p></li>
+<li><p>Check that <span class="math display">\[c_{tot} \stackrel{?}{=} \sum^{n}_{i=1} c_i\]</span></p></li>
+</ol>
+<h4 class="unnumbered" id="why-it-works">Why it works</h4>
+<p>Note how this scheme is the same as bLSAG (Section <a href="#blsag_note" data-reference-type="ref" data-reference="blsag_note">[blsag_note]</a>) when there is only one ring member. To add a fake member, instead of passing the challenge <span class="math inline">\(c_{\pi+1}\)</span> into a new challenge hash, the member gets added into the original hash. Since the following equation <span class="math display">\[c_{s} = c_{tot} - \sum^{n}_{i=1,i\neq s} c_i\]</span></p>
+<p>trivially holds for any index <span class="math inline">\(s\)</span>, a verifier will have no way to identify the real challenge. Moreover, without knowledge of <span class="math inline">\(k^o_{\pi}\)</span> the prover would never have been able to define <span class="math inline">\(r_{\pi}\)</span> properly (except with negligible probability).</p>
+<h3 id="subsec:proofs-output-creator-outproof">Prove creation of a transaction output (<span><code>OutProofV2</code></span>)</h3>
+<p>Now suppose we sent someone money (an output) and want to prove it. Transaction outputs contain at heart three components: the recipient’s address, the amount sent, and the transaction private key. Amounts are encoded, so we only really need the address and transaction private key to get started. Anyone who deletes or loses their transaction private key will be unable to make an OutProof, so in that sense OutProofs are the least reliable of all Monero transaction proofs.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<p>Our task here is to show the one-time address was made from the recipient’s address, and allow verifiers to reconstruct the output commitment. We do so by providing the sender-receiver shared secret <span class="math inline">\(rK^v\)</span>, then proving we created it and that it corresponds with the transaction public key and recipient’s address by signing a 2-base signature (Section <a href="#sec:proofs-discrete-logarithm-multiple-bases" data-reference-type="ref" data-reference="sec:proofs-discrete-logarithm-multiple-bases">[sec:proofs-discrete-logarithm-multiple-bases]</a>) on the base keys <span class="math inline">\(G\)</span> and <span class="math inline">\(K^v\)</span>. Verifiers can use the shared secret to check the recipient (Section <a href="#sec:one-time-addresses" data-reference-type="ref" data-reference="sec:one-time-addresses">[sec:one-time-addresses]</a>), decode the amount (Section <a href="#sec:pedersen_monero" data-reference-type="ref" data-reference="sec:pedersen_monero">[sec:pedersen_monero]</a>), and reconstruct the output commitment (Section <a href="#sec:pedersen_monero" data-reference-type="ref" data-reference="sec:pedersen_monero">[sec:pedersen_monero]</a>). We provide details for both normal addresses and subaddresses.</p>
+<h4 class="unnumbered" id="the-outproof">The OutProof</h4>
+<p>To generate a proof for an output directed to an address <span class="math inline">\((K^{v},K^{s})\)</span> or subaddress <span class="math inline">\((K^{v,i},K^{s,i})\)</span>, with transaction private key <span class="math inline">\(r\)</span>, where the sender-receiver shared secret is <span class="math inline">\(rK^v\)</span>, recall that the transaction public key stored in transaction data is either <span class="math inline">\(rG\)</span> or <span class="math inline">\(rK^{s,i}\)</span> depending on whether or not the recipient is a subaddress (Section <a href="#sec:subaddresses" data-reference-type="ref" data-reference="sec:subaddresses">[sec:subaddresses]</a>).</p>
+<ol>
+<li><p>Generate random number <span class="math inline">\(\alpha \in_R \mathbb{Z}_l\)</span>, and compute</p>
+<ol>
+<li><p><span><em>Normal address</em></span>: <span class="math inline">\(\alpha G\)</span> and <span class="math inline">\(\alpha K^v\)</span></p></li>
+<li><p><span><em>Subaddress</em></span>: <span class="math inline">\(\alpha K^{s,i}\)</span> and <span class="math inline">\(\alpha K^{v,i}\)</span></p></li>
+</ol></li>
+<li><p>Calculate the challenge</p>
+<ol>
+<li><p><span><em>Normal address</em></span>:<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> <span class="math display">\[c = \mathcal{H}_n(\mathfrak{m},[rK^v], [\alpha G], [\alpha K^v], [T_{txprf2}], [rG], [K^v], [0])\]</span></p></li>
+<li><p><span><em>Subaddress</em></span>: <span class="math display">\[c = \mathcal{H}_n(\mathfrak{m},[rK^{v,i}], [\alpha K^{s,i}], [\alpha K^{v,i}], [T_{txprf2}], [rK^{s,i}], [K^{v,i}], [K^{s,i}])\]</span></p></li>
+</ol></li>
+<li><p>Define the response<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> <span class="math inline">\(r^{resp} = \alpha - c*r\)</span>.</p></li>
+<li><p>The signature is <span class="math inline">\(\sigma^{outproof} = (c, r^{resp})\)</span>.</p></li>
+</ol>
+<p>A prover can generate a bunch of OutProofs, and send them all together to a verifier. He concatenates prefix string “<span><code>OutProofV2</code></span>" with a list of proofs, where each item (encoded in base-58) consists of the sender-receiver shared secret <span class="math inline">\(r K^v\)</span> (or <span class="math inline">\(r K^{v,i}\)</span> for a subaddress), and its corresponding <span class="math inline">\(\sigma^{outproof}\)</span>. We assume the verifier knows the appropriate address for each proof.</p>
+<h4 class="unnumbered" id="verification-1">Verification</h4>
+<ol>
+<li><p>Calculate the challenge</p>
+<ol>
+<li><p><span><em>Normal address</em></span>: <span class="math display">\[c&#39; = \mathcal{H}_n(\mathfrak{m},[rK^v], [r^{resp} G + c*r G], [r^{resp} K^v + c*r K^v], [T_{txprf2}], [rG], [K^v], [0])\]</span></p></li>
+<li><p><span><em>Subaddress</em></span>: <span class="math display">\[c&#39; = \mathcal{H}_n(\mathfrak{m},[rK^{v,i}], [r^{resp} K^{s,i} + c*r K^{s,i}], [r^{resp} K^{v,i} + c*r K^{v,i}], [T_{txprf2}], [rK^{s,i}], [K^{v,i}], [K^{s,i}])\]</span></p></li>
+</ol></li>
+<li><p>If <span class="math inline">\(c = c&#39;\)</span> then the prover knows <span class="math inline">\(r\)</span>, and <span class="math inline">\(rK^v\)</span> is legitimately a shared secret between <span class="math inline">\(r G\)</span> and <span class="math inline">\(K^v\)</span> (except with negligible probability).</p></li>
+<li><p>The verifier should check the recipient’s address provided can be used to make a one-time address from the relevant transaction (it’s the same computation for normal addresses and subaddresses) <span class="math display">\[K^s \stackrel{?}{=} K^o_t - \mathcal{H}_n(r K^v,t)\]</span></p></li>
+<li><p>They should also decode the output amount <span class="math inline">\(b_t\)</span>, compute the output mask <span class="math inline">\(y_t\)</span>, and try to reconstruct the corresponding output commitment<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> <span class="math display">\[C^b_t \stackrel{?}{=} y_t G + b_t H\]</span></p></li>
+</ol>
+<h3 id="subsec:proofs-output-ownership-inproof">Prove ownership of an output (<span><code>InProofV2</code></span>)</h3>
+<p>An OutProof shows the prover sent an output to an address, while an InProof shows an output was received to a certain address. It is essentially the other ‘side’ of the sender-receiver shared secret <span class="math inline">\(r K^v\)</span>. This time the prover proves knowledge of <span class="math inline">\(k^v\)</span> in <span class="math inline">\(K^v\)</span>, and that in combination with the transaction public key <span class="math inline">\(r G\)</span> the shared secret <span class="math inline">\(k^v*r G\)</span> appears.</p>
+<p>Once a verifier has <span class="math inline">\(r K^v\)</span>, they can check if the corresponding one-time address is owned by the prover’s address with <span class="math inline">\(K^o - \mathcal{H}_n(k^v*rG,t)*G \stackrel{?}{=} K^s\)</span> (Section <a href="#sec:multi_out_transactions" data-reference-type="ref" data-reference="sec:multi_out_transactions">[sec:multi_out_transactions]</a>). By making an InProof for all transaction public keys on the blockchain, a prover will reveal all his owned outputs.</p>
+<p>Giving the view key directly to a verifier would have the same effect, but once they have that key the verifier would be able to identify ownership of outputs to be created in the future. With InProofs the prover is able to retain control of his private keys, at the cost of the time it takes to prove (and then verify) each output is owned or unowned.</p>
+<h4 class="unnumbered" id="the-inproof">The InProof</h4>
+<p>An InProof is constructed the same way as an OutProof, except the base keys are now <span class="math inline">\(\mathcal{J} = \{G, r G\}\)</span>, the public keys are <span class="math inline">\(\mathcal{K} = \{K^v, r K^{v}\}\)</span>, and the signing key is <span class="math inline">\(k^v\)</span> instead of <span class="math inline">\(r\)</span>. We will show just the verification step to clarify our meaning. Note that the order of key prefixing changes (<span class="math inline">\(r G\)</span> and <span class="math inline">\(K^v\)</span> swap places) to coincide with the different role each key has.</p>
+<p>A multitude of InProofs, related to many outputs owned by the same address, can be sent together to the verifier. They are prefixed with the string “<span><code>InProofV2</code></span>", and each item (encoded in base-58) contains the sender-receiver shared secret <span class="math inline">\(r K^v\)</span> (or <span class="math inline">\(r K^{v,i}\)</span>), and its corresponding <span class="math inline">\(\sigma^{inproof}\)</span>.</p>
+<h4 class="unnumbered" id="verification-2">Verification</h4>
+<ol>
+<li><p>Calculate the challenge</p>
+<ol>
+<li><p><span><em>Normal address</em></span>: <span class="math display">\[c&#39; = \mathcal{H}_n(\mathfrak{m},[rK^v], [r^{resp} G + c*K^v], [r^{resp}*r G + c*k^v*r G], [T_{txprf2}], [K^v], [rG], [0])\]</span></p></li>
+<li><p><span><em>Subaddress</em></span>: <span class="math display">\[c&#39; = \mathcal{H}_n(\mathfrak{m},[rK^{v,i}], [r^{resp} K^{s,i} + c*K^{v,i}], [r^{resp}*r K^{s,i} + c*k^v*r K^{s,i}], [T_{txprf2}], [K^{v,i}], [r K^{s,i}], [K^{s,i}])\]</span></p></li>
+</ol></li>
+<li><p>If <span class="math inline">\(c = c&#39;\)</span> then the prover knows <span class="math inline">\(k^v\)</span>, and <span class="math inline">\(k^v*r G\)</span> is legitimately a shared secret between <span class="math inline">\(K^v\)</span> and <span class="math inline">\(r G\)</span> (except with negligible probability).</p></li>
+</ol>
+<h4 class="unnumbered" id="prove-full-ownership-with-the-one-time-address-key">Prove ‘full’ ownership with the one-time address key</h4>
+<p>While an InProof shows a one-time address was constructed with a specific address (except with negligible probability), it doesn’t necessarily mean the prover can <span><em>spend</em></span> that output. Only those who can spend an output actually own it.</p>
+<p>Proving ownership, once an InProof is complete, is as simple as signing a message with the spend key.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p>
+<h3 id="subsec:proofs-owned-output-spent-unspentproof">Prove an owned output was not spent in a transaction (UnspentProof)</h3>
+<p>It would seem like proving an output is spent or unspent is as simple as recreating its key image with a multi-base proof on <span class="math inline">\(\mathcal{J} = \{G,\mathcal{H}_p(K^o)\}\)</span> and <span class="math inline">\(\mathcal{K} = \{K^o,\tilde{K}\}\)</span>. While this does obviously work, verifiers must learn the key image, which also reveals when an unspent output is spent <span><em>in the future</em></span>.</p>
+<p>It turns out we can prove an output wasn’t spent in a specific transaction without revealing the key image. Moreover, we can prove it is currently unspent <span><em>full stop</em></span>, by extending this UnspentProof <span class="citation" data-cites="unspent-proof-issue-68"></span> to ‘all the transactions where it was included as a ring member’.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></p>
+<p>More specifically, our UnspentProof says that a given key image from a transaction on the blockchain does, or does not, correspond with a specific one-time address from its corresponding ring. Incidentally, as we will see, UnspentProofs go hand-in-hand with InProofs.</p>
+<h4 class="unnumbered" id="setting-up-an-unspentproof">Setting up an UnspentProof</h4>
+<p>The verifier of an UnspentProof must know <span class="math inline">\(r K^v\)</span>, the sender-receiver shared secret for a given owned output with one-time address <span class="math inline">\(K^o\)</span> and transaction public key <span class="math inline">\(r G\)</span>. He either knows the view key <span class="math inline">\(k^v\)</span>, which allowed him to calculate <span class="math inline">\(k^v*r G\)</span> and check <span class="math inline">\(K^o - \mathcal{H}_n(k^v*rG,t)*G \stackrel{?}{=} K^s\)</span> so he knows the output being tested belongs to the prover (recall Section <a href="#sec:one-time-addresses" data-reference-type="ref" data-reference="sec:one-time-addresses">[sec:one-time-addresses]</a>), or the prover provided <span class="math inline">\(r K^v\)</span>. This is where InProofs come in, since with an InProof the verifier can be assured <span class="math inline">\(r K^v\)</span> legitimately came from the prover’s view key, and corresponds with an owned output, without learning the private view key.</p>
+<p>Before verifying an UnspentProof, the verifier will learn the key image to be tested <span class="math inline">\(\tilde{K}_?\)</span>, and checks that its corresponding ring includes the prover’s owned output’s one-time address <span class="math inline">\(K^o\)</span>. He then calculates the partial ‘spend’ image <span class="math inline">\(\tilde{K}^s_?\)</span>. <span class="math display">\[\tilde{K}^s_? = \tilde{K}_? - \mathcal{H}_n(r K^v,t)*\mathcal{H}_p(K^o)\]</span></p>
+<p>If the tested key image was created from <span class="math inline">\(K^o\)</span> then the resultant point will be <span class="math inline">\(\tilde{K}^s_? = k^s*\mathcal{H}_p(K^o)\)</span>.</p>
+<h4 class="unnumbered" id="the-unspentproof">The UnspentProof</h4>
+<p>Our prover creates two multi-base proofs (recall Section <a href="#sec:proofs-discrete-logarithm-multiple-bases" data-reference-type="ref" data-reference="sec:proofs-discrete-logarithm-multiple-bases">[sec:proofs-discrete-logarithm-multiple-bases]</a>). His address, which owns the output in question, is <span class="math inline">\((K^v, K^s)\)</span> or <span class="math inline">\((K^{v,i}, K^{s,i})\)</span>.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></p>
+<ol>
+<li><p>A 3-base proof, where the signing key is <span class="math inline">\(k^s\)</span>, and <span class="math display">\[\begin{aligned}
+        \mathcal{J}^{unspent}_3 &amp;= \{[G], [K^s], [\tilde{K}^s_?]\}\\
+        \mathcal{K}^{unspent}_3 &amp;= \{[K^s], [k^s*K^s], [k^s*\tilde{K}^s_?]\}
+    \end{aligned}\]</span></p></li>
+<li><p>A 2-base proof, where the signing key is <span class="math inline">\(k^s*k^s\)</span>, and <span class="math display">\[\begin{aligned}
+        \mathcal{J}^{unspent}_2 &amp;= \{[G], [\mathcal{H}_p(K^o)]\}\\
+        \mathcal{K}^{unspent}_2 &amp;= \{[k^s*K^s], [k^s*k^s*\mathcal{H}_p(K^o)]\}
+    \end{aligned}\]</span></p></li>
+</ol>
+<p>Along with proofs <span class="math inline">\(\sigma^{unspent}_3\)</span> and <span class="math inline">\(\sigma^{unspent}_2\)</span>, the prover makes sure to communicate the public keys <span class="math inline">\(k^s*K^s\)</span>, <span class="math inline">\(k^s*\tilde{K}^s_?\)</span>, and <span class="math inline">\(k^s*k^s*\mathcal{H}_p(K^o)\)</span>.</p>
+<h4 class="unnumbered" id="verification-3">Verification</h4>
+<ol>
+<li><p>Confirm <span class="math inline">\(\sigma^{unspent}_3\)</span> and <span class="math inline">\(\sigma^{unspent}_2\)</span> are legitimate.</p></li>
+<li><p>Make sure the same public key <span class="math inline">\(k^s*K^s\)</span> was used in both proofs.</p></li>
+<li><p>Check whether <span class="math inline">\(k^s*\tilde{K}^s_?\)</span> and <span class="math inline">\(k^s*k^s*\mathcal{H}_p(K^o)\)</span> are the same. If they are, the output is spent, and if not it is unspent (except with negligible probability).</p></li>
+</ol>
+<h4 class="unnumbered" id="why-it-works-1">Why it works</h4>
+<p>This seemingly roundabout approach prevents the verifier from learning <span class="math inline">\(k^s*H_p(K^o)\)</span> for an unspent output, which he could use in combination with <span class="math inline">\(r K^v\)</span> to compute its real key image, while leaving him confident the tested key image doesn’t correspond to that output.</p>
+<p>Proof <span class="math inline">\(\sigma^{unspent}_2\)</span> can be reused for any number of UnspentProofs involving the same output, although if it actually was spent then only one is really necessary (i.e. UnspentProofs can also be used to demonstrate an output is spent). Performing UnspentProofs on all ring signatures where a given unspent output was referenced should not be computationally expensive. An output is only likely, over time, to be included as decoys in on the order of 11 (current ring size) different rings.</p>
+<h3 id="subsec:proofs-minimum-balance-reserveproof">Prove an address has a minimum unspent balance (<span><code>ReserveProofV2</code></span>)</h3>
+<p>Despite the privacy leak of revealing an output’s key image when it isn’t spent yet, it’s still a somewhat useful method and was implemented in Monero <span class="citation" data-cites="reserveproofs-pull-request-3027"></span> before UnspentProofs were invented <span class="citation" data-cites="unspent-proof-issue-68"></span>. Monero’s so-called ‘ReserveProof’ is used to prove an address owns a minimum amount of money by creating key images for some unspent outputs.</p>
+<p>More specifically, given a minimum balance, the prover finds enough unspent outputs to cover it, demonstrates ownership with InProofs, makes key images for them and proves they are legitimately based on those outputs with 2-base proofs (using a different key prefixing format), and then proves knowledge of the private spend keys used with normal Schnorr signatures (there may be more than one if some outputs are owned by different subaddresses). A verifier can check that the key images have not appeared on the blockchain, and hence their outputs must be unspent.</p>
+<h4 class="unnumbered" id="the-reserveproof">The ReserveProof</h4>
+<p>All the sub-proofs within a ReserveProof sign a different message than other proofs (e.g. OutProofs, InProofs, or SpendProofs). This time it is <span class="math inline">\(\mathfrak{m} = \mathcal{H}_n(\texttt{message}, \texttt{address}, \tilde{K}^o_1, ..., \tilde{K}^o_n)\)</span>, where <span><code>address</code></span> is the encoded form (see <span class="citation" data-cites="luigi-address"></span>) of the prover’s normal address <span class="math inline">\((K^v, K^s)\)</span>, and the key images correspond with unspent outputs to be included in the proof.</p>
+<ol>
+<li><p>Each output has an InProof, which shows the prover’s address (or one of his subaddresses) owns the output.</p></li>
+<li><p>Each output’s key image is signed with a 2-base proof, where the challenge is formatted like this <span class="math display">\[c = \mathcal{H}_n(\mathfrak{m}, [r G + c*K^o], [r \mathcal{H}_p(K^o) + c*\tilde{K}])\]</span></p></li>
+<li><p>Each address (and subaddress) that owns at least one output has a normal Schnorr signature (Section <a href="#sec:signing-messages" data-reference-type="ref" data-reference="sec:signing-messages">[sec:signing-messages]</a>), and the challenge looks like (it’s the same for normal addresses and subaddresses) <span class="math display">\[c = \mathcal{H}_n(\mathfrak{m}, K^{s,i}, [r G + c*K^{s,i}])\]</span></p></li>
+</ol>
+<p>To send a ReserveProof to someone else[.3cm], the prover concatenates prefix string “<span><code>ReserveProofV2</code></span>" with two lists encoded in base-58 (e.g. “<span><code>ReserveProofV2</code></span>, list 1, list 2"). Each item in list 1 is related to a specific output and contains its transaction hash (Section <a href="#subsec:transaction-id" data-reference-type="ref" data-reference="subsec:transaction-id">[subsec:transaction-id]</a>), output index in that transaction (Section <a href="#sec:multi_out_transactions" data-reference-type="ref" data-reference="sec:multi_out_transactions">[sec:multi_out_transactions]</a>), the relevant shared secret <span class="math inline">\(r K^v\)</span>, its key image, its InProof <span class="math inline">\(\sigma^{inproof}\)</span>, and its key image proof. List 2 items are the addresses that own those outputs along with their Schnorr signatures.</p>
+<h4 class="unnumbered" id="verification-4">Verification</h4>
+<ol>
+<li><p>Check the ReserveProof key images have not appeared in the blockchain.</p></li>
+<li><p>Verify the InProof for each output, and that one of the provided addresses owns each one.</p></li>
+<li><p>Verify the 2-base key image signatures.</p></li>
+<li><p>Use the sender-receiver shared secrets to decode the output amounts (Section <a href="#sec:pedersen_monero" data-reference-type="ref" data-reference="sec:pedersen_monero">[sec:pedersen_monero]</a>).</p></li>
+<li><p>Check each address’s signature.</p></li>
+</ol>
+<p>If everything is legitimate, then the prover must own, unspent, at least the total amount contained in the ReserveProof’s outputs (except with negligible probability).<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a></p>
+<h2 id="sec:proofs-monero-audit-framework">Monero audit framework</h2>
+<p>In the USA most companies undergo yearly audits of their financial statements <span class="citation" data-cites="investopedia-audits"></span>, which include the income statement, balance sheet, and cash flow statement. Of these the former two involve in large part a company’s internal record-keeping, while the last involves every transaction that affects how much money the company currently has. Cryptocurrencies are digital cash, so any audit of a cryptocurrency user’s cash flow statement must relate to transactions stored on the blockchain.</p>
+<p>The first task of an audited person is to identify all the outputs they currently own (spent and unspent). This can be one with InProofs using all of their addresses. A large business may have a multitude of subaddresses, especially retailers operating in online marketplaces (see Chapter <a href="#chapter:escrowed-market" data-reference-type="ref" data-reference="chapter:escrowed-market">[chapter:escrowed-market]</a>). Creating InProofs on all transactions for every single subaddress may result in enormous computational and storage requirements for both provers and verifiers.</p>
+<p>Instead, we can make InProofs for just the prover’s normal addresses (on all transactions). The auditor uses those sender-receiver shared secrets to check if any outputs are owned by the prover’s main address or its related subaddresses. Recalling Section <a href="#sec:subaddresses" data-reference-type="ref" data-reference="sec:subaddresses">[sec:subaddresses]</a>, a user’s view key is enough to identify all outputs owned by an address’s subaddresses.</p>
+<p>To ensure the prover is not hoodwinking an auditor by hiding the normal address for some of his subaddresses, he also must prove all subaddresses correspond with one of his known normal addresses.</p>
+<h3 id="subsec:proofs-address-subaddress-correspond-subaddressproof">Prove an address and subaddress correspond (SubaddressProof)</h3>
+<p>SubaddressProofs show that a normal address’s view key can be used to identify outputs owned by a given subaddress.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a></p>
+<h4 class="unnumbered" id="the-subaddressproof">The SubaddressProof</h4>
+<p>SubaddressProofs can be made in much the same way as OutProofs and InProofs. Here the base keys are <span class="math inline">\(\mathcal{J} = \{G, K^{s,i}\}\)</span>, public keys are <span class="math inline">\(\mathcal{K} = \{K^v, K^{v,i}\}\)</span>, and signing key is <span class="math inline">\(k^v\)</span>. Again, we show just the verification step to clarify our meaning.</p>
+<h4 class="unnumbered" id="verification-5">Verification</h4>
+<p>A verifier knows the prover’s address <span class="math inline">\((K^v, K^s)\)</span>, subaddress <span class="math inline">\((K^{v,i}, K^{s,i})\)</span>, and has the SubaddressProof <span class="math inline">\(\sigma^{subproof} = (c,r)\)</span>.</p>
+<ol>
+<li><p>Calculate the challenge <span class="math display">\[c&#39; = \mathcal{H}_n(\mathfrak{m},[K^{v,i}], [r G + c*K^v], [r K^{s,i} + c*K^{v,i}], [T_{txprf2}], [K^v], [K^{s,i}], [0])\]</span></p></li>
+<li><p>If <span class="math inline">\(c = c&#39;\)</span> then the prover knows <span class="math inline">\(k^v\)</span> for <span class="math inline">\(K^v\)</span>, and <span class="math inline">\(K^{s,i}\)</span> in combination with that view key makes <span class="math inline">\(K^{v,i}\)</span> (except with negligible probability).</p></li>
+</ol>
+<h3 id="subsec:audit-framework">The audit framework</h3>
+<p>Now we are prepared to learn as much as possible about a person’s transaction history.<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a></p>
+<ol>
+<li><p>The prover gathers a list of all his accounts, where each account consists of a normal address and various subaddresses. He makes SubaddressProofs for all subaddresses. Much like ReserveProofs, he also makes a signature with the spend key of each address and subaddress, demonstrating he has spend-rights over all outputs owned by those addresses.</p></li>
+<li><p>The prover generates, for each of his normal addresses, InProofs on all transactions (e.g. all transaction public keys) in the blockchain. This reveals to the auditor all outputs owned by the prover’s addresses since they can check all one-time addresses with the sender-receiver shared secrets. They can be sure outputs owned by subaddresses will be identified, because of the SubaddressProofs.<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a></p></li>
+<li><p>The prover generates, for each of his owned outputs, UnspentProofs on all transaction inputs where they appear as ring members. Now the auditor will know the prover’s balance, and can further investigate spent outputs.<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a></p></li>
+<li><p><span><em>Optional</em></span>: The prover generates, for each transaction where he spent an output, an OutProof to show the auditor the recipient and amount. This step is only possible for transactions where the prover saved the transaction private key(s).</p></li>
+</ol>
+<p>Importantly, a prover has no way to show the origin of funds directly. His only recourse is to request a set of proofs from people sending him money.</p>
+<ol>
+<li><p>For a transaction sending money to the prover, its author makes a SpendProof demonstrating they actually sent it.</p></li>
+<li><p>The prover’s funder also makes a signature with an identifying public key, for example the spend key of their normal address. Both the SpendProof and this signature should sign a message containing that identifying public key, to ensure the SpendProof wasn’t stolen or in fact made by someone else.</p></li>
+</ol>
+<section class="footnotes" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1" role="doc-endnote"><p>Just like in Section <a href="#sec:CLSAG" data-reference-type="ref" data-reference="sec:CLSAG">[sec:CLSAG]</a>, hash functions should be domain separated by prefixing them with tags. The current Monero transaction proofs implementation has no domain separation, so all the tags in this chapter are in features <span><em>not</em></span> yet implemented.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>Transaction IDs are usually communicated separately from proofs.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>As we will see in Chapter <a href="#chapter:txtangle" data-reference-type="ref" data-reference="chapter:txtangle">[chapter:txtangle]</a>, someone who made one input signature didn’t necessarily make all input signatures.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4" role="doc-endnote"><p>We can think of an ‘OutProof’ as showing an output is ‘outgoing’ from the prover. The corresponding ‘InProofs’ (Section <a href="#subsec:proofs-output-ownership-inproof" data-reference-type="ref" data-reference="subsec:proofs-output-ownership-inproof">1.1.4</a>) show outputs that are ‘incoming’ to the prover’s address.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5" role="doc-endnote"><p>Here the ‘0’ value is a 32-byte encoding of zero bytes.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6" role="doc-endnote"><p>Due to the limited number of available symbols, we unfortunately used <span class="math inline">\(r\)</span> for both responses and the transaction private key. Superscript ‘resp’ for ‘response’ will be used to differentiate the two when necessary.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7" role="doc-endnote"><p>A valid OutProof signature doesn’t necessarily mean the recipient considered is the real recipient. A malicious prover could generate a random view key <span class="math inline">\(K&#39;^v\)</span>, compute <span class="math inline">\(K&#39;^s = K^o - \mathcal{H}_n(rK&#39;^v,t)*G\)</span>, and provide <span class="math inline">\((K&#39;^v,K&#39;^s)\)</span> as the nominal recipient. By recalculating the output commitment, verifiers can be more confident the recipient address in question is legitimate. However, a prover and recipient could collaborate to encode the output commitment using <span class="math inline">\(K&#39;^v\)</span>, while the one-time address uses <span class="math inline">\((K^v,K^s)\)</span>. Since the recipient would need to know the private key <span class="math inline">\(k&#39;^v\)</span> (assuming the output amount is still meant to be spendable), there is questionable utility to that level of deception. Why wouldn’t the recipient just use <span class="math inline">\((K&#39;^v,K&#39;^s)\)</span> (or some other single-use address) for the entire output? Since the computation of <span class="math inline">\(C^b_t\)</span> is related to the recipient, we consider the described OutProof verification process adequate. In other words, the prover can’t use it to deceive verifiers without coordinating with the recipient.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8" role="doc-endnote"><p>The ability to provide such a signature directly does not seem to be available in Monero, although as we will see ReserveProofs (Section <a href="#subsec:proofs-minimum-balance-reserveproof" data-reference-type="ref" data-reference="subsec:proofs-minimum-balance-reserveproof">1.1.6</a>) do include them.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9" role="doc-endnote"><p>UnspentProofs have not been implemented in Monero.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10" role="doc-endnote"><p>UnspentProofs are made the same way for subaddresses and normal addresses. The full spend key of a subaddress is required, e.g. <span class="math inline">\(k^{s,i} = k^s + \mathcal{H}_n(k^v,i)\)</span> (Section <a href="#sec:subaddresses" data-reference-type="ref" data-reference="sec:subaddresses">[sec:subaddresses]</a>).<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11" role="doc-endnote"><p>ReserveProofs, while demonstrating full ownership of funds, do not include proofs that given subaddresses actually correspond with the prover’s normal address.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12" role="doc-endnote"><p>SubaddressProofs have not been implemented in Monero.<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13" role="doc-endnote"><p>This audit framework is not completely available in Monero. SubaddressProofs and UnspentProofs are not implemented, InProofs are not prepared for the optimization related to subaddresses that we explained, and there is no real structure to easily get or organize all the necessary information for both provers and verifiers.<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn14" role="doc-endnote"><p>This step can also be completed by providing the private view keys, although it has obvious privacy implications.<a href="#fnref14" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn15" role="doc-endnote"><p>Alternatively, he could make ReserveProofs for all owned outputs. Again, revealing the key images of unspent outputs has obvious privacy implications.<a href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+</body>
+</html>

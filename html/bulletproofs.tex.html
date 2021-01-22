@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>bulletproofs.tex</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">bulletproofs.tex</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#chapter:bulletproofs">Bulletproofs (WIP)</a>
+<ul>
+<li><a href="#sec:vectorzkproof">Vector Knowledge Proof</a></li>
+<li><a href="#inner-product-proof">Inner Product Proof</a></li>
+<li><a href="#sec:condensedvectorproof">Condensed Vector Knowledge Proof</a>
+<ul>
+<li><a href="#non-interactive-proof-2">Non-interactive proof</a></li>
+<li><a href="#verification-2">Verification</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="chapter:bulletproofs">Bulletproofs (WIP)</h1>
+<h2 id="sec:vectorzkproof">Vector Knowledge Proof</h2>
+<p>Prove knowledge of all elements in vector set <span class="math inline">\(\boldsymbol{V}\)</span> containing <span class="math inline">\(m\)</span> vectors of size <span class="math inline">\(N\)</span> (<span class="math inline">\(m \neq N\)</span>), committed to in <span class="math inline">\((C_1, C_2,..., C_m)\)</span> where <span class="math inline">\(C_i = v_{i,1}*H_1 + v_{i,2}*H_2 + ... + v_{i,N}*H_N\)</span>. The discrete logarithms with respect to <span class="math inline">\(G\)</span> of generators in vector <span class="math inline">\(\boldsymbol{H} = \langle H_1,..., H_N \rangle\)</span>, <span class="math inline">\(\boldsymbol{\lambda} = \langle \lambda_1, ..., \lambda_N \rangle\)</span>, are unknown (and e.g. the discrete log of <span class="math inline">\(H_2\)</span> with respect to <span class="math inline">\(H_4\)</span>). Verifiers know there are <span class="math inline">\(m*N\)</span> elements, but gain no information about them.</p>
+<h4 class="unnumbered" id="non-interactive-proof">Non-interactive proof</h4>
+<ol>
+<li><p>Generate a vector (size N+1) of random integers <span class="math inline">\(\boldsymbol{\alpha} \in_R \mathbb{Z}_l\)</span>, and compute the inner product <span class="math inline">\(C_{\alpha} = \boldsymbol{\alpha} \bullet \textbf{H}\)</span>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p></li>
+<li><p>Calculate the <span><em>challenge</em></span> <span class="math inline">\(c = \mathcal{H}(T_{vec},\boldsymbol{V},C_{\alpha})\)</span>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p></li>
+<li><p>Define the <span><em>response vector</em></span> (size N+1) <span class="math inline">\(\textbf{r}\)</span>, with an element <span class="math inline">\(r_j\)</span> for each generator <span class="math inline">\(H_j\)</span> (imagine vectors listed out in rows, and here we take the column sum with one <span class="math inline">\(v_{i,j}\)</span> from each vector <span class="math inline">\(i\)</span>) (note each one is multiplied by <span class="math inline">\(c\)</span> raised to power <span class="math inline">\(i\)</span>) <span class="math display">\[r_j = \alpha_j - \sum^{m}_{i=1} c^i*v_{i,j}\]</span></p></li>
+<li><p>Publish the proof pair <span class="math inline">\((c, \boldsymbol{r})\)</span>.</p></li>
+</ol>
+<h4 class="unnumbered" id="verification">Verification</h4>
+<ol>
+<li><p>Calculate the challenge: <span class="math inline">\(c&#39; = \mathcal{H}(...,\textbf{r} \bullet \textbf{H} + \sum^{m}_{i=1} (c&#39;)^i*C_i)\)</span>.</p></li>
+<li><p>If <span class="math inline">\(c = c&#39;\)</span> then the prover must know <span class="math inline">\(\boldsymbol{V}\)</span> (except with negligible probability).</p></li>
+</ol>
+<h4 class="unnumbered" id="why-it-works">Why it works</h4>
+<p><span class="math display">\[\begin{aligned}
+\textbf{r} \bullet \textbf{H} &amp;= C_{\alpha} - \sum^{m}_{i=1} (c&#39;)^i*C_i \\
+\sum^{N}_{j=1} [r_j*H_j] &amp;= C_{\alpha} - \sum^{m}_{i=1} (c&#39;)^i*C_i \\
+\sum^{N}_{j=1} [(\alpha_j - \sum^{m}_{i=1} c^i*v_{i,j})*H_j] &amp;= C_{\alpha} - \sum^{m}_{i=1} (c&#39;)^i*C_i \\
+(\sum^{N}_{j=1} \alpha_j*H_j) - \sum^{N}_{j=1} [(\sum^{m}_{i=1} c^i*v_{i,j})*H_j] &amp;= C_{\alpha} - \sum^{m}_{i=1} (c&#39;)^i*C_i \\
+C_{\alpha} - \sum^{m}_{i=1} c^i*[\sum^{N}_{j=1} v_{i,j}*H_j] &amp;= C_{\alpha} - \sum^{m}_{i=1} (c&#39;)^i*C_i \\
+C_{\alpha} - \sum^{m}_{i=1} c^i*C_i &amp;= C_{\alpha} - \sum^{m}_{i=1} (c&#39;)^i*C_i \\\end{aligned}\]</span></p>
+<p>Verifiers can be confident that provers know all elements of <span class="math inline">\(\boldsymbol{V}\)</span> (except with negligible probability) thanks to a confluence of features in this proof (combined with the logic from basic Schnorr Signatures, explained in Section <a href="#sec:schnorr-fiat-shamir" data-reference-type="ref" data-reference="sec:schnorr-fiat-shamir">[sec:schnorr-fiat-shamir]</a>).</p>
+<h4 class="unnumbered" id="justification-of-features">Justification of Features</h4>
+<ol>
+<li><p>If we do not use <span class="math inline">\(\boldsymbol{H}\)</span> or powers of <span class="math inline">\(c\)</span>, and the response was instead <span class="math inline">\(r = \sum \boldsymbol{\alpha} + c* \sum_{i=1}^{m} (\sum_{j=1}^{N} v_{i,j})\)</span>, then provers have only demonstrated they know the sum of all vector elements (at most). Or, in other words, just the discrete logarithm of <span class="math inline">\(K = \sum_{i=1}^{m} C_i\)</span> as in a normal Schnorr signature.</p></li>
+<li><p>Adding in <span class="math inline">\(\boldsymbol{H}\)</span> makes <span class="math inline">\(r_j = \alpha_j +  c* \sum_{i=1}^{m} v_{i,j}\)</span>, which ensures provers must at least know the sum at each vector index <span class="math inline">\(j\)</span>. While there may exist many other <span class="math inline">\(\boldsymbol{r&#39;}\)</span> vectors that produce <span class="math inline">\(R = \boldsymbol{r&#39;} \bullet \boldsymbol{H} = r&#39;_1*\lambda_1*G + r&#39;_2*\lambda_2*G + ...\)</span>, it is very difficult to find any of them using just the sum of all elements (step 1) without knowing <span class="math inline">\(\boldsymbol{\lambda}\)</span> (which we assume to be unknown).<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p></li>
+<li><p>Including powers of <span class="math inline">\(c\)</span> turns each response element <span class="math inline">\(r_j\)</span> into a polynomial function of <span class="math inline">\(c\)</span>, <span class="math inline">\(r_j(c) = \alpha_j + v_{1,j}*c + v_{2,j}*c^2 + ... + v_{m,j}*c^m\)</span>. Now, given <span class="math inline">\(c\)</span>, there are many combinations of (<span class="math inline">\(\alpha&#39;_j, v&#39;_{1,j}, ..., v&#39;_{m,j}\)</span>) that will produce <span class="math inline">\(r_j\)</span>, but the probability of guessing one is negligible since <span class="math inline">\(r_j\)</span> is itself unknown (and can be anything between 1 and <span class="math inline">\(l\)</span> [<span class="math inline">\(l\)</span> is the elliptic curve subgroup]). Even if the sum at each vector index is known (step 2), guessing a useful factorization becomes increasingly difficult as the size of <span class="math inline">\(\boldsymbol{V}\)</span> rises (usually the only one that works will be the actual elements of <span class="math inline">\(\boldsymbol{V}\)</span>). Moreover, <span class="math inline">\(c\)</span> is unknown in advance so provers can’t report a random <span class="math inline">\(r_j\)</span> (recall Section <a href="#sec:schnorr-fiat-shamir" data-reference-type="ref" data-reference="sec:schnorr-fiat-shamir">[sec:schnorr-fiat-shamir]</a>). This means provers must know all elements of <span class="math inline">\(\boldsymbol{V}\)</span>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p></li>
+</ol>
+<h2 id="inner-product-proof">Inner Product Proof</h2>
+<p>Suppose we have two vectors <span class="math inline">\(\boldsymbol{v}\)</span> and <span class="math inline">\(\boldsymbol{z}\)</span>, each with <span class="math inline">\(N\)</span> elements. Their inner product is <span class="math inline">\(s = \boldsymbol{v} \bullet \boldsymbol{z}\)</span>, we have their commitments <span class="math inline">\([C_s = x_s G + s H_1, C_v = (x_v, \boldsymbol{v}) \bullet (G,\boldsymbol{H}), C_z = (x_z, \boldsymbol{z}) \bullet (G,\boldsymbol{H})]\)</span><a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>, and we want to prove the inner product equation holds (and that we know all the elements) without revealing any information (aside from N) about <span class="math inline">\((s, \boldsymbol{v}, \boldsymbol{z})\)</span>. In other words, prove the value in <span class="math inline">\(C_s\)</span> is the inner product of the vectors, size N, in <span class="math inline">\(C_v\)</span> and <span class="math inline">\(C_z\)</span>. Note that now we include blinding factors <span class="math inline">\(x_s\)</span>, <span class="math inline">\(x_v\)</span>, and <span class="math inline">\(x_z\)</span>, which are not strictly part of the vectors being considered. This concept will be useful in later sections, where it is important to hide the original values with a random mask.</p>
+<p>Basically, we do two vector knowledge proofs (Section <a href="#sec:vectorzkproof" data-reference-type="ref" data-reference="sec:vectorzkproof">1.1</a>) for <span class="math inline">\(\boldsymbol{v}\)</span> and <span class="math inline">\(\boldsymbol{z}\)</span>, and an extra bit for the inner product.</p>
+<h4 class="unnumbered" id="non-interactive-proof-1">Non-interactive proof</h4>
+<ol>
+<li><p>Generate two vectors (size N) and four integers <span class="math inline">\((\alpha_{v,0}, \boldsymbol{\alpha_v}, \alpha_{z,0}, \boldsymbol{\alpha_z}, \alpha_{s,0}, \alpha_{s,1}) \in_R \mathbb{Z}_l\)</span>, and compute <span class="math display">\[\begin{aligned}
+    C_{\alpha}^{v} &amp;= (\alpha_{v,0},\boldsymbol{\alpha_v}) \bullet (G,\textbf{H}) \\
+    C_{\alpha}^{z} &amp;= (\alpha_{z,0}, \boldsymbol{\alpha_z}) \bullet (G,\textbf{H}) \\
+    C_{\alpha}^{s,0} &amp;= \alpha_{s,0}*G + (\boldsymbol{\alpha_v} \bullet \boldsymbol{\alpha_z})*H_1 \\
+    C_{\alpha}^{s,1} &amp;= \alpha_{s,1}*G + (\boldsymbol{v} \bullet \boldsymbol{\alpha_z} + \boldsymbol{z} \bullet \boldsymbol{\alpha_v})*H_1
+    \end{aligned}\]</span></p></li>
+<li><p>Calculate the <span><em>challenge</em></span> <span class="math inline">\(c = \mathcal{H}(...,C_{\alpha}^{v},C_{\alpha}^{z},C_{\alpha}^{s,0},C_{\alpha}^{s,1})\)</span>.</p></li>
+<li><p>Define the <span><em>response</em></span>, <span class="math inline">\(\boldsymbol{r}\)</span>, containing vectors (size N) <span class="math inline">\(\boldsymbol{r_v}, \boldsymbol{r_z}\)</span>, with <span class="math inline">\(r_{v,0}, r_{z,0}\)</span> for the vectors’ blinding factors, and <span class="math inline">\(r_s\)</span> for the inner product blinding factor <span class="math display">\[\begin{aligned}
+    r_{v,0} &amp;= \alpha_{v,0} - c*x_v \\
+    r_{z,0} &amp;= \alpha_{z,0} - c*x_z \\
+    r_{v,j} &amp;= \alpha_{v,j} - c*v_j \\
+    r_{z,j} &amp;= \alpha_{z,j} - c*z_j \\
+    r_s &amp;= \alpha_{s,0} + c*\alpha_{s,1} + c^2*x_s 
+    \end{aligned}\]</span></p></li>
+<li><p>Publish the proof <span class="math inline">\((c, \boldsymbol{r}, C^{s,0}_{\alpha}, C^{s,1}_{\alpha})\)</span>.</p></li>
+</ol>
+<h4 class="unnumbered" id="verification-1">Verification</h4>
+<ol>
+<li><p>Calculate the challenge: <span class="math display">\[c&#39; = \mathcal{H}(...,[(r_{v,0},\boldsymbol{r_v}) \bullet (G,\textbf{H}) + c*C_v],[(r_{z,0},\boldsymbol{r_z}) \bullet (G,\textbf{H}) + c*C_z],[C^{s,0}_{\alpha}],[C^{s,1}_{\alpha}])\]</span></p></li>
+<li><p>Compute<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> <span class="math display">\[\begin{aligned}
+    %R_v &amp;= (r_{v,0},\boldsymbol{r_v}) \bullet \textbf{H} \\
+    %R&#39;_v &amp;= C_{\alpha}^{v} + c&#39;*C_v \\
+    %R_z &amp;= (r_{z,0},\boldsymbol{r_z}) \bullet \textbf{H} \\
+    %R&#39;_z &amp;= C_{\alpha}^{z} + c&#39;*C_z \\
+    R_s &amp;= r_s*G + (\boldsymbol{r_v} \bullet \boldsymbol{r_z})*H_1 \\
+    R&#39;_s &amp;= C_{\alpha}^{s,0} + c&#39;*C_{\alpha}^{s,1} + c&#39;^2*C_s
+    \end{aligned}\]</span></p></li>
+<li><p>If <span class="math inline">\(c = c&#39;\)</span>, and <span class="math inline">\(R_s = R&#39;_s\)</span>, then the prover must know <span class="math inline">\(\boldsymbol{v}, \boldsymbol{z}\)</span>, and <span class="math inline">\(s\)</span>, and the inner product <span class="math inline">\(s = \boldsymbol{v} \bullet \boldsymbol{z}\)</span> must hold (except with negligible probability).</p></li>
+</ol>
+<h4 class="unnumbered" id="why-it-works-inner-product-component">Why it works (inner product component)</h4>
+<p><span class="math display">\[\begin{aligned}
+r_s*G + (\boldsymbol{r_v} \bullet \boldsymbol{r_z})*H_1 &amp;= C_{\alpha}^{s,0} + c*C_{\alpha}^{s,1} + c^2*C_s \\
+(\alpha_{s,0} + c \alpha_{s,1} + c^2 x_s)*G + (\boldsymbol{\alpha_v} \bullet \boldsymbol{\alpha_z} + c[\boldsymbol{v} \bullet \boldsymbol{\alpha_z} + \boldsymbol{z} \bullet \boldsymbol{\alpha_v}] + c^2 [\boldsymbol{v} \bullet \boldsymbol{z}])*H_1 &amp;= C_{\alpha}^{s,0} + c*C_{\alpha}^{s,1} + c^2*C_s \\
+C_{\alpha}^{s,0} + c*C_{\alpha}^{s,1} + c^2 (x_s*G + [\boldsymbol{v} \bullet \boldsymbol{z}]*H_1) &amp;= C_{\alpha}^{s,0} + c*C_{\alpha}^{s,1} + c^2*C_s \\
+c^2 (x_s*G + [\boldsymbol{v} \bullet \boldsymbol{z}]*H_1) &amp;= c^2(x_s*G + s*H_1) \\
+\boldsymbol{v} \bullet \boldsymbol{z} &amp;= s\end{aligned}\]</span></p>
+<p>Responses <span class="math inline">\(\boldsymbol{r_v}\)</span> and <span class="math inline">\(\boldsymbol{r_z}\)</span> prove knowledge of vectors <span class="math inline">\(\boldsymbol{v}\)</span> and <span class="math inline">\(\boldsymbol{z}\)</span>, so using them in <span class="math inline">\(R_s \stackrel{?}{=} R&#39;_s\)</span> proves the inner product holds. Readers can explore the algebraic logic to confirm this for themselves.</p>
+<h2 id="sec:condensedvectorproof">Condensed Vector Knowledge Proof</h2>
+<p>Our original vector knowledge proof was <span class="math inline">\((c, \boldsymbol{r})\)</span>, where the proof size was linear with vector dimension. Given <span class="math inline">\(N = 500\)</span> (and <span class="math inline">\(m = 1\)</span>), the proof will take up <span class="math inline">\((1 + 500)*32 = 16032\)</span> bytes. We can condense the proof size with an approach exposed by Bootle et. al. <span class="citation" data-cites="bootle-efficient-zkcircuits"></span>. It will be logarithmic with vector dimension (proof size <span class="math inline">\(\approx 6*log_2(N)\)</span>, so for N = 500 proof size around 54*32 = 1728 bytes).</p>
+<h3 class="unnumbered" id="non-interactive-proof-2">Non-interactive proof</h3>
+<ol>
+<li><p>With the intent of minimizing proof size (optimizing verification time is more complex), factor <span class="math inline">\(N\)</span> into <span class="math inline">\(q\)</span> prime numbers ordered largest to smallest. If <span class="math inline">\(N = 500\)</span>, <span class="math inline">\(\boldsymbol{f} = \langle 500, 5, 5, 5, 2, 2 \rangle\)</span> and indexed <span class="math inline">\(0\)</span> to <span class="math inline">\(q = 5\)</span> (0term is the original N).</p></li>
+<li><p>For <span class="math inline">\(i = 1\)</span> to <span class="math inline">\(q\)</span> (index 0 corresponds to original vectors),</p>
+<ol>
+<li><p>Chunk <span class="math inline">\(\boldsymbol{v}^{i-1}\)</span> and <span class="math inline">\(\boldsymbol{G}^{i-1}\)</span> into smaller vectors size <span class="math inline">\(f[i]\)</span> <span class="math display">\[\langle v^{i-1}[1], ..., v^{i-1}[f[i-1]] \rangle \xrightarrow{} \langle \langle v^{i-1}[1],...,v^{i-1}[f[i] \rangle,\langle \rangle,...,\langle v^{i-1}[f[i-1] - f[i] ],..., v^{i-1}[f[i-1]\rangle \rangle\]</span></p></li>
+</ol>
+<p><span class="math display">\[\begin{pmatrix}
+        1 &amp; 2 &amp; 3 \\
+        4 &amp; 5 &amp; 6
+    \end{pmatrix}\]</span></p></li>
+</ol>
+<h3 class="unnumbered" id="verification-2">Verification</h3>
+<section class="footnotes" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1" role="doc-endnote"><p>The inner product (a.k.a. dot product) between vectors <span class="math inline">\(\boldsymbol{v} = \langle 1, 2, 3 \rangle\)</span> and <span class="math inline">\(\boldsymbol{z} = \langle 4, 5, 6 \rangle\)</span> is <span class="math inline">\(\boldsymbol{v} \bullet \boldsymbol{z} = 1*4 + 2*5 + 3*6 = 32\)</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>We explicitly do domain separation here with <span class="math inline">\(T_{vec}\)</span>, and key prefixing with <span class="math inline">\(\boldsymbol{V}\)</span>. For the rest of the chapter it is implied with ellipses (...). Those ellipses could also include a message <span class="math inline">\(\mathfrak{m}\)</span> to make the proof a signature.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>Even if two or more vector indexes have the same sum (<span class="math inline">\(\sum_{i=1}^{m} v_{i,a} = \sum_{i=1}^{m} v_{i,b} = k\)</span>), <span class="math inline">\(k\)</span> will not be revealed since in the equation pair <span class="math inline">\(r_a = \alpha_a + c*k\)</span> and <span class="math inline">\(r_b = \alpha_b + c*k\)</span> there are three unknowns (<span class="math inline">\(\alpha_a\)</span>, <span class="math inline">\(\alpha_b\)</span>, and <span class="math inline">\(k\)</span>), and each additional equation <span class="math inline">\(r_q = \alpha_q + c*k\)</span> adds another unknown (<span class="math inline">\(\alpha_q\)</span>).<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4" role="doc-endnote"><p>A person with partial knowledge of <span class="math inline">\(\boldsymbol{V}\)</span> can increase his chances of faking the proof (by only a negligible amount in most cases). For an extreme example, if he knows all elements of <span class="math inline">\(\boldsymbol{V}\)</span> except one, he knows all commitments <span class="math inline">\(C_j\)</span> and their blinding factors, and he knows the missing element is in the range (<span class="math inline">\(q\)</span> to <span class="math inline">\(p\)</span>) where (<span class="math inline">\(p - q &lt; l\)</span>), then his chances of guessing that element (and checking by computing <span class="math inline">\(C&#39;_j\)</span>) are higher than solving the discrete logarithm problem via guess and check. Though in this case he ultimately knows all elements of <span class="math inline">\(\boldsymbol{V}\)</span> anyway. This logic extends to other partial-knowledge scenarios.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5" role="doc-endnote"><p>Our notation <span class="math inline">\((x_v, \boldsymbol{v}) \bullet (G,\boldsymbol{H})\)</span> here means blinding factor <span class="math inline">\(x_v\)</span> is appended to the front of <span class="math inline">\(\boldsymbol{v}\)</span> for the inner product, and likewise with generator <span class="math inline">\(G\)</span>.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6" role="doc-endnote"><p>Since <span class="math inline">\(C^{s,0}_{\alpha}\)</span> and <span class="math inline">\(C^{s,1}_{\alpha}\)</span> are tied together, it isn’t possible (within our knowledge) to move <span class="math inline">\(R_s\)</span> into the challenge computation.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+</body>
+</html>

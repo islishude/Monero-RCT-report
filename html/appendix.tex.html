@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>appendix.tex</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">appendix.tex</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#appendix:RCTTypeBulletproof2"><span><code>RCTTypeBulletproof2</code></span> Transaction Structure</a>
+<ul>
+<li><a href="#transaction-components">Transaction components</a></li>
+</ul></li>
+<li><a href="#appendix:block-content">Block Content</a>
+<ul>
+<li><a href="#block-components">Block components</a></li>
+</ul></li>
+<li><a href="#appendix:genesis-block">Genesis Block</a>
+<ul>
+<li><a href="#genesis-block-components">Genesis block components</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="appendix:RCTTypeBulletproof2"><span><code>RCTTypeBulletproof2</code></span> Transaction Structure</h1>
+<p>We present in this appendix a dump from a real Monero transaction of type <span><code>RCTTypeBulletproof2</code></span>, together with explanatory notes for relevant fields.</p>
+<p>The dump was obtained from the block explorer <a href="https://xmrchain.net">https://xmrchain.net</a>. It can also be acquired by executing command <span><code>print_tx &lt;TransactionID&gt; +hex +json</code></span> in the <span><code>monerod</code></span> daemon run in non-detached mode. <span><code>&lt;TransactionID&gt;</code></span> is a hash of the transaction (Section <a href="#subsec:transaction-id" data-reference-type="ref" data-reference="subsec:transaction-id">[subsec:transaction-id]</a>). The first line printed shows the actual command to run.</p>
+<p>To replicate our results, readers can do the following:</p>
+<ol>
+<li><p>We need the Monero command line tool (CLI), which can be found at <a href="https://web.getmonero.org/downloads/">https://web.getmonero.org/downloads/</a> (among other places). Get the ‘Command Line Tools Only’ for your operating system, move the file to a useful location, and unzip it.</p></li>
+<li><p>Open the terminal/command line and navigate into the folder created by unzipping.</p></li>
+<li><p>Run <span><code>monerod</code></span> with <span><code>./monerod</code></span>. Now the Monero blockchain will download. Unfortunately, there is currently no easy way to print transactions on your own system (e.g. without using a block explorer) without downloading the blockchain.</p></li>
+<li><p>After the syncing process is done, commands like <span><code>print_tx</code></span> will work. Use <span><code>help</code></span> to learn other commands.</p></li>
+</ol>
+<p>Component <span><code>rctsig_prunable</code></span>, as indicated by its name, is <span><em>prunable</em></span> from the blockchain. That is, once a block has been consensuated and the current chain length rules out all possibilities of double-spending attacks, this whole field can be pruned and replaced with its hash for the Merkle tree.</p>
+<p>Key images are stored separately, in the non-prunable area of transactions. These are essential for detecting double-spend attacks and can’t be pruned away.<br />
+Our sample transaction has 2 inputs and 2 outputs, and was added to the blockchain at timestamp 2020-03-02 19:01:10 UTC (as reported by its block’s miner).</p>
+<div class="sourceCode" id="cb1" data-commandchars="\\\{\}" data-numbers="left"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>print_tx 84799c2fc4c18188102041a74cef79486181df96478b717e8703512c7f7f3349</span>
+<span id="cb1-2"><a href="#cb1-2"></a>Found in blockchain at height 2045821</span>
+<span id="cb1-3"><a href="#cb1-3"></a>\{</span>
+<span id="cb1-4"><a href="#cb1-4"></a>  &quot;version&quot;: 2, </span>
+<span id="cb1-5"><a href="#cb1-5"></a>  &quot;unlock_time&quot;: 0, </span>
+<span id="cb1-6"><a href="#cb1-6"></a>  &quot;vin&quot;: [ \{</span>
+<span id="cb1-7"><a href="#cb1-7"></a>      &quot;key&quot;: \{</span>
+<span id="cb1-8"><a href="#cb1-8"></a>        &quot;amount&quot;: 0, </span>
+<span id="cb1-9"><a href="#cb1-9"></a>        &quot;key_offsets&quot;: [ 14401866, 142824, 615514, 18703, 5949, 22840, 5572, 16439,</span>
+<span id="cb1-10"><a href="#cb1-10"></a>        983, 4050, 320</span>
+<span id="cb1-11"><a href="#cb1-11"></a>        ], </span>
+<span id="cb1-12"><a href="#cb1-12"></a>        &quot;k_image&quot;: &quot;c439b9f0da76ca0bb17920ca1f1f3f1d216090751752b091bef9006918cb3db4&quot;</span>
+<span id="cb1-13"><a href="#cb1-13"></a>      \}</span>
+<span id="cb1-14"><a href="#cb1-14"></a>    \}, \{</span>
+<span id="cb1-15"><a href="#cb1-15"></a>      &quot;key&quot;: \{</span>
+<span id="cb1-16"><a href="#cb1-16"></a>        &quot;amount&quot;: 0, </span>
+<span id="cb1-17"><a href="#cb1-17"></a>        &quot;key_offsets&quot;: [ 14515357, 640505, 8794, 1246, 20300, 18577, 17108, 9824, 581,</span>
+<span id="cb1-18"><a href="#cb1-18"></a>        637, 1023</span>
+<span id="cb1-19"><a href="#cb1-19"></a>        ], </span>
+<span id="cb1-20"><a href="#cb1-20"></a>        &quot;k_image&quot;: &quot;03750c4b23e5be486e62608443151fa63992236910c41fa0c4a0a938bc6f5a37&quot;</span>
+<span id="cb1-21"><a href="#cb1-21"></a>      \}</span>
+<span id="cb1-22"><a href="#cb1-22"></a>    \}</span>
+<span id="cb1-23"><a href="#cb1-23"></a>  ], </span>
+<span id="cb1-24"><a href="#cb1-24"></a>  &quot;vout&quot;: [ \{</span>
+<span id="cb1-25"><a href="#cb1-25"></a>      &quot;amount&quot;: 0, </span>
+<span id="cb1-26"><a href="#cb1-26"></a>      &quot;target&quot;: \{</span>
+<span id="cb1-27"><a href="#cb1-27"></a>        &quot;key&quot;: &quot;d890ba9ebfa1b44d0bd945126ad29a29d8975e7247189e5076c19fa7e3a8cb00&quot;</span>
+<span id="cb1-28"><a href="#cb1-28"></a>      \}</span>
+<span id="cb1-29"><a href="#cb1-29"></a>    \}, \{</span>
+<span id="cb1-30"><a href="#cb1-30"></a>      &quot;amount&quot;: 0, </span>
+<span id="cb1-31"><a href="#cb1-31"></a>      &quot;target&quot;: \{</span>
+<span id="cb1-32"><a href="#cb1-32"></a>        &quot;key&quot;: &quot;dbec330f8a67124860a9bfb86b66db18854986bd540e710365ad6079c8a1c7b0&quot;</span>
+<span id="cb1-33"><a href="#cb1-33"></a>      \}</span>
+<span id="cb1-34"><a href="#cb1-34"></a>    \}</span>
+<span id="cb1-35"><a href="#cb1-35"></a>  ], </span>
+<span id="cb1-36"><a href="#cb1-36"></a>  &quot;extra&quot;: [ 1, 3, 39, 58, 185, 169, 82, 229, 226, 22, 101, 230, 254, 20, 143,</span>
+<span id="cb1-37"><a href="#cb1-37"></a>  37, 139, 28, 114, 77, 160, 229, 250, 107, 73, 105, 64, 208, 154, 182, 158, 200,</span>
+<span id="cb1-38"><a href="#cb1-38"></a>  73, 2, 9, 1, 12, 76, 161, 40, 250, 50, 135, 231</span>
+<span id="cb1-39"><a href="#cb1-39"></a>  ], </span>
+<span id="cb1-40"><a href="#cb1-40"></a>  &quot;rct_signatures&quot;: \{</span>
+<span id="cb1-41"><a href="#cb1-41"></a>    &quot;type&quot;: 4, </span>
+<span id="cb1-42"><a href="#cb1-42"></a>    &quot;txnFee&quot;: 32460000, </span>
+<span id="cb1-43"><a href="#cb1-43"></a>    &quot;ecdhInfo&quot;: [ \{</span>
+<span id="cb1-44"><a href="#cb1-44"></a>        &quot;amount&quot;: &quot;171f967524e29632&quot;</span>
+<span id="cb1-45"><a href="#cb1-45"></a>      \}, \{</span>
+<span id="cb1-46"><a href="#cb1-46"></a>        &quot;amount&quot;: &quot;5c2a1a9f54ccf40b&quot;</span>
+<span id="cb1-47"><a href="#cb1-47"></a>      \}], </span>
+<span id="cb1-48"><a href="#cb1-48"></a>    &quot;outPk&quot;: [ &quot;fed8aded6914f789b63c37f9d2eb5ee77149e1aa4700a482aea53f82177b3b41&quot;,</span>
+<span id="cb1-49"><a href="#cb1-49"></a>    &quot;670e086e40511a279e0e4be89c9417b4767251c5a68b4fc3deb80fdae7269c17&quot;]</span>
+<span id="cb1-50"><a href="#cb1-50"></a>  \}, </span>
+<span id="cb1-51"><a href="#cb1-51"></a>  &quot;rctsig_prunable&quot;: \{</span>
+<span id="cb1-52"><a href="#cb1-52"></a>    &quot;nbp&quot;: 1, </span>
+<span id="cb1-53"><a href="#cb1-53"></a>    &quot;bp&quot;: [ \{</span>
+<span id="cb1-54"><a href="#cb1-54"></a>        &quot;A&quot;: &quot;98e5f23484e97bb5b2d453505db79caadf20dc2b69dd3f2b3dbf2a53ca280216&quot;, </span>
+<span id="cb1-55"><a href="#cb1-55"></a>        &quot;S&quot;: &quot;b791d4bc6a4d71de5a79673ed4a5487a184122321ede0b7341bc3fdc0915a796&quot;, </span>
+<span id="cb1-56"><a href="#cb1-56"></a>        &quot;T1&quot;: &quot;5d58cfa9b69ecdb2375647729e34e24ce5eb996b5275aa93f9871259f3a1aecd&quot;, </span>
+<span id="cb1-57"><a href="#cb1-57"></a>        &quot;T2&quot;: &quot;1101994fea209b71a2aa25586e429c4c0f440067e2b197469aa1a9a1512f84b7&quot;, </span>
+<span id="cb1-58"><a href="#cb1-58"></a>        &quot;taux&quot;: &quot;b0ad39da006404ccacee7f6d4658cf17e0f42419c284bdca03c0250303706c03&quot;, </span>
+<span id="cb1-59"><a href="#cb1-59"></a>        &quot;mu&quot;: &quot;cacd7ca5404afa28e7c39918d9f80b7fe5e572a92a10696186d029b4923fa200&quot;, </span>
+<span id="cb1-60"><a href="#cb1-60"></a>        &quot;L&quot;: [ &quot;d06404fc35a60c6c47a04e2e43435cb030267134847f7a49831a61f82307fc32&quot;,</span>
+<span id="cb1-61"><a href="#cb1-61"></a>        &quot;c9a5932468839ee0cda1aa2815f156746d4dce79dab3013f4c9946fce6b69eff&quot;,</span>
+<span id="cb1-62"><a href="#cb1-62"></a>        &quot;efdae043dcedb79512581480d80871c51e063fe9b7a5451829f7a7824bcc5a0b&quot;,</span>
+<span id="cb1-63"><a href="#cb1-63"></a>        &quot;56fd2e74ac6e1766cfd56c8303a90c68165a6b0855fae1d5b51a2e035f333a1d&quot;,</span>
+<span id="cb1-64"><a href="#cb1-64"></a>        &quot;81736ed768f57e7f8d440b4b18228d348dce1eca68f969e75fab458f44174c99&quot;,</span>
+<span id="cb1-65"><a href="#cb1-65"></a>        &quot;695711950e076f54cf24ad4408d309c1873d0f4bf40c449ef28d577ba74dd86d&quot;,</span>
+<span id="cb1-66"><a href="#cb1-66"></a>        &quot;4dc3147619a6c9401fec004652df290800069b776fe31b3c5cf98f64eb13ef2c&quot;</span>
+<span id="cb1-67"><a href="#cb1-67"></a>        ], </span>
+<span id="cb1-68"><a href="#cb1-68"></a>        &quot;R&quot;: [ &quot;7650b8da45c705496c26136b4c1104a8da601ea761df8bba07f1249495d8f1ce&quot;,</span>
+<span id="cb1-69"><a href="#cb1-69"></a>        &quot;e87789fbe99a44554871fcf811723ee350cba40276ad5f1696a62d91a4363fa6&quot;,</span>
+<span id="cb1-70"><a href="#cb1-70"></a>        &quot;ebf663fe9bb580f0154d52ce2a6dae544e7f6fb2d3808531b0b0749f5152ddbf&quot;,</span>
+<span id="cb1-71"><a href="#cb1-71"></a>        &quot;5a4152682a1e812b196a265a6ba02e3647a6bd456b7987adff288c5b0b556ec6&quot;,</span>
+<span id="cb1-72"><a href="#cb1-72"></a>        &quot;dc0dcb2e696e11e4b62c20b6bfcb6182290748c5de254d64bf7f9e3c38fb46c9&quot;,</span>
+<span id="cb1-73"><a href="#cb1-73"></a>        &quot;101e2271ced03b229b88228d74b36088b40c88f26db8b1f9935b85fb3ab96043&quot;,</span>
+<span id="cb1-74"><a href="#cb1-74"></a>        &quot;b14aae1d35c9b176ac526c23f31b044559da75cf95bc640d1005bfcc6367040b&quot;</span>
+<span id="cb1-75"><a href="#cb1-75"></a>        ], </span>
+<span id="cb1-76"><a href="#cb1-76"></a>        &quot;a&quot;: &quot;4809857de0bd6becdb64b85e9dfbf6085743a8496006b72ceb81e01080965003&quot;, </span>
+<span id="cb1-77"><a href="#cb1-77"></a>        &quot;b&quot;: &quot;791d8dc3a4ddde5ba2416546127eb194918839ced3dea7399f9c36a17f36150e&quot;, </span>
+<span id="cb1-78"><a href="#cb1-78"></a>        &quot;t&quot;: &quot;aace86a7a1cbdec3691859fa07fdc83eed9ca84b8a064ca3f0149e7d6b721c03&quot;</span>
+<span id="cb1-79"><a href="#cb1-79"></a>      \}</span>
+<span id="cb1-80"><a href="#cb1-80"></a>    ], </span>
+<span id="cb1-81"><a href="#cb1-81"></a>    &quot;MGs&quot;: [ \{</span>
+<span id="cb1-82"><a href="#cb1-82"></a>        &quot;ss&quot;: [[ &quot;d7a9b87cfa74ad5322eedd1bff4c4dca08bcff6f8578a29a8bc4ad6789dee106&quot;,</span>
+<span id="cb1-83"><a href="#cb1-83"></a>        &quot;f08e5dfade29d2e60e981cb561d749ea96ddc7e6855f76f9b807842d1a17fe00&quot;],</span>
+<span id="cb1-84"><a href="#cb1-84"></a>        [&quot;de0a86d12be2426f605a5183446e3323275fe744f52fb439041ad2d59136ea0b&quot;,</span>
+<span id="cb1-85"><a href="#cb1-85"></a>        &quot;0028f97976630406e12c54094cbbe23a23fe5098f43bcae37339bfc0c4c74c07&quot;],</span>
+<span id="cb1-86"><a href="#cb1-86"></a>        [&quot;f6eef1f99e605372cb1ec2b3dd4c6e56a550fec071c8b1d830b9fda34de5cc05&quot;,</span>
+<span id="cb1-87"><a href="#cb1-87"></a>        &quot;cd98fc987374a0ac993edf4c9af0a6f2d5b054f2af601b612ea118f405303306&quot;],</span>
+<span id="cb1-88"><a href="#cb1-88"></a>        [&quot;5a8437575dae7e2183a1c620efbce655f3d6dc31e64c96276f04976243461e08&quot;,</span>
+<span id="cb1-89"><a href="#cb1-89"></a>        &quot;5090103f7f73a33024fbda999cd841b99b87c45fa32c4097cdc222fa3d7e9502&quot;],</span>
+<span id="cb1-90"><a href="#cb1-90"></a>        [&quot;88d34246afbccbd24d2af2ba29d835813634e619912ea4ca194a32281ac14e0e&quot;,</span>
+<span id="cb1-91"><a href="#cb1-91"></a>        &quot;eacdf59478f132dd8dbb9580546f96de194092558ffceeff410ee9eb30ce570e&quot;],</span>
+<span id="cb1-92"><a href="#cb1-92"></a>        [&quot;571dab8557921bbae30bda9b7e613c8a0cff378d1ec6413f59e4972f30f2470d&quot;,</span>
+<span id="cb1-93"><a href="#cb1-93"></a>        &quot;5ca78da9a129619299304d9b03186233370023debfdaddcd49c1a338c1f0c50d&quot;],</span>
+<span id="cb1-94"><a href="#cb1-94"></a>        [&quot;ac8dbe6bb28839cf98f02908bd1451742a10c713fdd51319f2d42a58bf1d7507&quot;,</span>
+<span id="cb1-95"><a href="#cb1-95"></a>        &quot;7347bf16cba5ee6a6f2d4f6a59d1ed0c1a43060c3a235531e7f1a75cd8c8530d&quot;],</span>
+<span id="cb1-96"><a href="#cb1-96"></a>        [&quot;b8876bd3a5766150f0fbc675ba9c774c2851c04afc4de0b17d3ac4b6de617402&quot;,</span>
+<span id="cb1-97"><a href="#cb1-97"></a>        &quot;e39f1d2452d76521cbf02b85a6b626eeb5994f6f28ce5cf81adc0ff2b8adb907&quot;],</span>
+<span id="cb1-98"><a href="#cb1-98"></a>        [&quot;1309f8ead30b7be8d0c5932743b343ef6c0001cef3a4101eae98ffde53f46300&quot;,</span>
+<span id="cb1-99"><a href="#cb1-99"></a>        &quot;370693fa86838984e9a7232bca42fd3d6c0c2119d44471d61eee5233ba53c20f&quot;],</span>
+<span id="cb1-100"><a href="#cb1-100"></a>        [&quot;80bc2da5fc5951f2c7406fce37a7aa72ffef9cfa21595b1b68dfab4b7b9f9f0c&quot;,</span>
+<span id="cb1-101"><a href="#cb1-101"></a>        &quot;c37137898234f00bce00746b131790f3223f97960eefe67231eb001092f5510c&quot;],</span>
+<span id="cb1-102"><a href="#cb1-102"></a>        [&quot;01c89e07571fd365cac6744b34f1b44e06c1c31cbf3ee4156d08309345fdb20e&quot;,</span>
+<span id="cb1-103"><a href="#cb1-103"></a>        &quot;a35c8786695a86c0a4e677b102197a11dadc7171dd8c2e1de90d828f050ec00f&quot;]], </span>
+<span id="cb1-104"><a href="#cb1-104"></a>        &quot;cc&quot;: &quot;0d8b70c600c67714f3e9a0480f1ffc7477023c793752c1152d5df0813f75ff0f&quot;</span>
+<span id="cb1-105"><a href="#cb1-105"></a>      \}, \{</span>
+<span id="cb1-106"><a href="#cb1-106"></a>        &quot;ss&quot;: [[ &quot;4536e585af58688b69d932ef3436947a13d2908755d1c644ca9d6a978f0f0206&quot;,</span>
+<span id="cb1-107"><a href="#cb1-107"></a>        &quot;9aab6509f4650482529219a805ee09cd96bb439ee1766ced5d3877bf1518370b&quot;],</span>
+<span id="cb1-108"><a href="#cb1-108"></a>        [&quot;5849d6bf0f850fcee7acbef74bd7f02f77ecfaaa16a872f52479ebd27339760f&quot;,</span>
+<span id="cb1-109"><a href="#cb1-109"></a>        &quot;96a9ec61486b04201313ac8687eaf281af59af9fd10cf450cb26e9dc8f1ce804&quot;],</span>
+<span id="cb1-110"><a href="#cb1-110"></a>        [&quot;7fe5dcc4d3eff02fca4fb4fa0a7299d212cd8cd43ec922d536f21f92c8f93f00&quot;,</span>
+<span id="cb1-111"><a href="#cb1-111"></a>        &quot;d306a62831b49700ae9daad44fcd00c541b959da32c4049d5bdd49be28d96701&quot;],</span>
+<span id="cb1-112"><a href="#cb1-112"></a>        [&quot;2edb125a5670d30f6820c01b04b93dd8ff11f4d82d78e2379fe29d7a68d9c103&quot;,</span>
+<span id="cb1-113"><a href="#cb1-113"></a>        &quot;753ac25628c0dada7779c6f3f13980dfc5b7518fb5855fd0e7274e3075a3410c&quot;],</span>
+<span id="cb1-114"><a href="#cb1-114"></a>        [&quot;264de632d9cb867e052f95007dfdf5a199975136c907f1d6ad73061938f49c01&quot;,</span>
+<span id="cb1-115"><a href="#cb1-115"></a>        &quot;dd7eb6028d0695411f647058f75c42c67660f10e265c83d024c4199bed073d01&quot;],</span>
+<span id="cb1-116"><a href="#cb1-116"></a>        [&quot;b2ac07539336954f2e9b9cba298d4e1faa98e13e7039f7ae4234ac801641340f&quot;,</span>
+<span id="cb1-117"><a href="#cb1-117"></a>        &quot;69e130422516b82b456927b64fe02732a3f12b5ee00c7786fe2a381325bf3004&quot;],</span>
+<span id="cb1-118"><a href="#cb1-118"></a>        [&quot;49ea699ca8cf2656d69020492cdfa69815fb69145e8f922bb32e358c23cebb0f&quot;,</span>
+<span id="cb1-119"><a href="#cb1-119"></a>        &quot;c5706f903c04c7bed9c74844f8e24521b01bc07b8dbf597621cceeeb3afc1d0c&quot;],</span>
+<span id="cb1-120"><a href="#cb1-120"></a>        [&quot;a1faf85aa942ba30b9f0511141fcab3218c00953d046680d36e09c35c04be905&quot;,</span>
+<span id="cb1-121"><a href="#cb1-121"></a>        &quot;7b6b1b6fb23e0ee5ea43c2498ea60f4fcf62f70c7e0e905eb4d9afa1d0a18800&quot;],</span>
+<span id="cb1-122"><a href="#cb1-122"></a>        [&quot;785d0993a70f1c2f0ac33c1f7632d64e34dd730d1d8a2fb0606f5770ed633506&quot;,</span>
+<span id="cb1-123"><a href="#cb1-123"></a>        &quot;e12777c49ffc3f6c35d27a9ccb3d9b8fed7f0864a880f7bae7399e334207280e&quot;],</span>
+<span id="cb1-124"><a href="#cb1-124"></a>        [&quot;ab31972bf1d2f904d6b0bf18f4664fa2b16a1fb2644cd4e6278b63ade87b6d09&quot;,</span>
+<span id="cb1-125"><a href="#cb1-125"></a>        &quot;1efb04fe9a75c01a0fe291d0ae00c716e18c64199c1716a086dd6e32f63e0a07&quot;],</span>
+<span id="cb1-126"><a href="#cb1-126"></a>        [&quot;a6f4e21a27bf8d28fc81c873f63f8d78e017666adbf038da0b83c2ad04ef6805&quot;,</span>
+<span id="cb1-127"><a href="#cb1-127"></a>        &quot;c02103455f93c2d7ec4b7152db7de00d1c9e806b1945426b6773026b4a85dd03&quot;]], </span>
+<span id="cb1-128"><a href="#cb1-128"></a>        &quot;cc&quot;: &quot;d5ac037bb78db41cf924af713b7379c39a4e13901d3eac017238550a1a3b910a&quot;</span>
+<span id="cb1-129"><a href="#cb1-129"></a>      \}],</span>
+<span id="cb1-130"><a href="#cb1-130"></a>    &quot;pseudoOuts&quot;: [ &quot;b313c1ae9ca06213684fbdefa9412f4966ad192bc0b2f74ed1731381adb7ab58&quot;,</span>
+<span id="cb1-131"><a href="#cb1-131"></a>    &quot;7148e7ef5cfd156c62a6e285e5712f8ef123575499ff9a11f838289870522423&quot;]</span>
+<span id="cb1-132"><a href="#cb1-132"></a>  \}</span>
+<span id="cb1-133"><a href="#cb1-133"></a>\}</span></code></pre></div>
+<h2 class="unnumbered" id="transaction-components">Transaction components</h2>
+<ul>
+<li><p>(line 2) - The command <span><code>print_tx</code></span> would report the block where it found the transaction, which we replicate here for demonstration purposes.</p></li>
+<li><p><span><code>version</code></span> (line 4) - Transaction format/era version; ‘2’ corresponds to RingCT.</p></li>
+<li><p><span><code>unlock_time</code></span> (line 5) - Prevents a transaction’s outputs from being spent until the time has past. It is either a block height, or a UNIX timestamp if the number is larger than the beginning of UNIX time. It defaults to zero when no limit is specified.</p></li>
+<li><p><span><code>vin</code></span> (line 6-23) - List of inputs (there are two here)</p></li>
+<li><p><span><code>amount</code></span> (line 8) - Deprecated (legacy) amount field for type 1 transactions</p></li>
+<li><p><span><code>key_offset</code></span> (line 9) - This allows verifiers to find ring member keys and commitments in the blockchain, and makes it obvious those members are legitimate. The first offset is absolute within the blockchain history, and each subsequent offset is relative to the previous. For example, with real offsets {7,11,15,20}, the blockchain records {7,4,4,5}. Verifiers compute the last offset like (7+4+4+5 = 20) (Section <a href="#subsec:space-and-ver-rcttypefull" data-reference-type="ref" data-reference="subsec:space-and-ver-rcttypefull">[subsec:space-and-ver-rcttypefull]</a>).</p></li>
+<li><p><span><code>k_image</code></span> (line 12) - Key image <span class="math inline">\(\tilde{K_j}\)</span> from Section <a href="#sec:MLSAG" data-reference-type="ref" data-reference="sec:MLSAG">[sec:MLSAG]</a>, where <span class="math inline">\(j = 1\)</span> since this is the first input.</p></li>
+<li><p><span><code>vout</code></span> (lines 24-35) - List of outputs (there are two here)</p></li>
+<li><p><span><code>amount</code></span> (line 25) - Deprecated amount field for type 1 transactions</p></li>
+<li><p><span><code>key</code></span> (line 27) - One-time destination key for output <span class="math inline">\(t = 0\)</span> as described in Section <a href="#sec:one-time-addresses" data-reference-type="ref" data-reference="sec:one-time-addresses">[sec:one-time-addresses]</a></p></li>
+<li><p><span><code>extra</code></span> (lines 36-39) - Miscellaneous data, including the <span><em>transaction public key</em></span>, i.e. the share secret <span class="math inline">\(r G\)</span> of Section <a href="#sec:one-time-addresses" data-reference-type="ref" data-reference="sec:one-time-addresses">[sec:one-time-addresses]</a>, and encrypted payment ID from Section <a href="#sec:integrated-addresses" data-reference-type="ref" data-reference="sec:integrated-addresses">[sec:integrated-addresses]</a>. It typically works like this: each number is one byte (it can be 0-255), and each kind of thing that can be in the field has a ‘tag’ and ‘length’. The tag indicates which information comes next, and length indicates how many bytes that info occupies. The first number is always a tag. Here, ‘1’ indicates a ‘transaction public key’. Tx public keys are always 32 bytes, so we don’t need to include the length. Thirty-two numbers later we find a new tag ‘2’ which means ‘extra nonce’, its length is ‘9’, and the next byte is ‘1’ which means an 8-byte encrypted payment ID (the extra nonce can have fields inside it, for some reason). Eight bytes go by, and that’s the end of this extra field. See <span class="citation" data-cites="extra-field-stackexchange"></span> for more details. (note: in the original Cryptonote specification the first byte indicated the size of the field. Monero doesn’t use that.) <span class="citation" data-cites="tx-extra-field"></span></p></li>
+<li><p><span><code>rct_signatures</code></span> (lines 40-50) - First part of signature data</p></li>
+<li><p><span><code>type</code></span> (line 41) - Signature type; <span><code>RCTTypeBulletproof2</code></span> is type 4. Deprecated RingCT types <span><code>RCTTypeFull</code></span> and <span><code>RCTTypeSimple</code></span> were 1 and 2 respectively. Miner transactions use <span><code>RCTTypeNull</code></span>, type 0.</p></li>
+<li><p><span><code>txnFee</code></span> (line 42) - Transaction fee in clear text, in this case 0.00003246 XMR</p></li>
+<li><p><span><code>ecdhInfo</code></span> (lines 43-47) - ‘elliptic curve diffie-hellman info’: Obscured amount for each of the outputs <span class="math inline">\(t \in \{0, ..., p-1\}\)</span>; here <span class="math inline">\(p = 2\)</span></p></li>
+<li><p><span><code>amount</code></span> (line 44) - Field <span><em>amount</em></span> at <span class="math inline">\(t = 0\)</span> as described in Section <a href="#sec:pedersen_monero" data-reference-type="ref" data-reference="sec:pedersen_monero">[sec:pedersen_monero]</a></p></li>
+<li><p><span><code>outPk</code></span> (lines 48-49) - Commitments for each output, Section <a href="#sec:ringct-introduction" data-reference-type="ref" data-reference="sec:ringct-introduction">[sec:ringct-introduction]</a></p></li>
+<li><p><span><code>rctsig_prunable</code></span> (lines 51-132) - Second part of signature data</p></li>
+<li><p><span><code>nbp</code></span> (line 52) - Number of Bulletproof range proofs in this transaction</p></li>
+<li><p><span><code>bp</code></span> (lines 53-80) - Bulletproof proof elements (Bulletproofs were not explored in this document, so we will not itemize further) <span class="math display">\[\Pi_{BP} = (A, S, T_1, T_2, \tau_x, \mu, \mathbb{L}, \mathbb{R}, a, b, t)\]</span></p></li>
+<li><p><span><code>MGs</code></span> (lines 81-129) - MLSAG signatures</p></li>
+<li><p><span><code>ss</code></span> (lines 82-103) - Components <span class="math inline">\(r_{i,1}\)</span> and <span class="math inline">\(r_{i,2}\)</span> from the first input’s MLSAG signature <span class="math display">\[\sigma_j(\mathfrak{m}) = (c_1, r_{1, 1}, r_{1, 2}, ..., r_{v+1, 1}, r_{v+1, 2})\]</span></p></li>
+<li><p><span><code>cc</code></span> (line 104) - Component <span class="math inline">\(c_1\)</span> from aforementioned MLSAG signature</p></li>
+<li><p><span><code>pseudoOuts</code></span> (lines 130-131) - Pseudo output commitments <span class="math inline">\(C&#39;^a_j\)</span>, as described in Section <a href="#sec:pedersen_monero" data-reference-type="ref" data-reference="sec:pedersen_monero">[sec:pedersen_monero]</a>. Please recall that the sum of these commitments will equal the sum of the two output commitments of this transaction (plus the transaction fee commitment <span class="math inline">\(f H\)</span>).</p></li>
+</ul>
+<h1 id="appendix:block-content">Block Content</h1>
+<p>In this appendix we show the structure of a sample block, namely the 1582196block after the genesis block. The block has 5 transactions, and was added to the blockchain at timestamp 2018-05-27 21:56:01 UTC (as reported by the block’s miner).</p>
+<div class="sourceCode" id="cb2" data-commandchars="\\\{\}" data-numbers="left"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>print_block 1582196</span>
+<span id="cb2-2"><a href="#cb2-2"></a>timestamp: 1527458161</span>
+<span id="cb2-3"><a href="#cb2-3"></a>previous hash: 30bb9b475a08f2ea6fe07a1fd591ea209a7f633a400b2673b8835a975348b0eb</span>
+<span id="cb2-4"><a href="#cb2-4"></a>nonce: 2147489363</span>
+<span id="cb2-5"><a href="#cb2-5"></a>is orphan: 0</span>
+<span id="cb2-6"><a href="#cb2-6"></a>height: 1582196</span>
+<span id="cb2-7"><a href="#cb2-7"></a>depth: 2</span>
+<span id="cb2-8"><a href="#cb2-8"></a>hash: 50c8e5e51453c2ab85ef99d817e166540b40ef5fd2ed15ebc863091ca2a04594</span>
+<span id="cb2-9"><a href="#cb2-9"></a>difficulty: 51333809600</span>
+<span id="cb2-10"><a href="#cb2-10"></a>reward: 4634817937431</span>
+<span id="cb2-11"><a href="#cb2-11"></a>\{</span>
+<span id="cb2-12"><a href="#cb2-12"></a>  &quot;major_version&quot;: 7,</span>
+<span id="cb2-13"><a href="#cb2-13"></a>  &quot;minor_version&quot;: 7,</span>
+<span id="cb2-14"><a href="#cb2-14"></a>  &quot;timestamp&quot;: 1527458161,</span>
+<span id="cb2-15"><a href="#cb2-15"></a>  &quot;prev_id&quot;: &quot;30bb9b475a08f2ea6fe07a1fd591ea209a7f633a400b2673b8835a975348b0eb&quot;,</span>
+<span id="cb2-16"><a href="#cb2-16"></a>  &quot;nonce&quot;: 2147489363,</span>
+<span id="cb2-17"><a href="#cb2-17"></a>  &quot;miner_tx&quot;: \{</span>
+<span id="cb2-18"><a href="#cb2-18"></a>    &quot;version&quot;: 2,</span>
+<span id="cb2-19"><a href="#cb2-19"></a>    &quot;unlock_time&quot;: 1582256,</span>
+<span id="cb2-20"><a href="#cb2-20"></a>    &quot;vin&quot;: [ \{</span>
+<span id="cb2-21"><a href="#cb2-21"></a>        &quot;gen&quot;: \{</span>
+<span id="cb2-22"><a href="#cb2-22"></a>          &quot;height&quot;: 1582196</span>
+<span id="cb2-23"><a href="#cb2-23"></a>        \}</span>
+<span id="cb2-24"><a href="#cb2-24"></a>      \}</span>
+<span id="cb2-25"><a href="#cb2-25"></a>    ],</span>
+<span id="cb2-26"><a href="#cb2-26"></a>    &quot;vout&quot;: [ \{</span>
+<span id="cb2-27"><a href="#cb2-27"></a>        &quot;amount&quot;: 4634817937431,</span>
+<span id="cb2-28"><a href="#cb2-28"></a>        &quot;target&quot;: \{</span>
+<span id="cb2-29"><a href="#cb2-29"></a>          &quot;key&quot;: &quot;39abd5f1c13dc6644d1c43db68691996bb3cd4a8619a37a227667cf2bf055401&quot;</span>
+<span id="cb2-30"><a href="#cb2-30"></a>        \}</span>
+<span id="cb2-31"><a href="#cb2-31"></a>      \}</span>
+<span id="cb2-32"><a href="#cb2-32"></a>    ],</span>
+<span id="cb2-33"><a href="#cb2-33"></a>    &quot;extra&quot;: [ 1, 89, 148, 148, 232, 110, 49, 77, 175, 158, 102, 45, 72, 201, 193,</span>
+<span id="cb2-34"><a href="#cb2-34"></a>    18, 142, 202, 224, 47, 73, 31, 207, 236, 251, 94, 179, 190, 71, 72, 251, 110, </span>
+<span id="cb2-35"><a href="#cb2-35"></a>    134, 2, 8, 1, 242, 62, 180, 82, 253, 252, 0</span>
+<span id="cb2-36"><a href="#cb2-36"></a>    ],</span>
+<span id="cb2-37"><a href="#cb2-37"></a>    &quot;rct_signatures&quot;: \{</span>
+<span id="cb2-38"><a href="#cb2-38"></a>      &quot;type&quot;: 0</span>
+<span id="cb2-39"><a href="#cb2-39"></a>    \}</span>
+<span id="cb2-40"><a href="#cb2-40"></a>  \},</span>
+<span id="cb2-41"><a href="#cb2-41"></a>  &quot;tx_hashes&quot;: [ &quot;e9620db41b6b4e9ee675f7bfdeb9b9774b92aca0c53219247b8f8c7aecf773ae&quot;,</span>
+<span id="cb2-42"><a href="#cb2-42"></a>                 &quot;6d31593cd5680b849390f09d7ae70527653abb67d8e7fdca9e0154e5712591bf&quot;,</span>
+<span id="cb2-43"><a href="#cb2-43"></a>                 &quot;329e9c0caf6c32b0b7bf60d1c03655156bf33c0b09b6a39889c2ff9a24e94a54&quot;,</span>
+<span id="cb2-44"><a href="#cb2-44"></a>                 &quot;447c77a67adeb5dbf402183bc79201d6d6c2f65841ce95cf03621da5a6bffefc&quot;,</span>
+<span id="cb2-45"><a href="#cb2-45"></a>                 &quot;90a698b0db89bbb0704a4ffa4179dc149f8f8d01269a85f46ccd7f0007167ee4&quot;</span>
+<span id="cb2-46"><a href="#cb2-46"></a>  ]</span>
+<span id="cb2-47"><a href="#cb2-47"></a>\}</span></code></pre></div>
+<h2 class="unnumbered" id="block-components">Block components</h2>
+<ul>
+<li><p>(lines 2-10) - Block information collected by software, not actually part of the block properly speaking.</p></li>
+<li><p><span><code>is orphan</code></span> (line 5) - Signifies if this block was orphaned. Nodes usually store all branches during a fork situation, and discard unnecessary branches when a cumulative difficulty winner emerges, thereby orphaning the blocks.</p></li>
+<li><p><span><code>depth</code></span> (line 7) - In a blockchain copy, the depth of any given block is how far back in the chain it is relative to the most recent block.</p></li>
+<li><p><span><code>hash</code></span> (line 8) - This block’s block ID.</p></li>
+<li><p><span><code>difficulty</code></span> (line 9) - Difficulty isn’t stored in a block, since users can compute <span><em>all</em></span> block difficulties from block timestamps and the rules in Section <a href="#sec:difficulty" data-reference-type="ref" data-reference="sec:difficulty">[sec:difficulty]</a>.</p></li>
+<li><p><span><code>major_version</code></span> (line 12) - Corresponds to the protocol version used to verify this block.</p></li>
+<li><p><span><code>minor_version</code></span> (line 13) - Originally intended as a voting mechanism among miners, it now merely reiterates the <span><code>major_version</code></span>. Since the field does not occupy much space, the developers probably thought deprecating it would not be worth the effort.</p></li>
+<li><p><span><code>timestamp</code></span> (line 14) - An integer representation of this block’s UTC timestamp, as reported by the block’s miner.</p></li>
+<li><p><span><code>prev_id</code></span> (line 15) - The previous block’s block ID. Herein lies the essence of Monero’s blockchain.</p></li>
+<li><p><span><code>nonce</code></span> (line 16) - The nonce used by this block’s miner to pass its difficulty target. Anyone can recompute the proof of work and verify the nonce is valid.</p></li>
+<li><p><span><code>miner_tx</code></span> (lines 17-40) - This block’s miner transaction.</p></li>
+<li><p><span><code>version</code></span> (line 18) - Transaction format/era version; ‘2’ corresponds to RingCT.</p></li>
+<li><p><span><code>unlock_time</code></span> (line 19) - The miner transaction’s output can’t be spent until the 1582256block, after 59 more blocks have been mined (it is a 60 block lock time since it can’t be spent until 60 block time intervals have passed, e.g. <span class="math inline">\(2*60 = 120\)</span> minutes).</p></li>
+<li><p><span><code>vin</code></span> (lines 20-25) - Inputs to the miner tx. There are none, since the miner tx is used to generate block rewards and collect transaction fees.</p></li>
+<li><p><span><code>gen</code></span> (line 21) - Short for ‘generate’.</p></li>
+<li><p><span><code>height</code></span> (line 22) - The block height for which this miner tx’s block reward was generated. Each block height can only generate a block reward once.</p></li>
+<li><p><span><code>vout</code></span> (lines 26-32) - Outputs of the miner tx.</p></li>
+<li><p><span><code>amount</code></span> (line 27) - Amount dispersed by the miner tx, containing block reward and fees from this block’s transactions. Recorded in atomic units.</p></li>
+<li><p><span><code>key</code></span> (line 29) - One-time address assigning ownership of the miner tx’s amount.</p></li>
+<li><p><span><code>extra</code></span> (lines 33-36) - Extra information for the miner tx, including the transaction public key.</p></li>
+<li><p><span><code>type</code></span> (line 38) - Type of transaction, in this case ‘0’ for <span><code>RCTTypeNull</code></span>, indicating a miner tx.</p></li>
+<li><p><span><code>tx_hashes</code></span> (lines 41-46) - All transaction IDs included in this block (but not the miner tx ID, which is <span><code>06fb3e1cf889bb972774a8535208d98db164394ef2b14ecfe74814170557e6e9</code></span>).</p></li>
+</ul>
+<h1 id="appendix:genesis-block">Genesis Block</h1>
+<p>In this appendix we show the structure of the Monero genesis block. The block has 0 transactions (it just sends the first block reward to thankful_for_today <span class="citation" data-cites="bitmonero-launched"></span>). Monero’s founder did not add a timestamp, perhaps as a relic of Bytecoin, the coin Monero’s code was forked from, whose creators apparently tried to hide a large pre-mine <span class="citation" data-cites="monero-history"></span>, and may operate a shady network of cryptocurrency-related software and services <span class="citation" data-cites="bytecoin-network"></span>.</p>
+<p>Block 1 was added to the blockchain at timestamp 2014-04-18 10:49:53 UTC (as reported by the block’s miner), so we can assume the genesis block was created the same day. This corresponds with the launch date announced by thankful_for_today <span class="citation" data-cites="bitmonero-launched"></span>.</p>
+<div class="sourceCode" id="cb3" data-commandchars="\\\{\}" data-numbers="left"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1"></a>print_block 0</span>
+<span id="cb3-2"><a href="#cb3-2"></a>timestamp: 0</span>
+<span id="cb3-3"><a href="#cb3-3"></a>previous hash: 0000000000000000000000000000000000000000000000000000000000000000</span>
+<span id="cb3-4"><a href="#cb3-4"></a>nonce: 10000</span>
+<span id="cb3-5"><a href="#cb3-5"></a>is orphan: 0</span>
+<span id="cb3-6"><a href="#cb3-6"></a>height: 0</span>
+<span id="cb3-7"><a href="#cb3-7"></a>depth: 1580975</span>
+<span id="cb3-8"><a href="#cb3-8"></a>hash: 418015bb9ae982a1975da7d79277c2705727a56894ba0fb246adaabb1f4632e3</span>
+<span id="cb3-9"><a href="#cb3-9"></a>difficulty: 1</span>
+<span id="cb3-10"><a href="#cb3-10"></a>reward: 17592186044415</span>
+<span id="cb3-11"><a href="#cb3-11"></a>\{</span>
+<span id="cb3-12"><a href="#cb3-12"></a>  &quot;major_version&quot;: 1,</span>
+<span id="cb3-13"><a href="#cb3-13"></a>  &quot;minor_version&quot;: 0,</span>
+<span id="cb3-14"><a href="#cb3-14"></a>  &quot;timestamp&quot;: 0,</span>
+<span id="cb3-15"><a href="#cb3-15"></a>  &quot;prev_id&quot;: &quot;0000000000000000000000000000000000000000000000000000000000000000&quot;,</span>
+<span id="cb3-16"><a href="#cb3-16"></a>  &quot;nonce&quot;: 10000,</span>
+<span id="cb3-17"><a href="#cb3-17"></a>  &quot;miner_tx&quot;: \{</span>
+<span id="cb3-18"><a href="#cb3-18"></a>    &quot;version&quot;: 1,</span>
+<span id="cb3-19"><a href="#cb3-19"></a>    &quot;unlock_time&quot;: 60,</span>
+<span id="cb3-20"><a href="#cb3-20"></a>    &quot;vin&quot;: [ \{</span>
+<span id="cb3-21"><a href="#cb3-21"></a>        &quot;gen&quot;: \{</span>
+<span id="cb3-22"><a href="#cb3-22"></a>          &quot;height&quot;: 0</span>
+<span id="cb3-23"><a href="#cb3-23"></a>        \}</span>
+<span id="cb3-24"><a href="#cb3-24"></a>      \}</span>
+<span id="cb3-25"><a href="#cb3-25"></a>    ],</span>
+<span id="cb3-26"><a href="#cb3-26"></a>    &quot;vout&quot;: [ \{</span>
+<span id="cb3-27"><a href="#cb3-27"></a>        &quot;amount&quot;: 17592186044415,</span>
+<span id="cb3-28"><a href="#cb3-28"></a>        &quot;target&quot;: \{</span>
+<span id="cb3-29"><a href="#cb3-29"></a>          &quot;key&quot;: &quot;9b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd088071&quot;</span>
+<span id="cb3-30"><a href="#cb3-30"></a>        \}</span>
+<span id="cb3-31"><a href="#cb3-31"></a>      \}</span>
+<span id="cb3-32"><a href="#cb3-32"></a>    ],</span>
+<span id="cb3-33"><a href="#cb3-33"></a>    &quot;extra&quot;: [ 1, 119, 103, 170, 252, 222, 155, 224, 13, 207, 208, 152, 113, 94, 188, </span>
+<span id="cb3-34"><a href="#cb3-34"></a>    247, 244, 16, 218, 235, 197, 130, 253, 166, 157, 36, 162, 142, 157, 11, 200, 144, </span>
+<span id="cb3-35"><a href="#cb3-35"></a>    209</span>
+<span id="cb3-36"><a href="#cb3-36"></a>    ],</span>
+<span id="cb3-37"><a href="#cb3-37"></a>    &quot;signatures&quot;: [ ]</span>
+<span id="cb3-38"><a href="#cb3-38"></a>  \},</span>
+<span id="cb3-39"><a href="#cb3-39"></a>  &quot;tx_hashes&quot;: [ ]</span>
+<span id="cb3-40"><a href="#cb3-40"></a>\}</span></code></pre></div>
+<h2 class="unnumbered" id="genesis-block-components">Genesis block components</h2>
+<p>Since we used the same software to print the genesis block and the block from Appendix <a href="#appendix:block-content" data-reference-type="ref" data-reference="appendix:block-content">2</a>, the structure appears basically the same. We point out some unique differences.</p>
+<ul>
+<li><p><span><code>difficulty</code></span> (line 9) - The genesis block’s difficulty is reported as 1, which means any nonce could work.</p></li>
+<li><p><span><code>timestamp</code></span> (line 14) - The genesis block doesn’t have a meaningful timestamp.</p></li>
+<li><p><span><code>prev_id</code></span> (line 15) - We use an empty 32 bytes for the previous ID, by convention.</p></li>
+<li><p><span><code>nonce</code></span> (line 16) - <span class="math inline">\(n = 10000\)</span> by convention.</p></li>
+<li><p><span><code>amount</code></span> (line 27) - This exactly corresponds to our calculation for the first block reward (17.592186044415 XMR) in Section <a href="#subsec:block-reward" data-reference-type="ref" data-reference="subsec:block-reward">[subsec:block-reward]</a>.</p></li>
+<li><p><span><code>key</code></span> (line 29) - The very first Moneroj were dispersed to Monero’s founder thankful_for_today.</p></li>
+<li><p><span><code>extra</code></span> (lines 33-36) - Using the encoding discussed in Appendix <a href="#appendix:RCTTypeBulletproof2" data-reference-type="ref" data-reference="appendix:RCTTypeBulletproof2">1</a>, the genesis block’s miner tx <span><code>extra</code></span> field just contains one transaction public key.</p></li>
+<li><p><span><code>signatures</code></span> (line 37) - There are no signatures in the genesis block. This is here as an artifact of the <span><code>print_block</code></span> function. The same is true for <span><code>tx_hashes</code></span> in line 39.</p></li>
+</ul>
+</body>
+</html>

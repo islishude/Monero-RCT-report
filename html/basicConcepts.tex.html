@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>basicConcepts.tex</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">basicConcepts.tex</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#chapter:basicConcepts">Basic Concepts</a>
+<ul>
+<li><a href="#a-few-words-about-notation">A few words about notation</a></li>
+<li><a href="#sec:modular-arithmetic">Modular arithmetic</a>
+<ul>
+<li><a href="#subsec:modular-addition-multiplication">Modular addition and multiplication</a></li>
+<li><a href="#modular-exponentiation">Modular exponentiation</a></li>
+<li><a href="#modular-multiplicative-inverse">Modular multiplicative inverse</a></li>
+<li><a href="#subsec:modular-equations">Modular equations</a></li>
+</ul></li>
+<li><a href="#EllipticCurveCryptography">Elliptic curve cryptography</a>
+<ul>
+<li><a href="#elliptic_curves_section">What are elliptic curves?</a></li>
+<li><a href="#ec:keys">Public key cryptography with elliptic curves</a></li>
+<li><a href="#DH_exchange_section">Diffie-Hellman key exchange with elliptic curves</a></li>
+<li><a href="#sec:schnorr-fiat-shamir">Schnorr signatures and the Fiat-Shamir transform</a></li>
+<li><a href="#sec:signing-messages">Signing messages</a></li>
+</ul></li>
+<li><a href="#Ed25519_section">Curve Ed25519</a>
+<ul>
+<li><a href="#binary_note">Binary representation</a></li>
+<li><a href="#point_compression_section">Point compression</a></li>
+<li><a href="#EdDSA_section">EdDSA signature algorithm</a></li>
+</ul></li>
+<li><a href="#sec:XOR_section">Binary operator XOR</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="chapter:basicConcepts">Basic Concepts</h1>
+<h2 id="a-few-words-about-notation">A few words about notation</h2>
+<p>A focal objective of this report was to collect, review, correct, and homogenize all existing information concerning the inner workings of the Monero cryptocurrency. And, at the same time supply all the necessary details to present the material in a constructive and single-threaded manner.</p>
+<p>An important instrument to achieve this was to settle for a number of notational conventions. Among others, we have used:</p>
+<ul>
+<li><p>lower case letters to denote simple values, integers, strings, bit representations, etc.</p></li>
+<li><p>upper case letters to denote curve points and complicated constructs</p></li>
+</ul>
+<p>For items with a special meaning, we have tried to use as much as possible the same symbols throughout the document. For instance, a curve generator is always denoted by <span class="math inline">\(G\)</span>, its order is <span class="math inline">\(l\)</span>, private/public keys are denoted whenever possible by <span class="math inline">\(k/K\)</span> respectively, etc.<br />
+Beyond that, we have aimed at being <span><em>conceptual</em></span> in our presentation of algorithms and schemes. A reader with a computer science background may feel we have neglected questions like the bit representation of items, or, in some cases, how to carry out concrete operations. Moreover, students of mathematics may find we disregarded explanations of abstract algebra.</p>
+<p>However, we don’t see this as a loss. A simple object such as an integer or a string can always be represented by a bit string. So-called ‘endianness’ is rarely relevant, and is mostly a matter of convention for our algorithms.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>Elliptic curve points are normally denoted by pairs <span class="math inline">\((x, y)\)</span>, and can therefore be represented with two integers. However, in the world of cryptography it is common to apply <span><em>point compression</em></span> techniques, which allow representing a point using only the space of one coordinate. For our conceptual approach it is often accessory whether point compression is used or not, but most of the time it is implicitly assumed.<br />
+We have also used cryptographic hash functions freely without specifying any concrete algorithms. In the case of Monero it will typically be a <span class="math inline">\(\mathit{Keccak}\)</span><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> variant, but if not explicitly mentioned then it is not important to the theory.</p>
+<p>A cryptographic hash function (henceforth simply ‘hash function’, or ‘hash’) takes in some message <span class="math inline">\(\mathfrak{m}\)</span> of arbitrary length and returns a hash <span class="math inline">\(h\)</span> (or ‘message digest’) of fixed length, with each possible output equiprobable for a given input. Cryptographic hash functions are difficult to reverse, have an interesting feature known as the <span><em>large avalanche effect</em></span> which can cause very similar messages to produce very dissimilar hashes, and it is hard to find two messages with the same message digest.</p>
+<p>Hash functions will be applied to integers, strings, curve points, or combinations of these objects. These occurrences should be interpreted as hashes of bit representations, or the concatenation of such representations. Depending on context, the result of a hash will be numeric, a bit string, or even a curve point. Further details in this respect will be given as needed.</p>
+<h2 id="sec:modular-arithmetic">Modular arithmetic</h2>
+<p>Most modern cryptography begins with modular arithmetic, which in turn begins with the modulus operation (denoted ‘mod’). We only care about the positive modulus, which always returns a positive integer.</p>
+<p>The positive modulus is similar to the ‘remainder’ after dividing two numbers, e.g. <span class="math inline">\(c\)</span> the ‘remainder’ of <span class="math inline">\(a/b\)</span>. Let’s imagine a number line. To calculate <span class="math inline">\(c = a \pmod b\)</span> we stand at point <span class="math inline">\(a\)</span> then walk toward zero with each <span class="math inline">\(\text{step} = b\)</span> until we reach an integer <span class="math inline">\(\geq{0}\)</span> and <span class="math inline">\(&lt;b\)</span>. That is <span class="math inline">\(c\)</span>. For example, <span class="math inline">\(4\)</span> (modulo 3) <span class="math inline">\(= 1\)</span>, <span class="math inline">\(-5 \pmod 4 = 3\)</span>, and so on.</p>
+<p>Formally, the positive modulus is here defined for <span class="math inline">\(c = a \pmod b\)</span> as <span class="math inline">\(a=bx+c\)</span>, where <span class="math inline">\(0\leq{c}&lt;{b}\)</span> and <span class="math inline">\(x\)</span> is a signed integer which gets discarded (<span class="math inline">\(b\)</span> is a positive non-zero integer).</p>
+<p>Note that, if <span class="math inline">\(a \leq n\)</span>, <span class="math inline">\(-a \pmod n\)</span> is the same as <span class="math inline">\(n - a\)</span>.</p>
+<h3 id="subsec:modular-addition-multiplication">Modular addition and multiplication</h3>
+<p>In computer science it is important to avoid large numbers when doing modular arithmetic. For example, if we have <span class="math inline">\(29+87 \pmod{99}\)</span> and we aren’t allowed variables with three or more digits (such as <span class="math inline">\(116 = 29+87\)</span>), then we can’t compute <span class="math inline">\(116 \pmod{99} = 17\)</span> directly.</p>
+<p>To perform <span class="math inline">\(c = a+b \pmod n\)</span>, where <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are each less than the modulus <span class="math inline">\(n\)</span>, we can do this:</p>
+<ul>
+<li><p>Compute <span class="math inline">\(x = n-a\)</span>. If <span class="math inline">\(x &gt; b\)</span> then <span class="math inline">\(c = a+b\)</span>, otherwise <span class="math inline">\(c = b - x\)</span>.</p></li>
+</ul>
+<p>We can use modular addition to achieve modular multiplication (<span class="math inline">\(a*b \pmod n = c\)</span>) with an algorithm called ‘double-and-add’. Let us demonstrate by example. Say we want to do <span class="math inline">\(7*8 \pmod 9 = 2\)</span>. It is the same as <span class="math display">\[7*8 = 8+8+8+8+8+8+8 \pmod 9\]</span></p>
+<p>Now break this into groups of two. <span class="math display">\[(8+8) + (8+8) + (8+8) + 8\]</span></p>
+<p>And again, by groups of two. <span class="math display">\[[(8+8) + (8+8)] + (8+8) + 8\]</span></p>
+<p>The total number of <span class="math inline">\(+\)</span> point operations falls from 6 to 4 because we only need to find <span class="math inline">\((8+8)\)</span> once.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a><br />
+Double-and-add is implemented by converting the first number (the ‘multiplicand’ <span class="math inline">\(a\)</span>) to binary (in our example, 7 <span class="math inline">\(\rightarrow\)</span> [0111]), then going through the binary array and doubling and adding.</p>
+<p>Let’s make an array <span class="math inline">\(A = [0111]\)</span> and index it 3,2,1,0.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> A[0] = 1 is the first element of A and is the least significant bit. We set a result variable to be initially <span class="math inline">\(r = 0\)</span>, and set a sum variable to be initially <span class="math inline">\(s = 8\)</span> (more generally, we start with <span class="math inline">\(s = b\)</span>). We follow this algorithm:</p>
+<ol>
+<li><p>Iterate through: <span class="math inline">\(i = (0,...,A_{size} - 1)\)</span></p>
+<ol>
+<li><p>If A[i] == 1, then <span class="math inline">\(r = r + s \pmod n\)</span>.</p></li>
+<li><p>Compute <span class="math inline">\(s = s + s \pmod n\)</span>.</p></li>
+</ol></li>
+<li><p>Use the final <span class="math inline">\(r\)</span>: <span class="math inline">\(c = r\)</span>.</p></li>
+</ol>
+<p>In our example <span class="math inline">\(7*8 \pmod 9\)</span>, this sequence appears:</p>
+<ol>
+<li><p><span class="math inline">\(i = 0\)</span></p>
+<ol>
+<li><p>A[0] = 1, so <span class="math inline">\(r = 0 + 8 \pmod 9\)</span> = 8</p></li>
+<li><p><span class="math inline">\(s = 8 + 8 \pmod 9\)</span> = 7</p></li>
+</ol></li>
+<li><p><span class="math inline">\(i = 1\)</span></p>
+<ol>
+<li><p>A[1] = 1, so <span class="math inline">\(r = 8 + 7 \pmod 9\)</span> = 6</p></li>
+<li><p><span class="math inline">\(s = 7 + 7 \pmod 9\)</span> = 5</p></li>
+</ol></li>
+<li><p><span class="math inline">\(i = 2\)</span></p>
+<ol>
+<li><p>A[2] = 1, so <span class="math inline">\(r = 6 + 5 \pmod 9\)</span> = 2</p></li>
+<li><p><span class="math inline">\(s = 5 + 5 \pmod 9\)</span> = 1</p></li>
+</ol></li>
+<li><p><span class="math inline">\(i = 3\)</span></p>
+<ol>
+<li><p>A[3] = 0, so <span class="math inline">\(r\)</span> stays the same</p></li>
+<li><p><span class="math inline">\(s = 1 + 1 \pmod 9\)</span> = 2</p></li>
+</ol></li>
+<li><p><span class="math inline">\(r = 2\)</span> is the result</p></li>
+</ol>
+<h3 id="modular-exponentiation">Modular exponentiation</h3>
+<p>Clearly <span class="math inline">\(8^7 \pmod 9 = 8*8*8*8*8*8*8 \pmod 9\)</span>. Just like double-and-add, we can do square-and-multiply. For <span class="math inline">\(a^e \pmod{n}\)</span>:</p>
+<ol>
+<li><p>Define <span class="math inline">\(e_{scalar} \rightarrow e_{binary}\)</span>; <span class="math inline">\(A = [e_{binary}]\)</span>; <span class="math inline">\(r = 1\)</span>; <span class="math inline">\(m = a\)</span></p></li>
+<li><p>Iterate through: <span class="math inline">\(i = (0,...,A_{size} - 1)\)</span></p>
+<ol>
+<li><p>If A[i] == 1, then <span class="math inline">\(r = r * m \pmod n\)</span>.</p></li>
+<li><p>Compute <span class="math inline">\(m = m * m \pmod n\)</span>.</p></li>
+</ol></li>
+<li><p>Use the final <span class="math inline">\(r\)</span> as result.</p></li>
+</ol>
+<h3 id="modular-multiplicative-inverse">Modular multiplicative inverse</h3>
+<p>Sometimes we need <span class="math inline">\(1/a \pmod n\)</span>, or in other words <span class="math inline">\(a^{-1} \pmod n\)</span>. The inverse of something times itself is by definition one (identity). Imagine <span class="math inline">\(0.25 = 1/4\)</span>, and then <span class="math inline">\(0.25*4 = 1\)</span>.<br />
+In modular arithmetic, for <span class="math inline">\(c = a^{-1} \pmod{n}\)</span>, <span class="math inline">\(a c \equiv 1 \pmod{n}\)</span> for <span class="math inline">\(0 \leq c &lt; n\)</span> and for <span class="math inline">\(a\)</span> and <span class="math inline">\(n\)</span> relatively prime.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> Relatively prime means they don’t share any divisors except 1 (the fraction <span class="math inline">\(a/n\)</span> can’t be reduced/simplified).</p>
+<p>We can use square-and-multiply to compute the modular multiplicative inverse when <span class="math inline">\(n\)</span> is a prime number because of <span><em>Fermat’s little theorem</em></span>:<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> <span class="math display">\[\begin{aligned}
+    a^{n-1} &amp;\equiv 1 \pmod{n} \\
+    a*a^{n-2} &amp;\equiv 1 \pmod{n} \\
+    c \equiv a^{n-2} &amp;\equiv a^{-1} \pmod{n}\end{aligned}\]</span></p>
+<p>More generally (and more rapidly), the so-called ‘extended Euclidean algorithm’ <span class="citation" data-cites="extended-euclidean"></span> can also find modular inverses.</p>
+<h3 id="subsec:modular-equations">Modular equations</h3>
+<p>Suppose we have an equation <span class="math inline">\(c = 3*4*5 \pmod 9\)</span>. Computing this is straightforward. Given some operation <span class="math inline">\(\circ\)</span> (for example, <span class="math inline">\(\circ = *\)</span>) between two expressions <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>: <span class="math display">\[(A \circ B)\pmod{n} = {[A\pmod {n}] \circ [B\pmod{n}]}\pmod{n}\]</span></p>
+<p>In our example, we set <span class="math inline">\(A = 3*4\)</span>, <span class="math inline">\(B = 5\)</span>, and <span class="math inline">\(n = 9\)</span>: <span class="math display">\[\begin{aligned}
+(3*4 * 5) \pmod{9} &amp;= {[3*4 \pmod {9}] * [5 \pmod{9}]} \pmod{9} \\
+                   &amp;= [3]*[5] \pmod 9 \\
+                 c &amp;= 6\end{aligned}\]</span></p>
+<p>Now we have a way to do modular subtraction. <span class="math display">\[\begin{aligned}
+A - B \pmod n &amp;\rightarrow A + (-B) \pmod n \\
+              &amp;\rightarrow {[A \pmod {n}] + [-B \pmod{n}]} \pmod{n}\end{aligned}\]</span><br />
+The same principle would apply to something like <span class="math inline">\(x = (a-b*c*d)^{-1} (e*f+g^{h}) \pmod n\)</span>.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
+<h2 id="EllipticCurveCryptography">Elliptic curve cryptography</h2>
+<h3 id="elliptic_curves_section">What are elliptic curves?</h3>
+<p>A finite field <span class="math inline">\(\mathbb{F}_q\)</span>, where <span class="math inline">\(q\)</span> is a prime number greater than 3, is the field formed by the set <span class="math inline">\(\{0, 1, 2, ..., q-1\}\)</span>. Addition and multiplication <span class="math inline">\((+,  \cdot)\)</span> and negation <span class="math inline">\((-)\)</span> are calculated<span class="math inline">\(\pmod q\)</span>.</p>
+<p>“Calculated<span class="math inline">\(\pmod q\)</span>" means<span class="math inline">\(\pmod q\)</span> is performed on any instance of an arithmetic operation between two field elements, or negation of a single field element. For example, given a prime field <span class="math inline">\(\mathbb{F}_p\)</span> with <span class="math inline">\(p = 29\)</span>, <span class="math inline">\(17+20=8\)</span> because <span class="math inline">\(37 \pmod{29} = 8\)</span>. Also, <span class="math inline">\(-13 = -13 \pmod{29} = 16\)</span>.<br />
+Typically, an elliptic curve with a given <span class="math inline">\((a,b)\)</span> pair is defined as the set of all points with coordinates <span class="math inline">\((x, y)\)</span> satisfying a <span><em>Weierstraß</em></span> equation <span class="citation" data-cites="Hankerson:2003:GEC:940321"></span>:<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> <span class="math display">\[y^2 = x^3 + a x + b \quad \textrm{where} \quad a, b, x, y \in \mathbb{F}_q\]</span></p>
+<p>The cryptocurrency Monero uses a special curve belonging to the category of so-called <span><em>Twisted Edwards</em></span> curves <span class="citation" data-cites="Bernstein2008"></span>, which are commonly expressed as (for a given <span class="math inline">\((a,d)\)</span> pair): <span class="math display">\[a x^2 + y^2 = 1 + d x^2 y^2 \quad \textrm{where} \quad a, d, x, y \in \mathbb{F}_q\]</span></p>
+<p>In what follows we will prefer this second form. The advantage it offers over the previously mentioned Weierstraß form is that basic cryptographic primitives require fewer arithmetic operations, resulting in faster cryptographic algorithms (see Bernstein <span><em>et al.</em></span> in <span class="citation" data-cites="Bernstein2007"></span> for details).<br />
+Let <span class="math inline">\(P_1 = (x_1, y_1)\)</span> and <span class="math inline">\(P_2 = (x_2, y_2)\)</span> be two points belonging to a Twisted Edwards elliptic curve (henceforth known simply as an EC). We define addition on points by defining <span class="math inline">\(P_1 + P_2 = (x_1, y_1) + (x_2, y_2)\)</span> as the point <span class="math inline">\(P_3 = (x_3, y_3)\)</span> where<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> <span class="math display">\[\begin{aligned}
+x_3 &amp; =  \frac{x_1 y_2 + y_1 x_ 2}{1 + d x_1 x_2 y_1 y_2}  \pmod{q} \\
+y_3 &amp; =  \frac{y_1 y_2 - a x_1 x_2}{1 - d x_1 x_2 y_1 y_2} \pmod{q} \end{aligned}\]</span></p>
+<p>These formulas for addition also apply for point doubling; that is, when <span class="math inline">\(P_1 = P_2\)</span>. To subtract a point, invert its coordinates over the y-axis, <span class="math inline">\((x,y) \rightarrow (-x,y)\)</span> <span class="citation" data-cites="Bernstein2008"></span>, and use point addition. Recall that ‘negative’ elements <span class="math inline">\(-x\)</span> of <span class="math inline">\(\mathbb{F}_q\)</span> are really <span class="math inline">\(-x \pmod{q}\)</span>.<br />
+Whenever two curve points are added together <span class="math inline">\(P_3\)</span> is a point on the ‘original’ elliptic curve, or in other words all <span class="math inline">\(x_3,y_3 \in \mathbb{F}_q\)</span> and satisfy the EC equation.</p>
+<p>Each point <span class="math inline">\(P\)</span> in EC can generate a subgroup of order (size) <span class="math inline">\(u\)</span> out of some of the other points in EC using multiples of itself. For example, some point <span class="math inline">\(P\)</span>’s subgroup might have order 5 and contain the points <span class="math inline">\((0, P, 2P, 3P, 4P)\)</span>, each of which is in EC. At <span class="math inline">\(5P\)</span> the so-called <span><em>point-at-infinity</em></span> appears, which is like the ‘zero’ position on an EC, and has coordinates <span class="math inline">\((0, 1)\)</span>.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></p>
+<p>Conveniently, <span class="math inline">\(5P + P = P\)</span>. This means the subgroup is <span><em>cyclic</em></span>.<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a> All <span class="math inline">\(P\)</span> in EC generate a cyclic subgroup. If <span class="math inline">\(P\)</span> generates a subgroup whose order is prime, then all the included points (except for the point-at-infinity) generate that same subgroup. In our example, take multiples of point <span class="math inline">\(2P\)</span>: <span class="math display">\[2P, 4P, 6P, 8P, 10P \rightarrow 2P, 4P, 1P, 3P, 0\]</span></p>
+<p>Another example: a subgroup with order 6 <span class="math inline">\((0, P, 2P, 3P, 4P, 5P)\)</span>. Multiples of point <span class="math inline">\(2P\)</span>: <span class="math display">\[2P, 4P, 6P, 8P, 10P, 12P \rightarrow 2P, 4P, 0, 2P, 4P, 0\]</span> Here <span class="math inline">\(2P\)</span> has order 3. Since 6 is not prime, not all of its member points recreate the original subgroup.</p>
+<p>Each EC has an order <span class="math inline">\(N\)</span> equal to the total number of points in the curve (including the point-at-infinity), and the orders of all subgroups generated by points are divisors of <span class="math inline">\(N\)</span> (by <span><em>Lagrange’s theorem</em></span>). We can imagine a set of all EC points <span class="math inline">\(\{0,P_1,...,P_{N-1}\}\)</span>. If <span class="math inline">\(N\)</span> isn’t prime, some points will make subgroups with orders equal to divisors of <span class="math inline">\(N\)</span>.</p>
+<p>To find the order, <span class="math inline">\(u\)</span>, of any given point <span class="math inline">\(P\)</span>’s subgroup:</p>
+<ol>
+<li><p>Find <span class="math inline">\(N\)</span> (e.g. use <span><em>Schoof’s algorithm</em></span>).</p></li>
+<li><p>Find all the divisors of <span class="math inline">\(N\)</span>.</p></li>
+<li><p>For every divisor <span class="math inline">\(n\)</span> of <span class="math inline">\(N\)</span>, compute <span class="math inline">\(n P\)</span>.</p></li>
+<li><p>The smallest <span class="math inline">\(n\)</span> such that <span class="math inline">\(n P = 0\)</span> is the order <span class="math inline">\(u\)</span> of the subgroup.</p></li>
+</ol>
+<p>ECs selected for cryptography typically have <span class="math inline">\(N = hl\)</span>, where <span class="math inline">\(l\)</span> is some sufficiently large (such as 160 bits) prime number and <span class="math inline">\(h\)</span> is the so-called <span><em>cofactor</em></span> which could be as small as 1 or 2.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a> One point in the subgroup of size <span class="math inline">\(l\)</span> is usually selected to be the generator <span class="math inline">\(G\)</span> as a convention. For every other point <span class="math inline">\(P\)</span> in that subgroup there exists an integer <span class="math inline">\(0 &lt; n \leq l\)</span> satisfying <span class="math inline">\(P = n G\)</span>.</p>
+<p>Let’s expand our understanding. Say there is a point <span class="math inline">\(P&#39;\)</span> with order <span class="math inline">\(N\)</span>, where <span class="math inline">\(N=h l\)</span>. Any other point <span class="math inline">\(P_i\)</span> can be found with some integer <span class="math inline">\(n_i\)</span> such that <span class="math inline">\(P_i=n_i P&#39;\)</span>. If <span class="math inline">\(P_1=n_1 P&#39;\)</span> has order <span class="math inline">\(l\)</span>, any <span class="math inline">\(P_2=n_2 P&#39;\)</span> with order <span class="math inline">\(l\)</span> must be in the same subgroup as <span class="math inline">\(P_1\)</span> because <span class="math inline">\(l P_1=0 = l P_2\)</span>, and if <span class="math inline">\(l(n_1 P&#39;) \equiv l(n_2 P&#39;) \equiv N P&#39;=0\)</span>, then <span class="math inline">\(n_1\)</span> &amp; <span class="math inline">\(n_2\)</span> must both be multiples of <span class="math inline">\(h\)</span>. Since <span class="math inline">\(N= h l\)</span>, there are only <span class="math inline">\(l\)</span> multiples of <span class="math inline">\(h\)</span>, implying only one subgroup of size <span class="math inline">\(l\)</span> is possible.</p>
+<p>Put simply, the subgroup formed by multiples of <span class="math inline">\((h P&#39;)\)</span> always contains <span class="math inline">\(P_1\)</span> and <span class="math inline">\(P_2\)</span>. Furthermore, <span class="math inline">\(h(n&#39; P&#39;)=0\)</span> when <span class="math inline">\(n&#39;\)</span> is a multiple of <span class="math inline">\(l\)</span>, and there are only <span class="math inline">\(h\)</span> such variations of <span class="math inline">\(n&#39; \pmod N\)</span> (including the point at infinity for <span class="math inline">\(n&#39; = hl\)</span>) because when <span class="math inline">\(n&#39; = h l\)</span> it cycles back to 0: <span class="math inline">\(h l P&#39; = 0\)</span>. So, there are only <span class="math inline">\(h\)</span> points <span class="math inline">\(P\)</span> in EC where <span class="math inline">\(h P\)</span> will equal 0.</p>
+<p>A similar argument could be applied to any subgroup of size <span class="math inline">\(u\)</span>. Any two points <span class="math inline">\(P_1\)</span> and <span class="math inline">\(P_2\)</span> with order <span class="math inline">\(u\)</span> are in the same subgroup, which is composed of multiples of <span class="math inline">\((N/u) P&#39;\)</span>.<br />
+With this new understanding it is clear we can use the following algorithm to find (non-point-at-infinity) points in the subgroup of order <span class="math inline">\(l\)</span>:</p>
+<ol>
+<li><p>Find <span class="math inline">\(N\)</span> of the elliptic curve EC, choose subgroup order <span class="math inline">\(l\)</span>, compute <span class="math inline">\(h=N/l\)</span>.</p></li>
+<li><p>Choose a random point <span class="math inline">\(P&#39;\)</span> in EC.</p></li>
+<li><p>Compute <span class="math inline">\(P=h P&#39;\)</span>.</p></li>
+<li><p>If <span class="math inline">\(P=0\)</span> return to step 2, else <span class="math inline">\(P\)</span> is in the subgroup of order <span class="math inline">\(l\)</span>.</p></li>
+</ol>
+<p>Calculating the scalar product between any integer <span class="math inline">\(n\)</span> and any point <span class="math inline">\(P\)</span>, <span class="math inline">\(nP\)</span>, is not difficult, whereas finding <span class="math inline">\(n\)</span> such that <span class="math inline">\(P_1 = n P_2\)</span> is thought to be computationally hard. By analogy to modular arithmetic, this is often called the <span><em>discrete logarithm problem</em></span> (DLP). Scalar multiplication can be seen as a <span><em>one-way function</em></span>, which paves the way for using elliptic curves for cryptography.<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a></p>
+<p>The scalar product <span class="math inline">\(nP\)</span> is equivalent to <span class="math inline">\((((P+P)+(P+P))…)\)</span>. Though not always the most efficient approach, we can use double-and-add like in Section <a href="#subsec:modular-addition-multiplication" data-reference-type="ref" data-reference="subsec:modular-addition-multiplication">1.2.1</a>. To get the sum <span class="math inline">\(R = n P\)</span>, remember we use the <span class="math inline">\(+\)</span> point operation discussed in Section <a href="#elliptic_curves_section" data-reference-type="ref" data-reference="elliptic_curves_section">1.3.1</a>.</p>
+<ol>
+<li><p>Define <span class="math inline">\(n_{scalar} \rightarrow n_{binary}\)</span>; <span class="math inline">\(A = [n_{binary}]\)</span>; <span class="math inline">\(R = 0\)</span>, the point-at-infinity; <span class="math inline">\(S = P\)</span></p></li>
+<li><p>Iterate through: <span class="math inline">\(i = (0,...,A_{size} - 1)\)</span></p>
+<ol>
+<li><p>If A[i] == 1, then R += S.</p></li>
+<li><p>Compute S += S.</p></li>
+</ol></li>
+<li><p>Use the final R as result.</p></li>
+</ol>
+<p>Note that EC scalars for points in the subgroup of size <span class="math inline">\(l\)</span> (which we will be using henceforth) are members of the finite field <span class="math inline">\(\mathbb{F}_l\)</span>. This means arithmetic between scalars is mod <span class="math inline">\(l\)</span>.</p>
+<h3 id="ec:keys">Public key cryptography with elliptic curves</h3>
+<p>Public key cryptography algorithms can be devised in a way analogous to modular arithmetic.</p>
+<p>Let <span class="math inline">\(k\)</span> be a randomly selected number satisfying <span class="math inline">\(0 &lt; k &lt; l\)</span>, and call it a <span><em>private key</em></span>.<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a> Calculate the corresponding <span><em>public key</em></span> <span class="math inline">\(K\)</span> (an EC point) with the scalar product <span class="math inline">\(k G = K\)</span>.</p>
+<p>Due to the <span><em>discrete logarithm problem</em></span> (DLP) we cannot easily deduce <span class="math inline">\(k\)</span> from <span class="math inline">\(K\)</span> alone. This property allows us to use the values <span class="math inline">\((k, K)\)</span> in standard public key cryptography algorithms.</p>
+<h3 id="DH_exchange_section">Diffie-Hellman key exchange with elliptic curves</h3>
+<p>A basic <span><em>Diffie-Hellman</em></span> <span class="citation" data-cites="Diffie-Hellman"></span> exchange of a shared secret between <span><em>Alice</em></span> and <span><em>Bob</em></span> could take place in the following manner:</p>
+<ol>
+<li><p>Alice and Bob generate their own private/public keys <span class="math inline">\((k_A, K_A) \textrm{ and } (k_B, K_B)\)</span>. Both publish or exchange their public keys, and keep the private keys for themselves.</p></li>
+<li><p>Clearly, it holds that <span class="math display">\[S = k_A K_B = k_A k_B G = k_B k_A G = k_B K_A\]</span></p>
+<p>Alice could privately calculate <span class="math inline">\(S = k_A K_B\)</span>, and Bob <span class="math inline">\(S = k_B K_A\)</span>, allowing them to use this single value as a shared secret.</p>
+<p>For example, if Alice has a message <span class="math inline">\(m\)</span> to send Bob, she could hash the shared secret <span class="math inline">\(h = \mathcal{H}(S)\)</span>, compute <span class="math inline">\(x = m + h\)</span>, and send <span class="math inline">\(x\)</span> to Bob. Bob computes <span class="math inline">\(h&#39; = \mathcal{H}(S)\)</span>, calculates <span class="math inline">\(m = x - h&#39;\)</span>, and learns <span class="math inline">\(m\)</span>.</p></li>
+</ol>
+<p>An external observer would not be able to easily calculate the shared secret due to the ‘Diffie-Hellman Problem’ (DHP), which says finding <span class="math inline">\(S\)</span> from <span class="math inline">\(K_A\)</span> and <span class="math inline">\(K_B\)</span> is very difficult. Also, the DLP prevents them from finding <span class="math inline">\(k_A\)</span> or <span class="math inline">\(k_B\)</span>.<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a></p>
+<h3 id="sec:schnorr-fiat-shamir">Schnorr signatures and the Fiat-Shamir transform</h3>
+<p>In 1989 Claus-Peter Schnorr published a now-famous interactive authentication protocol <span class="citation" data-cites="schnorr-signatures"></span>, generalized by Maurer in 2009 <span class="citation" data-cites="simple-zk-proof-maurer"></span>, that allowed someone to prove they know the private key <span class="math inline">\(k\)</span> of a given public key <span class="math inline">\(K\)</span> without revealing any information about it <span class="citation" data-cites="Signatures2015BorromeanRS"></span>. It goes something like this:</p>
+<ol>
+<li><p>The prover generates a random integer <span class="math inline">\(\alpha \in_R \mathbb{Z}_l\)</span>,<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a> computes <span class="math inline">\(\alpha G\)</span>, and sends <span class="math inline">\(\alpha G\)</span> to the verifier.</p></li>
+<li><p>The verifier generates a random <span><em>challenge</em></span> <span class="math inline">\(c \in_R \mathbb{Z}_l\)</span> and sends <span class="math inline">\(c\)</span> to the prover.</p></li>
+<li><p>The prover computes the <span><em>response</em></span> <span class="math inline">\(r = \alpha + c*k\)</span> and sends <span class="math inline">\(r\)</span> to the verifier.</p></li>
+<li><p>The verifier computes <span class="math inline">\(R = r G\)</span> and <span class="math inline">\(R&#39; = \alpha G + c*K\)</span>, and checks <span class="math inline">\(R \stackrel{?}{=} R&#39;\)</span>.</p></li>
+</ol>
+<p>The verifier can compute <span class="math inline">\(R&#39; = \alpha G + c*K\)</span> before the prover, so providing <span class="math inline">\(c\)</span> is like saying, “I challenge you to respond with the discrete logarithm of <span class="math inline">\(R&#39;\)</span>." A challenge the prover can only overcome by knowing <span class="math inline">\(k\)</span> (except with negligible probability).</p>
+<p>If <span class="math inline">\(\alpha\)</span> was chosen randomly by the prover then <span class="math inline">\(r\)</span> is randomly distributed <span class="citation" data-cites="SCOZZAFAVA1993313"></span> and <span class="math inline">\(k\)</span> is information-theoretically secure within <span class="math inline">\(r\)</span> (it can still be found by solving the DLP for <span class="math inline">\(K\)</span> or <span class="math inline">\(\alpha G\)</span>).<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a> However, if the prover reuses <span class="math inline">\(\alpha\)</span> to prove his knowledge of <span class="math inline">\(k\)</span>, anyone who knows both challenges in <span class="math inline">\(r = \alpha + c*k\)</span> and <span class="math inline">\(r&#39; = \alpha + c&#39;*k\)</span> can compute <span class="math inline">\(k\)</span> (two equations, two unknowns).<a href="#fn18" class="footnote-ref" id="fnref18" role="doc-noteref"><sup>18</sup></a> <span class="math display">\[k = \frac{r-r&#39;}{c-c&#39;}\]</span></p>
+<p>If the prover knew <span class="math inline">\(c\)</span> from the beginning (e.g. if the verifier secretly gave it to her), she could generate a random response <span class="math inline">\(r\)</span> and compute <span class="math inline">\(\alpha G = r G - c K\)</span>. When she later sends <span class="math inline">\(r\)</span> to the verifier, she ‘proves’ knowledge of <span class="math inline">\(k\)</span> without ever having to know it. Someone observing the transcript of events between prover and verifier would be none the wiser. The scheme is not <span><em>publicly verifiable</em></span>. <span class="citation" data-cites="Signatures2015BorromeanRS"></span><br />
+In his role as challenger, the verifier spits out a random number after receiving <span class="math inline">\(\alpha G\)</span>, making him equivalent to a <span><em>random function</em></span>. Random functions, such as hash functions, are known as random oracles because computing one is like requesting a random number from someone <span class="citation" data-cites="Signatures2015BorromeanRS"></span>.<a href="#fn19" class="footnote-ref" id="fnref19" role="doc-noteref"><sup>19</sup></a><br />
+Using a hash function, instead of the verifier, to generate challenges is known as a <span><em>Fiat-Shamir transform</em></span> <span class="citation" data-cites="fiat-shamir-transform"></span>, because it makes an interactive proof non-interactive and publicly verifiable <span class="citation" data-cites="Signatures2015BorromeanRS"></span>.<a href="#fn20" class="footnote-ref" id="fnref20" role="doc-noteref"><sup>20</sup></a><a href="#fn21" class="footnote-ref" id="fnref21" role="doc-noteref"><sup>21</sup></a></p>
+<h4 class="unnumbered" id="non-interactive-proof">Non-interactive proof</h4>
+<ol>
+<li><p>Generate random number <span class="math inline">\(\alpha \in_R \mathbb{Z}_l\)</span>, and compute <span class="math inline">\(\alpha G\)</span>.</p></li>
+<li><p>Calculate the challenge using a cryptographically secure hash function, <span class="math inline">\(c = \mathcal{H}([\alpha G])\)</span>.</p></li>
+<li><p>Define the response <span class="math inline">\(r = \alpha + c*k\)</span>.</p></li>
+<li><p>Publish the proof pair <span class="math inline">\((\alpha G, r)\)</span>.</p></li>
+</ol>
+<h4 class="unnumbered" id="verification">Verification</h4>
+<ol>
+<li><p>Calculate the challenge: <span class="math inline">\(c&#39; = \mathcal{H}([\alpha G])\)</span>.</p></li>
+<li><p>Compute <span class="math inline">\(R = r G\)</span> and <span class="math inline">\(R&#39; = \alpha G + c&#39;*K\)</span>.</p></li>
+<li><p>If <span class="math inline">\(R = R&#39;\)</span> then the prover must know <span class="math inline">\(k\)</span> (except with negligible probability).</p></li>
+</ol>
+<h4 class="unnumbered" id="why-it-works">Why it works</h4>
+<p><span class="math display">\[\begin{aligned}
+r G &amp;= (\alpha + c*k) G \\
+    &amp;= (\alpha G) + (c*k G) \\
+    &amp;= \alpha G + c*K \\
+  R &amp;= R&#39;\end{aligned}\]</span></p>
+<p>An important part of any proof/signature scheme is the resources required to verify them. This includes space to store proofs, and time spent verifying. In this scheme we store one EC point and one integer, and need to know the public key - another EC point. Since hash functions are comparatively fast to compute, keep in mind that verification time is mostly a function of elliptic curve operations.</p>
+<h3 id="sec:signing-messages">Signing messages</h3>
+<p>Typically, a cryptographic signature is performed on a cryptographic hash of a message rather than the message itself, which facilitates signing messages of varying size. However, in this report we will loosely use the term ‘message’, and its symbol <span class="math inline">\(\mathfrak{m}\)</span>, to refer to the message properly speaking and/or its hash value, unless specified.</p>
+<p>Signing messages is a staple of Internet security that lets a message’s recipient be confident its content is as intended by the signer. One common signature scheme is called ECDSA. See <span class="citation" data-cites="ecdsa"></span>, ANSI X9.62, and <span class="citation" data-cites="Hankerson:2003:GEC:940321"></span>.</p>
+<p>The signature scheme we present here is an alternative formulation of the transformed Schnorr proof from before. Thinking of signatures in this way prepares us for exploring ring signatures in the next chapter.</p>
+<h4 class="unnumbered" id="signature">Signature</h4>
+<p>Assume Alice has the private/public key pair <span class="math inline">\((k_A, K_A)\)</span>. To unequivocally sign an arbitrary message <span class="math inline">\(\mathfrak{m}\)</span>, she could execute the following steps:</p>
+<ol>
+<li><p>Generate random number <span class="math inline">\(\alpha \in_R \mathbb{Z}_l\)</span>, and compute <span class="math inline">\(\alpha G\)</span>.</p></li>
+<li><p>Calculate the challenge using a cryptographically secure hash function, <span class="math inline">\(c = \mathcal{H}(\mathfrak{m},[\alpha G])\)</span>.</p></li>
+<li><p>Define the response <span class="math inline">\(r\)</span> such that <span class="math inline">\(\alpha = r + c*k_A\)</span>. In other words, <span class="math inline">\(r = \alpha - c*k_A\)</span>.</p></li>
+<li><p>Publish the signature <span class="math inline">\((c, r)\)</span>.</p></li>
+</ol>
+<h4 class="unnumbered" id="verification-1">Verification</h4>
+<p>Any third party who knows the EC domain parameters (specifying which elliptic curve was used), the signature <span class="math inline">\((c, r)\)</span> and the signing method, <span class="math inline">\(\mathfrak{m}\)</span> and the hash function, and <span class="math inline">\(K_A\)</span> can verify the signature:</p>
+<ol>
+<li><p>Calculate the challenge: <span class="math inline">\(c&#39; = \mathcal{H}(\mathfrak{m},[r G + c*K_A])\)</span>.</p></li>
+<li><p>If <span class="math inline">\(c = c&#39;\)</span> then the signature passes.</p></li>
+</ol>
+<p>In this signature scheme we store two scalars, and need one public EC key.</p>
+<h4 class="unnumbered" id="why-it-works-1">Why it works</h4>
+<p>This stems from the fact that <span class="math display">\[\begin{aligned}
+     r G &amp;= (\alpha - c*k_A) G \\
+         &amp;= \alpha G - c*K_A \\
+\alpha G &amp;= r G + c*K_A \\
+\mathcal{H}_n(\mathfrak{m},[\alpha G]) &amp;= \mathcal{H}_n(\mathfrak{m},[r G + c*K_A]) \\
+       c &amp;= c&#39;\end{aligned}\]</span></p>
+<p>Therefore the owner of <span class="math inline">\(k_A\)</span> (Alice) created <span class="math inline">\((c,r)\)</span> for <span class="math inline">\(\mathfrak{m}\)</span>: she signed the message. The probability someone else, a forger without <span class="math inline">\(k_A\)</span>, could have made <span class="math inline">\((c,r)\)</span> is negligible, so a verifier can be confident the message was not tampered with.</p>
+<h2 id="Ed25519_section">Curve Ed25519</h2>
+<p>Monero uses a particular Twisted Edwards elliptic curve for cryptographic operations, <span><em>Ed25519</em></span>, the <span><em>birational equivalent</em></span><a href="#fn22" class="footnote-ref" id="fnref22" role="doc-noteref"><sup>22</sup></a> of the Montgomery curve <span><em>Curve25519</em></span>.</p>
+<p>Both Curve25519 and Ed25519 were released by Bernstein <span><em>et al.</em></span> <span class="citation" data-cites="Bernstein2008 Bernstein2012 Bernstein2007"></span>.<a href="#fn23" class="footnote-ref" id="fnref23" role="doc-noteref"><sup>23</sup></a></p>
+<p>The curve is defined over the prime field <span class="math inline">\(\mathbb{F}_{2^{255} - 19}\)</span> (i.e. <span class="math inline">\(q = 2^{255}-19\)</span>) by means of the following equation: <span class="math display">\[-x^2 + y^2 = 1 - \frac{121665}{121666} x^2 y^2\]</span></p>
+<p>This curve addresses many concerns raised by the cryptography community.<a href="#fn24" class="footnote-ref" id="fnref24" role="doc-noteref"><sup>24</sup></a> It is well known that NIST<a href="#fn25" class="footnote-ref" id="fnref25" role="doc-noteref"><sup>25</sup></a> standard algorithms have issues. For example, it has recently become clear the NIST standard random number generation algorithm PNRG (the version based on elliptic curves) is flawed and contains a potential backdoor <span class="citation" data-cites="hales2014nsa"></span>. Seen from a broader perspective, standardization authorities like NIST lead to a cryptographic monoculture, introducing a point of centralization. A great example of this was illustrated when the NSA used its influence over NIST to weaken an international cryptographic standard <span class="citation" data-cites="NSA-NIST"></span>.</p>
+<p>Curve Ed25519 is not subject to any patents (see <span class="citation" data-cites="ECC-patents"></span> for a discussion on this subject), and the team behind it has developed and adapted basic cryptographic algorithms with efficiency in mind <span class="citation" data-cites="Bernstein2007"></span>.</p>
+<p>Twisted Edwards curves have order expressible as <span class="math inline">\(N=2^c l\)</span>, where <span class="math inline">\(l\)</span> is a prime number and <span class="math inline">\(c\)</span> a positive integer. In the case of curve Ed25519, its order is a 76 digit number (<span class="math inline">\(l\)</span> is 253 bits):<a href="#fn26" class="footnote-ref" id="fnref26" role="doc-noteref"><sup>26</sup></a> <span class="math display">\[2^3 \cdot 7237005577332262213973186563042994240857116359379907606001950938285454250989\marginnote{src/ringct/ rctOps.h {\tt curve- Order()}}\]</span></p>
+<h3 id="binary_note">Binary representation</h3>
+<p>Elements of <span class="math inline">\(\mathbb{F}_{2^{255} - 19}\)</span> are encoded as 256-bit integers, so they can be represented using 32 bytes. Since each element only requires 255 bits, the most significant bit is always zero.</p>
+<p>Consequently, any point in Ed25519 could be expressed using 64 bytes. By applying <span><em>point compression</em></span> techniques, described here below, however, it is possible to reduce this amount by half, to 32 bytes.</p>
+<h3 id="point_compression_section">Point compression</h3>
+<p>The Ed25519 curve has the property that its points can be easily compressed, so that representing a point will consume only the space of one coordinate. We will not delve into the mathematics necessary to justify this, but we can give a brief insight into how it works <span class="citation" data-cites="eddsa-ed25519-irtf"></span>. Point compression for the Ed25519 curve was first described in <span class="citation" data-cites="Bernstein2012"></span>, while the concept was first introduced in <span class="citation" data-cites="Miller:point-compression-origin"></span>.</p>
+<p>This point compression scheme follows from a transformation of the Twisted Edwards curve equation (assuming <span class="math inline">\(a = -1\)</span>, which is true for Monero): <span class="math inline">\(x^2 = (y^2-1)/(d y^2+1)\)</span>,<a href="#fn27" class="footnote-ref" id="fnref27" role="doc-noteref"><sup>27</sup></a> which indicates there are two possible <span class="math inline">\(x\)</span> values (<span class="math inline">\(+\)</span> or <span class="math inline">\(-\)</span>) for each <span class="math inline">\(y\)</span>. Field elements <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are calculated<span class="math inline">\(\pmod{q}\)</span>, so there are no actual negative values. However, taking<span class="math inline">\(\pmod{q}\)</span> of <span class="math inline">\(–x\)</span> will change the value between odd and even since <span class="math inline">\(q\)</span> is odd. For example: <span class="math inline">\(3 \pmod{5} = 3\)</span>, <span class="math inline">\(-3 \pmod{5} = 2\)</span>. In other words, the field elements <span class="math inline">\(x\)</span> and <span class="math inline">\(–x\)</span> have different odd/even assignments.</p>
+<p>If we have a curve point and know its <span class="math inline">\(x\)</span> is even, but given its <span class="math inline">\(y\)</span> value the transformed curve equation outputs an odd number, then we know negating that number will give us the right <span class="math inline">\(x\)</span>. One bit can convey this information, and conveniently the <span class="math inline">\(y\)</span> coordinate has an extra bit.</p>
+<p>Assume we want to compress a point <span class="math inline">\((x, y)\)</span>.</p>
+<dl>
+<dt>Encoding</dt>
+<dd><p>We set the most significant bit of <span class="math inline">\(y\)</span> to 0 if <span class="math inline">\(x\)</span> is even, and 1 if it is odd. The resulting value <span class="math inline">\(y’\)</span> will represent the curve point.</p>
+</dd>
+<dt>Decoding</dt>
+<dd><ol>
+<li><p>Retrieve[2.05cm] the compressed point <span class="math inline">\(y’\)</span>, then copy its most significant bit to the parity bit <span class="math inline">\(b\)</span> before setting it to 0. Now it is the original <span class="math inline">\(y\)</span> again.</p></li>
+<li><p>Let <span class="math inline">\(u = y^2-1 \pmod q\)</span> and <span class="math inline">\(v = d y^2  + 1 \pmod q\)</span>. This means <span class="math inline">\(x^2 = u/v \pmod q\)</span>.</p></li>
+<li><p>Compute<a href="#fn28" class="footnote-ref" id="fnref28" role="doc-noteref"><sup>28</sup></a> <span class="math inline">\(z = u v^3 (u v^7)^{(q-5)/8} \pmod q\)</span>.</p>
+<ol>
+<li><p>If <span class="math inline">\(v z^2 = u \pmod q\)</span> then <span class="math inline">\(x&#39; = z\)</span>.</p></li>
+<li><p>If <span class="math inline">\(v z^2 = -u \pmod q\)</span> then calculate <span class="math inline">\(x&#39; = z*2^{(q-1)/4} \pmod q\)</span>.</p></li>
+</ol></li>
+<li><p>Using the parity bit <span class="math inline">\(b\)</span> from the first step, if <span class="math inline">\(b \ne\)</span> the least significant bit of <span class="math inline">\(x&#39;\)</span> then <span class="math inline">\(x = -x&#39; \pmod q\)</span>, otherwise <span class="math inline">\(x = x&#39;\)</span>.</p></li>
+<li><p>Return the decompressed point <span class="math inline">\((x,y)\)</span>.</p></li>
+</ol>
+</dd>
+</dl>
+<p>Implementations of Ed25519 (such as Monero) typically use the generator <span class="math inline">\(G = (x,4/5)\)</span> <span class="citation" data-cites="Bernstein2012"></span>, where x is the ‘even’, or <span class="math inline">\(b = 0\)</span>, variant based on point decompression of <span class="math inline">\(y = 4/5 \pmod q\)</span>.</p>
+<h3 id="EdDSA_section">EdDSA signature algorithm</h3>
+<p>Bernstein and his team have developed a number of basic algorithms based on curve Ed25519.<a href="#fn29" class="footnote-ref" id="fnref29" role="doc-noteref"><sup>29</sup></a> For illustration purposes we will describe a highly optimized and secure alternative to the ECDSA signature scheme which, according to the authors, allows producing over 100 000 signatures per second using a commodity Intel Xeon processor <span class="citation" data-cites="Bernstein2012"></span>. The algorithm can also be found described in Internet RFC8032 <span class="citation" data-cites="rfc8032"></span>. Note this is a very Schnorr-like signature scheme.</p>
+<p>Among other things, instead of generating random integers every time, it uses a hash value derived from the private key of the signer and the message itself. This circumvents security flaws related to the implementation of random number generators. Also, another goal of the algorithm is to avoid accessing secret or unpredictable memory locations to prevent so-called <span><em>cache timing attacks</em></span> <span class="citation" data-cites="Bernstein2012"></span>.</p>
+<p>We provide here an outline of the steps performed by the algorithm. A complete description and sample implementation in the Python language can be found in <span class="citation" data-cites="rfc8032"></span>.</p>
+<h4 class="unnumbered" id="signature-1">Signature</h4>
+<ol>
+<li><p>Let <span class="math inline">\(h_k\)</span> be a hash <span class="math inline">\(\mathcal{H}(k)\)</span> of the signer’s private key <span class="math inline">\(k\)</span>. Compute <span class="math inline">\(\alpha\)</span> as a hash <span class="math inline">\(\alpha = \mathcal{H}(h_k, \mathfrak{m})\)</span> of the hashed private key and message. Depending on implementation, <span class="math inline">\(\mathfrak{m}\)</span> could be the actual message or its hash <span class="citation" data-cites="rfc8032"></span>.</p></li>
+<li><p>Calculate <span class="math inline">\(\alpha G\)</span> and the challenge <span class="math inline">\(ch = \mathcal{H}([\alpha G], K,  \mathfrak{m})\)</span>.</p></li>
+<li><p>Calculate the response <span class="math inline">\(r = \alpha + ch \cdot k\)</span>.</p></li>
+<li><p>The signature is the pair <span class="math inline">\((\alpha G, r)\)</span>.</p></li>
+</ol>
+<h4 class="unnumbered" id="verification-2">Verification</h4>
+<p>Verification is performed as follows</p>
+<ol>
+<li><p>Compute <span class="math inline">\(ch&#39; = \mathcal{H}([\alpha G], K,  \mathfrak{m})\)</span>.</p></li>
+<li><p>If the equality <span class="math inline">\(2^c r G \stackrel{?}{=} 2^c \alpha G + 2^c ch&#39;*K\)</span> holds then the signature is valid.</p></li>
+</ol>
+<p>The <span class="math inline">\(2^c\)</span> term comes from Bernstein <span><em>et al.</em></span>’s general form of the EdDSA algorithm <span class="citation" data-cites="Bernstein2012"></span>. According to that paper, though it isn’t required for adequate verification, removing <span class="math inline">\(2^c\)</span> provides stronger equations.</p>
+<p>The public key <span class="math inline">\(K\)</span> can be any EC point, but we only want to use points in the generator <span class="math inline">\(G\)</span>’s subgroup. Multiplying by the cofactor <span class="math inline">\(2^c\)</span> ensures all points are in that subgroup. Alternatively, verifiers could check <span class="math inline">\(l K \stackrel{?}{=} 0\)</span>, which only works if <span class="math inline">\(K\)</span> is in the subgroup. We do not know of any weaknesses caught by these precautions, though as we will see the latter method is important in Monero (Section <a href="#blsag_note" data-reference-type="ref" data-reference="blsag_note">[blsag_note]</a>).</p>
+<p>In this signature scheme we store one EC point and one scalar, and have one public EC key.</p>
+<h4 class="unnumbered" id="why-it-works-2">Why it works</h4>
+<p><span class="math display">\[\begin{aligned}
+2^c r G &amp;= 2^c (\alpha + \mathcal{H}([\alpha G], K,  \mathfrak{m}) \cdot k) \cdot G \\
+        &amp;= 2^c \alpha G + 2^c \mathcal{H}([\alpha G], K,  \mathfrak{m}) \cdot K \end{aligned}\]</span></p>
+<h4 class="unnumbered" id="binary-representation">Binary representation</h4>
+<p>By default, an EdDSA signature would need <span class="math inline">\(64 + 32\)</span> bytes for the EC point <span class="math inline">\(\alpha G\)</span> and scalar <span class="math inline">\(r\)</span>. However, RFC8032 assumes point <span class="math inline">\(\alpha G\)</span> is compressed, which reduces space requirements to only <span class="math inline">\(32 + 32\)</span> bytes. We include the public key <span class="math inline">\(K\)</span>, which implies <span class="math inline">\(32 + 32 + 32\)</span> total bytes.</p>
+<h2 id="sec:XOR_section">Binary operator XOR</h2>
+<p>The binary operator XOR is a useful tool that will appear in Sections <a href="#sec:integrated-addresses" data-reference-type="ref" data-reference="sec:integrated-addresses">[sec:integrated-addresses]</a> and <a href="#sec:pedersen_monero" data-reference-type="ref" data-reference="sec:pedersen_monero">[sec:pedersen_monero]</a>. It takes two arguments and returns true if one, but not both, of them is true <span class="citation" data-cites="wolfram-xor"></span>. Here is its truth table:</p>
+<div class="center">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">A</th>
+<th style="text-align: center;">B</th>
+<th style="text-align: center;">A XOR B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">T</td>
+<td style="text-align: center;">T</td>
+<td style="text-align: center;">F</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">T</td>
+<td style="text-align: center;">F</td>
+<td style="text-align: center;">T</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">F</td>
+<td style="text-align: center;">T</td>
+<td style="text-align: center;">T</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">F</td>
+<td style="text-align: center;">F</td>
+<td style="text-align: center;">F</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>In the context of computer science, XOR is equivalent to bit addition modulo 2. For example, the XOR of two bit pairs: <span class="math display">\[\begin{aligned}
+{1}
+    \text{XOR}(\{1,1\},\{1,0\}) &amp;= \{1+1,1+0\} \pmod 2 \\
+                                &amp;= \{0,1\} \end{aligned}\]</span></p>
+<p>Each of these also produce <span class="math inline">\(\{0,1\}\)</span>: <span class="math inline">\(\text{XOR}(\{1,0\},\{1,1\})\)</span>, <span class="math inline">\(\text{XOR}(\{0,0\},\{0,1\})\)</span>, and <span class="math inline">\(\text{XOR}(\{0,1\},\{0,0\})\)</span>. For XOR inputs with <span class="math inline">\(b\)</span> bits, there are <span class="math inline">\(2^{\text{b}} - 1\)</span> other combinations of inputs that would make the same output. This means if <span class="math inline">\(C = \text{XOR}(A,B)\)</span> and input <span class="math inline">\(A \in_R \{0,...,2^{\text{b}-1}\}\)</span>, an observer who learned <span class="math inline">\(C\)</span> would gain no information about <span class="math inline">\(B\)</span>.</p>
+<p>At the same time, anyone who knows two of the elements in <span class="math inline">\(\{A,B,C\}\)</span>, where <span class="math inline">\(C = \text{XOR}(A,B)\)</span>, can calculate the third element, such as <span class="math inline">\(A = \text{XOR}(B,C)\)</span>. XOR indicates if two elements are different or the same, so knowing <span class="math inline">\(C\)</span> and <span class="math inline">\(B\)</span> is enough to expose <span class="math inline">\(A\)</span>. A careful examination of the truth table reveals this vital feature.<a href="#fn30" class="footnote-ref" id="fnref30" role="doc-noteref"><sup>30</sup></a></p>
+<section class="footnotes" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1" role="doc-endnote"><p>In computer memory, each byte is stored in its own address (an address is akin to a numbered slot, which a byte can be stored in). A given ‘word’ or variable is referenced by the lowest address of its bytes. If variable <span class="math inline">\(x\)</span> has 4 bytes, stored in addresses 10-13, address 10 is used to find <span class="math inline">\(x\)</span>. The way bytes of <span class="math inline">\(x\)</span> are organized in its set of addresses depends on <span><em>endianness</em></span>, although each individual byte is always and everywhere stored the same way within its address. Basically, which end of <span class="math inline">\(x\)</span> is stored in the reference address? It could be the <span><em>big end</em></span> or <span><em>little end</em></span>. Given <span class="math inline">\(x =\)</span> 0x12345678 (hexadecimal, 2 hexadecimal digits occupy 1 byte e.g. 8 binary digits a.k.a. bits), and an array of addresses {10, 11, 12, 13}, the big endian encoding of <span class="math inline">\(x\)</span> is {12, 34, 56, 78} and the little endian encoding is {78, 56, 34, 12}. <span class="citation" data-cites="endianness"></span><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p><span id="kekkak_note" label="kekkak_note">[kekkak_note]</span>The Keccak hashing algorithm forms the basis for the NIST standard <span><em>SHA-3</em></span> <span class="citation" data-cites="nist-sha3"></span>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>The effect of double-and-add becomes apparent with large numbers. For example, with <span class="math inline">\(2^{15} * 2^{30}\)</span> straight addition would require about <span class="math inline">\(2^{15}\)</span> <span class="math inline">\(+\)</span> operations, while double-and-add only requires 15!<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4" role="doc-endnote"><p>This is known as ‘LSB 0’ numbering, since the least significant bit has index 0. We will use ‘LSB 0’ for the rest of this chapter. The point here is clarity, not accurate conventions.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5" role="doc-endnote"><p>In the equation <span class="math inline">\(a \equiv b \pmod{n}\)</span>, <span class="math inline">\(a\)</span> is <span><em>congruent</em></span> to <span class="math inline">\(b \pmod{n}\)</span>, which just means <span class="math inline">\(a \pmod{n} = b \pmod{n}\)</span>.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6" role="doc-endnote"><p><span id="inverse_rule_note" label="inverse_rule_note">[inverse_rule_note]</span>The modular multiplicative inverse has a rule stating:<br />
+<span><em>If <span class="math inline">\(a c \equiv b \pmod{n}\)</span> with <span class="math inline">\(a\)</span> and <span class="math inline">\(n\)</span> relatively prime, the solution to this linear congruence is given by <span class="math inline">\(c = a^{-1} b \pmod{n}\)</span>.</em></span><span class="citation" data-cites="wiki-modular-arithmetic"></span><br />
+It means we can do <span class="math inline">\(c = a^{-1} b \pmod n \rightarrow ca \equiv b \pmod n \rightarrow a \equiv c^{-1} b \pmod n\)</span>.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7" role="doc-endnote"><p>The modulus of large numbers can exploit modular equations. It turns out <span class="math inline">\(254 \pmod {13} \equiv 2*10*10 + 5*10 + 4 \equiv (((2)*10 + 5)*10 + 4) \pmod {13}\)</span>. An algorithm for <span class="math inline">\(a \pmod n\)</span> when <span class="math inline">\(a &gt; n\)</span> is:</p>
+<ol>
+<li><p>Define <span class="math inline">\(A \rightarrow [a_{decimal}]\)</span>; <span class="math inline">\(r = 0\)</span></p></li>
+<li><p>For <span class="math inline">\(i = A_{size} - 1,...,0\)</span></p>
+<ol>
+<li><p><span class="math inline">\(r = (r*10 + A[i]) \pmod n\)</span></p></li>
+</ol></li>
+<li><p>Use the final <span class="math inline">\(r\)</span> as result.</p></li>
+</ol>
+<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></li>
+<li id="fn8" role="doc-endnote"><p><span id="notation1" label="notation1">[notation1]</span>Notation: The phrase <span class="math inline">\(a \in \mathbb{F}\)</span> means <span class="math inline">\(a\)</span> is some element in the field <span class="math inline">\(\mathbb{F}\)</span>.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9" role="doc-endnote"><p>Typically elliptic curve points are converted into projective coordinates prior to curve operations like point addition, in order to avoid performing field inversions for efficiency. <span class="citation" data-cites="ecc-projective"></span><a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10" role="doc-endnote"><p>It turns out elliptic curves have <span><em>abelian group</em></span> structure under the addition operation described, since their point-at-infinity’s are identity elements. A concise definition of this notion can be found under <a href="https://brilliant.org/wiki/abelian-group/">https://brilliant.org/wiki/abelian-group/</a>.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11" role="doc-endnote"><p><span id="cyclical_note" label="cyclical_note">[cyclical_note]</span>Cyclic subgroup means, for <span class="math inline">\(P\)</span>’s subgroup with order <span class="math inline">\(u\)</span>, and with any integer <span class="math inline">\(n\)</span>, <span class="math inline">\(n P = [n \pmod{u}] P\)</span>. We can imagine ourselves standing on a point on a globe some distance from a ‘zero’th position, and each step we take moves us that distance. After a while, we will wind up back where we started, although it may take many revolutions before we land exactly on the original spot again. The number of steps it takes to land on the exact same spot is the ‘order’ of the ‘stepping group’, and all our footprints are unique points in that group. We recommend applying this concept to other ideas discussed here.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12" role="doc-endnote"><p>EC with small cofactors allow relatively faster point addition, etc. <span class="citation" data-cites="Bernstein2008"></span>.<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13" role="doc-endnote"><p>No known equation or algorithm can efficiently (based on available technology) solve for <span class="math inline">\(n\)</span> in <span class="math inline">\(P_1 = n P_2\)</span>, meaning it would take many many years to unravel just one scalar product.<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn14" role="doc-endnote"><p>The private key is sometimes known as a <span><em>secret key</em></span>. This lets us abbreviate: pk = public key, sk = secret key.<a href="#fnref14" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn15" role="doc-endnote"><p>The DHP is thought to be of at least similar difficulty to the DLP, although it has not been proven. <span class="citation" data-cites="diffie-hellman-problem"></span><a href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn16" role="doc-endnote"><p><span id="notation3_note" label="notation3_note">[notation3_note]</span>Notation: The <span class="math inline">\(R\)</span> in <span class="math inline">\(\alpha \in_R \mathbb{Z}_l\)</span> means <span class="math inline">\(\alpha\)</span> is randomly selected from <span class="math inline">\(\{1,2,3,...,l-1\}\)</span>. In other words, <span class="math inline">\(\mathbb{Z}_l\)</span> is all integers<span class="math inline">\(\pmod l\)</span>. We exclude ‘<span class="math inline">\(l\)</span>’ since the point-at-infinity is not useful here.<a href="#fnref16" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn17" role="doc-endnote"><p><span id="information_theoretic_note" label="information_theoretic_note">[information_theoretic_note]</span>A cryptosystem with information-theoretic security is one where even an adversary with infinite computing power could not break it, because they simply wouldn’t have enough information.<a href="#fnref17" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn18" role="doc-endnote"><p>If the prover is a computer, you could imagine someone ‘cloning’/copying the computer after it generates <span class="math inline">\(\alpha\)</span>, then presenting each copy with a different challenge.<a href="#fnref18" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn19" role="doc-endnote"><p>More generally, “[i]n cryptography... an oracle is any system which can give some extra information on a system, which otherwise would not be available."<span class="citation" data-cites="cryptographic-oracle"></span><a href="#fnref19" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn20" role="doc-endnote"><p>The output of a cryptographic hash function <span class="math inline">\(\mathcal{H}\)</span> is uniformly distributed across the range of possible outputs. That is to say, for some input <span class="math inline">\(A\)</span>, <span class="math inline">\(\mathcal{H}(A) \in^D_R \mathbb{S}_H\)</span> where <span class="math inline">\(\mathbb{S}_H\)</span> is the set of possible outputs from <span class="math inline">\(\mathcal{H}\)</span>. We use <span class="math inline">\(\in^D_R\)</span> to indicate the function is deterministically random. <span class="math inline">\(\mathcal{H}(A)\)</span> produces the same thing every time, but its output is equivalent to a random number.<a href="#fnref20" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn21" role="doc-endnote"><p>Note that non-interactive Schnorr-like proofs (and signatures) require either use of a fixed generator <span class="math inline">\(G\)</span>, or inclusion of the generator in the challenge hash. Including it that way is known as key prefixing, which we discuss a bit more later (Sections <a href="#blsag_note" data-reference-type="ref" data-reference="blsag_note">[blsag_note]</a> and <a href="#sec:robust-key-aggregation" data-reference-type="ref" data-reference="sec:robust-key-aggregation">[sec:robust-key-aggregation]</a>).<a href="#fnref21" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn22" role="doc-endnote"><p><span id="birational_note" label="birational_note">[birational_note]</span>Without giving further details, birational equivalence can be thought of as an isomorphism expressible using rational terms.<a href="#fnref22" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn23" role="doc-endnote"><p>Dr. Bernstein also developed an encryption scheme known as ChaCha <span class="citation" data-cites="Bernstein_chacha chacha-irtf"></span>, which the primary Monero implementation uses to encrypt certain sensitive information related to users’ wallets.<a href="#fnref23" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn24" role="doc-endnote"><p>Even if a curve appears to have no cryptographic security problems, it’s possible the person/organization that created it knows a secret issue that only crops up in very rare curves. Such a person may have to randomly generate many curves in order to find one with a hidden weakness and no known weaknesses. If reasonable explanations are required for curve parameters, then it becomes even more difficult to find weak curves that will be accepted by the cryptographic community. Curve Ed25519 is known as a ‘fully rigid’ curve, which means its generation process was fully explained. <span class="citation" data-cites="elliptic-curve-rigidity"></span><a href="#fnref24" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn25" role="doc-endnote"><p><span id="NIST_note" label="NIST_note">[NIST_note]</span>National Institute of Standards and Technology, <a href="https://www.nist.gov/">https://www.nist.gov/</a><a href="#fnref25" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn26" role="doc-endnote"><p>This means private EC keys in Ed25519 are 253 bits.<a href="#fnref26" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn27" role="doc-endnote"><p>Here <span class="math inline">\(d = - \frac{121665}{121666}\)</span>.<a href="#fnref27" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn28" role="doc-endnote"><p>Since <span class="math inline">\(q = 2^{255}-19 \equiv 5 \pmod{8}\)</span>, <span class="math inline">\((q-5)/8\)</span> and <span class="math inline">\((q-1)/4\)</span> are integers.<a href="#fnref28" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn29" role="doc-endnote"><p><span id="group_ops_twisted_edwards_note" label="group_ops_twisted_edwards_note">[group_ops_twisted_edwards_note]</span>See <span class="citation" data-cites="Bernstein2007"></span> for efficient group operations in Twisted Edwards EC (i.e. point addition, doubling, mixed addition, etc). See <span class="citation" data-cites="curve25519"></span> for efficient modular arithmetic.<a href="#fnref29" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn30" role="doc-endnote"><p>One interesting application of XOR (unrelated to Monero) is swapping two bit registers without a third register. We use the symbol <span class="math inline">\(\oplus\)</span> to indicate an XOR operation. <span class="math inline">\(A \oplus A = 0\)</span>, so after three XOR operations between the registers: <span class="math inline">\(\{A, B\} \rightarrow{} \{[A \oplus B], B\} \rightarrow{} \{[A \oplus B], B \oplus [A \oplus B]\} = \{[A \oplus B], A \oplus 0\} = \{[A \oplus B], A\} \rightarrow{} \{[A \oplus B] \oplus A, A\} = \{B, A\}\)</span>.<a href="#fnref30" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+</body>
+</html>

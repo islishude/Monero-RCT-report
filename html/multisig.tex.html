@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>multisig.tex</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">multisig.tex</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#chapter:multisignatures">Multisignatures in Monero</a>
+<ul>
+<li><a href="#sec:communicating">Communicating with co-signers</a></li>
+<li><a href="#sec:key-aggregation">Key aggregation for addresses</a>
+<ul>
+<li><a href="#sec:naive-key-aggregation">Naive approach</a></li>
+<li><a href="#subsec:drawbacks-naive-aggregation-cancellation">Drawbacks to the naive approach</a></li>
+<li><a href="#sec:robust-key-aggregation">Robust key aggregation</a></li>
+</ul></li>
+<li><a href="#sec:threshold-schnorr">Thresholded Schnorr-like signatures</a>
+<ul>
+<li><a href="#signature">Signature</a></li>
+<li><a href="#verification">Verification</a></li>
+<li><a href="#why-it-works">Why it works</a></li>
+<li><a href="#additional-commit-and-reveal-step">Additional commit-and-reveal step</a></li>
+</ul></li>
+<li><a href="#sec:MLSTAG-RingCT">MLSTAG Ring Confidential signatures for Monero</a>
+<ul>
+<li><a href="#sec:rcttypebulletproof2-multisig"><span><code>RCTTypeBulletproof2</code></span> with N-of-N multisig</a></li>
+<li><a href="#sec:simplified-communication">Simplified communication</a></li>
+</ul></li>
+<li><a href="#sec:recalculating-key-images-multisig">Recalculating key images</a>
+<ul>
+<li><a href="#proof">Proof</a></li>
+<li><a href="#verification-1">Verification</a></li>
+</ul></li>
+<li><a href="#sec:smaller-thresholds">Smaller thresholds</a>
+<ul>
+<li><a href="#sec:1-of-n">1-of-N key aggregation</a></li>
+<li><a href="#sec:n-1-of-n">(N-1)-of-N key aggregation</a></li>
+<li><a href="#sec:m-of-n">M-of-N key aggregation</a></li>
+</ul></li>
+<li><a href="#sec:general-key-families">Key families</a>
+<ul>
+<li><a href="#family-trees">Family trees</a></li>
+<li><a href="#subsec:nesting-multisig-keys">Nesting multisig keys</a></li>
+<li><a href="#implications-for-monero">Implications for Monero</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="chapter:multisignatures">Multisignatures in Monero</h1>
+<p>Cryptocurrency transactions are not reversible. If someone steals private keys or succeeds in a scam, the money lost could be gone forever. Dividing signing power between people can weaken the potential danger of a miscreant.</p>
+<p>Say you deposit money into a joint account with a security company that monitors for suspicious activity related to your account. Transactions can only be signed if both you and the company cooperate. If someone steals your keys, you can notify the company there is a problem and the company will stop signing transactions for your account. This is usually called an ‘escrow’ service.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a><br />
+Cryptocurrencies use a ‘multisignature’ technique to achieve collaborative signing with so-called ‘M-of-N multisig’. In M-of-N, N people cooperate to make a joint key, and only M people (M <span class="math inline">\(\leq\)</span> N) are needed to sign with that key. We begin this chapter by introducing the basics of N-of-N multisig, progress into N-of-N Monero multisig, generalize for M-of-N multisig, and then explain how to nest multisig keys inside other multisig keys.<br />
+In this chapter we focus on how we feel multisig <span><em>should</em></span> be done, based on the recommendations in <span class="citation" data-cites="MRL-0009-multisig"></span>, and various observations about efficient implementation. We try to point out in footnotes where the current implementation deviates from what is described.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Our contributions are detailing M-of-N multisig, and a novel approach to nesting multisig keys.</p>
+<h2 id="sec:communicating">Communicating with co-signers</h2>
+<p>Building joint keys and joint transactions requires communicating secret information between people who could be located all around the globe. To keep that information secure from observers, co-signers need to encrypt the messages they send each other.</p>
+<p>Diffie-Hellman exchange (ECDH) is a very simple way to encrypt messages using elliptic curve cryptography. We already mentioned this in Section <a href="#sec:pedersen_monero" data-reference-type="ref" data-reference="sec:pedersen_monero">[sec:pedersen_monero]</a>, where Monero output amounts are communicated to recipients via the shared secret <span class="math inline">\(r K^v\)</span>. It looked like this: <span class="math display">\[\begin{aligned}
+  \mathit{amount}_t = b_t \oplus_8 \mathcal{H}_n(``amount”, \mathcal{H}_n(r K_B^v, t))\end{aligned}\]</span></p>
+<p>We could easily extend this to any message. First encode the message as a series of bits, then break it into chunks equal in size to the output of <span class="math inline">\(\mathcal{H}_n\)</span>. Generate a random number <span class="math inline">\(r \in \mathbb{Z}_l\)</span> and perform a Diffie-Hellman exchange on all the message chunks using the recipient’s public key <span class="math inline">\(K\)</span>. Send those encrypted chunks along with the public key <span class="math inline">\(r G\)</span> to the intended recipient, who can then decrypt the message with the shared secret <span class="math inline">\(k r G\)</span>. Message senders should also create a signature on their encrypted message (or just the encrypted message’s hash for simplicity) so receivers can confirm messages weren’t tampered with (a signature is only verifiable on the correct message <span class="math inline">\(\mathfrak{m}\)</span>).</p>
+<p>Since encryption is not essential to the operation of a cryptocurrency like Monero, we do not feel it necessary to go into more detail. Curious readers can look at this excellent conceptual overview <span class="citation" data-cites="tutorialspoint-cryptography"></span>, or see a technical description of the popular AES encryption scheme here <span class="citation" data-cites="AES-encryption"></span>. Also, Dr. Bernstein developed an encryption scheme known as ChaCha <span class="citation" data-cites="Bernstein_chacha chacha-irtf"></span>, which the primary Monero implementation uses to encrypt certain sensitive information related to users’ wallets (such as key images for owned outputs).</p>
+<h2 id="sec:key-aggregation">Key aggregation for addresses</h2>
+<h3 id="sec:naive-key-aggregation">Naive approach</h3>
+<p>Let’s say N people want to create a group multisignature address, which we denote <span class="math inline">\((K^{v,grp},K^{s,grp})\)</span>. Funds can be sent to that address just like any normal address, but, as we will see later, to spend those funds all N people have to work together to sign transactions.</p>
+<p>Since all N participants should be able to view funds received by the group address, we can let everyone know the group view key <span class="math inline">\(k^{v,grp}\)</span> (recall Sections <a href="#sec:user-keys" data-reference-type="ref" data-reference="sec:user-keys">[sec:user-keys]</a> and <a href="#sec:one-time-addresses" data-reference-type="ref" data-reference="sec:one-time-addresses">[sec:one-time-addresses]</a>). To give all participants equal power, the view key can be a sum of view key components that all participants send each other securely. For participant <span class="math inline">\(e \in \{1,...,N\}\)</span>, his base view key component is <span class="math inline">\(k^{v,base}_e \in_R \mathbb{Z}_l\)</span>, and all participants can compute the group private view key <span class="math display">\[k^{v,grp} = \sum^{N}_{e=1} k^{v,base}_e\]</span></p>
+<p>In a similar fashion, the group spend key <span class="math inline">\(K^{s,grp} = k^{s,grp} G\)</span> could be a sum of private spend key base components. However, if someone knows all the private spend key components then they know the total private spend key. Add in the private view key and he can sign transactions on his own. It wouldn’t be multisignature, just a plain old signature.</p>
+<p>Instead, we get the same effect if the group spend key is a sum of public spend keys. Say the participants have base public spend keys <span class="math inline">\(K^{s,base}_e\)</span> which they send each other securely. Now let them each compute <span class="math display">\[K^{s,grp} = \sum_e K^{s,base}_e\]</span></p>
+<p>Clearly this is the same as <span class="math display">\[K^{s,grp} = (\sum_e k^{s,base}_e)*G\]</span></p>
+<h3 id="subsec:drawbacks-naive-aggregation-cancellation">Drawbacks to the naive approach</h3>
+<p>Using a sum of public spend keys is intuitive and seemingly straightforward, but leads to a couple issues.</p>
+<h4 class="unnumbered" id="key-aggregation-test">Key aggregation test</h4>
+<p>An outside adversary who knows all the base public spend keys <span class="math inline">\(K^{s,base}_e\)</span> can trivially test a given public address <span class="math inline">\((K^v,K^s)\)</span> for key aggregation by computing <span class="math inline">\(K^{s,grp} = \sum_e K^{s,base}_e\)</span> and checking <span class="math inline">\(K^s \stackrel{?}{=} K^{s,grp}\)</span>. This ties in with a broader requirement that aggregated keys be indistinguishable from normal keys, so observers can’t gain any insight into users’ activities based on the kind of address they publish.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>We can get around this by creating new base spend keys for each multisignature address, or by masking old keys. The former case is easy, but may be inconvenient.</p>
+<p>The second case proceeds like this: given participant <span class="math inline">\(e\)</span>’s old key pair <span class="math inline">\((K^v_e,K^s_e)\)</span> with private keys <span class="math inline">\((k^v_e,k^s_e)\)</span> and random masks <span class="math inline">\(\mu^v_e,\mu^s_e\)</span>,<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> let his new base private key components for the group address be <span class="math display">\[\begin{aligned}
+    k^{v,base}_e &amp;= \mathcal{H}_n(k^v_e,\mu^v_e)\\
+    k^{s,base}_e &amp;= \mathcal{H}_n(k^s_e,\mu^s_e)\end{aligned}\]</span></p>
+<p>If participants don’t want observers to gather the new keys and test for key aggregation, they would have to communicate their new key components to each other securely.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+<p>If key aggregation tests are not a concern, they could publish their public key base components <span class="math inline">\((K^{v,base}_e,K^{s,base}_e)\)</span> as normal addresses. Any third party could then compute the group address from those individual addresses and send funds to it, without interacting with any of the joint recipients <span class="citation" data-cites="maxwell2018simple-musig"></span>.</p>
+<h4 class="unnumbered" id="key-cancellation">Key cancellation</h4>
+<p>If the group spend key is a sum of public keys, a dishonest participant who learns his collaborators’ spend key base components ahead of time can cancel them.</p>
+<p>For example, say Alice and Bob want to make a group address. Alice, in good faith, tells Bob her key components <span class="math inline">\((k^{v,base}_A,K^{s,base}_A)\)</span>. Bob privately makes his key components <span class="math inline">\((k^{v,base}_B,K^{s,base}_B)\)</span> but doesn’t tell Alice right away. Instead, he computes <span class="math inline">\(K&#39;^{s,base}_B = K^{s,base}_B - K^{s,base}_A\)</span> and tells Alice <span class="math inline">\((k^{v,base}_B,K&#39;^{s,base}_B)\)</span>. The group address is: <span class="math display">\[\begin{aligned}
+    K^{v,grp} &amp;= (k^{v,base}_A + k^{v,base}_B) G \\
+             &amp;= k^{v,grp} G\\
+    K^{s,grp} &amp;= K^{s,base}_A + K&#39;^{s,base}_B \\
+             &amp;= K^{s,base}_A + (K^{s,base}_B - K^{s,base}_A)\\
+             &amp;= K^{s,base}_B\end{aligned}\]</span></p>
+<p>This leaves a group address <span class="math inline">\((k^{v,grp} G,K^{s,base}_B)\)</span> where Alice knows the private group view key, and Bob knows both the private view key <span><em>and</em></span> private spend key! Bob can sign transactions on his own, fooling Alice, who might believe funds sent to the address can only be spent with her permission.</p>
+<p>We could solve this issue by requiring each participant, before aggregating keys, to make a signature proving they know the private key to their spend key component <span class="citation" data-cites="old-multisig-mrl-note"></span>.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> This is inconvenient and vulnerable to implementation mistakes. Fortunately a solid alternative is available.</p>
+<h3 id="sec:robust-key-aggregation">Robust key aggregation</h3>
+<p>To easily resist key cancellation we make a small change to spend key aggregation (leaving view key aggregation the same). Let the set of N signers’ base spend key components be <span class="math inline">\(\mathbb{S}^{base} = \{K^{s,base}_1,...,K^{s,base}_N\}\)</span>, ordered according to some convention (such as smallest to largest numerically, i.e. lexicographically).<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> The robust aggregated spend key is <span class="citation" data-cites="MRL-0009-multisig"></span><a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a><a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> <span class="math display">\[K^{s,grp} = \sum_e \mathcal{H}_n(T_{agg},\mathbb{S}^{base},K^{s,base}_e)K^{s,base}_e\]</span></p>
+<p>Now if Bob tries to cancel Alice’s spend key, he gets stuck with a very difficult problem. <span class="math display">\[\begin{aligned}
+    K^{s,grp} &amp;= \mathcal{H}_n(T_{agg},\mathbb{S},K^{s}_A)K^{s}_A + \mathcal{H}_n(T_{agg},\mathbb{S},K&#39;^{s}_B)K&#39;^{s}_B \\
+             &amp;= \mathcal{H}_n(T_{agg},\mathbb{S},K^{s}_A)K^{s}_A + \mathcal{H}_n(T_{agg},\mathbb{S},K&#39;^{s}_B)K^{s}_B - \mathcal{H}_n(T_{agg},\mathbb{S},K&#39;^{s}_B)K^{s}_A \\
+             &amp;= [\mathcal{H}_n(T_{agg},\mathbb{S},K^{s}_A) - \mathcal{H}_n(T_{agg},\mathbb{S},K&#39;^{s}_B)]K^{s}_A + \mathcal{H}_n(T_{agg},\mathbb{S},K&#39;^{s}_B)K^{s}_B\end{aligned}\]</span></p>
+<p>We leave Bob’s frustration to the reader’s imagination.</p>
+<p>Just like with the naive approach, any third party who knows <span class="math inline">\(\mathbb{S}^{base}\)</span> and the corresponding public view keys can compute the group address.</p>
+<p>Since participants don’t need to prove they know their private spend keys, or really interact at all before signing transactions, our robust key aggregation meets the so-called <span><em>plain public-key model</em></span>, where “the only requirement is that each potential signer has a public key"<span class="citation" data-cites="maxwell2018simple-musig"></span>.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></p>
+<h4 class="unnumbered" id="functions-premerge-and-merge">Functions <span><code>premerge</code></span> and <span><code>merge</code></span></h4>
+<p>More formally, and for the sake of clarity going forward, we can say there is an operation <span><code>premerge</code></span> which takes in a set of base keys <span class="math inline">\(\mathbb{S}^{base}\)</span>, and outputs a set of aggregation keys <span class="math inline">\(\mathbb{K}^{agg}\)</span> of equal size, where element<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a> <span class="math display">\[\mathbb{K}^{agg}[e] = \mathcal{H}_n(T_{agg},\mathbb{S}^{base},K^{s,base}_e)K^{s,base}_e\]</span></p>
+<p>The aggregation private keys <span class="math inline">\(k^{agg}_e\)</span> are used in group signatures.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a></p>
+<p>There is another operation <span><code>merge</code></span> which takes the aggregation keys from <span><code>premerge</code></span> and constructs the group signing key (e.g. spend key for Monero) <span class="math display">\[K^{grp} = \sum_e \mathbb{K}^{agg}[e]\]</span></p>
+<p>We generalize these functions for (N-1)-of-N and M-of-N in Section <a href="#sec:n-1-of-n" data-reference-type="ref" data-reference="sec:n-1-of-n">1.6.2</a>, and further generalize them for nested multisig in Section <a href="#subsec:nesting-multisig-keys" data-reference-type="ref" data-reference="subsec:nesting-multisig-keys">1.7.2</a>.</p>
+<h2 id="sec:threshold-schnorr">Thresholded Schnorr-like signatures</h2>
+<p>It takes a certain amount of signers for a multisignature to work, so we say there is a ‘threshold’ of signers below which the signature can’t be produced. A multisignature with N participants that requires all N people to build a signature, usually referred to as <span><em>N-of-N multisig</em></span>, would have a threshold of N. Later we will extend this to M-of-N (M <span class="math inline">\(\leq\)</span> N) multisig where N participants create the group address but only M people are needed to make signatures.</p>
+<p>Let’s take a step back from Monero. All signature schemes in this document lead from Maurer’s general zero-knowledge proof of knowledge <span class="citation" data-cites="simple-zk-proof-maurer"></span>, so we can demonstrate the essential form of thresholded signatures using a simple Schnorr-like signature (recall Section <a href="#sec:signing-messages" data-reference-type="ref" data-reference="sec:signing-messages">[sec:signing-messages]</a>) <span class="citation" data-cites="old-multisig-mrl-note"></span>.</p>
+<h3 class="unnumbered" id="signature">Signature</h3>
+<p>Say there are N people who each have a public key in the set <span class="math inline">\(\mathbb{K}^{agg}\)</span>, where each person <span class="math inline">\(e \in \{1,...,N\}\)</span> knows the private key <span class="math inline">\(k^{agg}_e\)</span>. Their N-of-N group public key, which they will use to sign messages, is <span class="math inline">\(K^{grp}\)</span>. Suppose they want to jointly sign a message <span class="math inline">\(\mathfrak{m}\)</span>. They could collaborate on a basic Schnorr-like signature like this</p>
+<ol>
+<li><p>Each participant <span class="math inline">\(e \in \{1,...,N\}\)</span> does the following:</p>
+<ol>
+<li><p>picks random component <span class="math inline">\(\alpha_e \in_R \mathbb{Z}_l\)</span>,</p></li>
+<li><p>computes <span class="math inline">\(\alpha_e G\)</span></p></li>
+<li><p>commits to it with <span class="math inline">\(C^{\alpha}_e = \mathcal{H}_n(T_{com},\alpha_e G)\)</span>,</p></li>
+<li><p>and sends <span class="math inline">\(C^{\alpha}_e\)</span> to the other participants securely.</p></li>
+</ol></li>
+<li><p>Once all commitments <span class="math inline">\(C^{\alpha}_e\)</span> have been collected, each participant sends their <span class="math inline">\(\alpha_e G\)</span> to the other participants securely. They must verify that <span class="math inline">\(C^{\alpha}_e \stackrel{?}{=} \mathcal{H}_n(T_{com},\alpha_e G)\)</span> for all other participants.</p></li>
+<li><p>Each participant computes <span class="math display">\[\alpha G = \sum_e \alpha_e G\]</span></p></li>
+<li><p>Each participant <span class="math inline">\(e \in \{1,...,N\}\)</span> does the following:<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a></p>
+<ol>
+<li><p>computes the challenge <span class="math inline">\(c = \mathcal{H}_n(\mathfrak{m},[\alpha G])\)</span>,</p></li>
+<li><p>defines their response component <span class="math inline">\(r_e = \alpha_e - c* k^{agg}_e \pmod l\)</span>,</p></li>
+<li><p>and sends <span class="math inline">\(r_e\)</span> to the other participants securely.</p></li>
+</ol></li>
+<li><p>Each participant computes <span class="math display">\[r = \sum_e r_e\]</span></p></li>
+<li><p>Any participant can publish the signature <span class="math inline">\(\sigma(\mathfrak{m}) = (c,r)\)</span>.</p></li>
+</ol>
+<h3 class="unnumbered" id="verification">Verification</h3>
+<p>Given <span class="math inline">\(K^{grp}\)</span>, <span class="math inline">\(\mathfrak{m}\)</span>, and <span class="math inline">\(\sigma(\mathfrak{m}) = (c,r)\)</span>:</p>
+<ol>
+<li><p>Compute the challenge <span class="math inline">\(c&#39; = \mathcal{H}_n(\mathfrak{m},[r G + c*K^{grp}])\)</span>.</p></li>
+<li><p>If <span class="math inline">\(c = c&#39;\)</span> then the signature is legitimate except with negligible probability.</p></li>
+</ol>
+<p>We included the superscript <span class="math inline">\(grp\)</span> for clarity, but in reality the verifier has no way to tell <span class="math inline">\(K^{grp}\)</span> is a merged key unless a participant tells him, or unless he knows the base or aggregation key components.</p>
+<h3 class="unnumbered" id="why-it-works">Why it works</h3>
+<p>Response <span class="math inline">\(r\)</span> is the core of this signature. Participant <span class="math inline">\(e\)</span> knows two secrets in <span class="math inline">\(r_e\)</span> (<span class="math inline">\(\alpha_e\)</span> and <span class="math inline">\(k^{agg}_e\)</span>), so his private key <span class="math inline">\(k^{agg}_e\)</span> is information-theoretically secure from other participants (assuming he never reuses <span class="math inline">\(\alpha_e\)</span>). Moreover, verifiers use the group public key <span class="math inline">\(K^{grp}\)</span>, so all key components are needed to build signatures. <span class="math display">\[\begin{aligned}
+    r G &amp;= (\sum_e r_e) G \\
+      &amp;= (\sum_e (\alpha_e - c*k^{agg}_e)) G \\
+      &amp;= (\sum_e \alpha_e) G - c*(\sum_e k^{agg}_e) G \\
+      &amp;= \alpha G - c*K^{grp} \\
+    \alpha G &amp;= r G + c*K^{grp} \\
+    \mathcal{H}_n(\mathfrak{m},[\alpha G]) &amp;= \mathcal{H}_n(\mathfrak{m},[r G + c*K^{grp}]) \\
+    c &amp;= c&#39;\end{aligned}\]</span></p>
+<h3 class="unnumbered" id="additional-commit-and-reveal-step">Additional commit-and-reveal step</h3>
+<p>The reader may be wondering where Step 2 came from. Without commit-and-reveal <span class="citation" data-cites="MRL-0009-multisig"></span>, a malicious co-signer could learn all <span class="math inline">\(\alpha_e G\)</span> <span><em>before</em></span> the challenge is computed. This lets him control the challenge produced to some degree, by modifying his own <span class="math inline">\(\alpha_e G\)</span> prior to sending it out. He can use the response components collected from multiple controlled signatures to derive other signers’ private keys <span class="math inline">\(k^{agg}_e\)</span> in sub-exponential time <span class="citation" data-cites="cryptoeprint:2018:417"></span>, a serious security threat. This threat relies on Wagner’s generalization <span class="citation" data-cites="generalized-birthday-wagner"></span> (see also <span class="citation" data-cites="adam-wagnerian-tragedies"></span> for a more intuitive explanation) of the birthday problem <span class="citation" data-cites="birthday-problem"></span>.<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a></p>
+<h2 id="sec:MLSTAG-RingCT">MLSTAG Ring Confidential signatures for Monero</h2>
+<p>Monero thresholded ring confidential transactions add some complexity because MLSTAG (thresholded MLSAG) signing keys are one-time addresses and commitments to zero (for input amounts).</p>
+<p>Recalling Section <a href="#sec:multi_out_transactions" data-reference-type="ref" data-reference="sec:multi_out_transactions">[sec:multi_out_transactions]</a>, a one-time address assigning ownership of a transaction’s <span class="math inline">\(t\)</span>output to whoever has public address <span class="math inline">\((K^v_t,K^s_t)\)</span> goes like this <span class="math display">\[\begin{aligned}
+  K_t^o &amp;= \mathcal{H}_n(r K_t^v, t)G + K_t^s = (\mathcal{H}_n(r K_t^v, t) + k_t^s)G  \\ 
+  k_t^o &amp;= \mathcal{H}_n(r K_t^v, t) + k_t^s\end{aligned}\]</span></p>
+<p>We can update our notation for outputs received by a group address <span class="math inline">\((K^{v,grp}_t,K^{s,grp}_t)\)</span>: <span class="math display">\[\begin{aligned}
+  K^{o,grp}_t &amp;= \mathcal{H}_n(r K^{v,grp}_t, t)G + K^{s,grp}_t  \\ 
+  k^{o,grp}_t &amp;= \mathcal{H}_n(r K^{v,grp}_t, t) + k^{s,grp}_t\end{aligned}\]</span></p>
+<p>Just as before, anyone with <span class="math inline">\(k^{v,grp}_t\)</span> and <span class="math inline">\(K^{s,grp}_t\)</span> can discover <span class="math inline">\(K^{o,grp}_t\)</span> is their address’s owned output, and can decode the Diffie-Hellman term for output amount and reconstruct the corresponding commitment mask (Section <a href="#sec:pedersen_monero" data-reference-type="ref" data-reference="sec:pedersen_monero">[sec:pedersen_monero]</a>).</p>
+<p>This also means multisig subaddresses are possible (Section <a href="#sec:subaddresses" data-reference-type="ref" data-reference="sec:subaddresses">[sec:subaddresses]</a>). Multisig transactions using funds received to a subaddress require some fairly straightforward modifications to the following algorithms, which we mention in footnotes.<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a></p>
+<h3 id="sec:rcttypebulletproof2-multisig"><span><code>RCTTypeBulletproof2</code></span> with N-of-N multisig</h3>
+<p>Most parts of a multisig transaction can be completed by whoever initiated it. Only the MLSTAG signatures require collaboration. An initiator should do these things to prepare for an <span><code>RCTTypeBulletproof2</code></span> transaction (recall Section <a href="#sec:RCTTypeBulletproof2" data-reference-type="ref" data-reference="sec:RCTTypeBulletproof2">[sec:RCTTypeBulletproof2]</a>):</p>
+<ol>
+<li><p>Generate a transaction private key <span class="math inline">\(r \in_R \mathbb{Z}_l\)</span> (Section <a href="#sec:one-time-addresses" data-reference-type="ref" data-reference="sec:one-time-addresses">[sec:one-time-addresses]</a>) and compute the corresponding public key <span class="math inline">\(r G\)</span> (or multiple such keys if dealing with a subaddress recipient; Section <a href="#sec:subaddresses" data-reference-type="ref" data-reference="sec:subaddresses">[sec:subaddresses]</a>).</p></li>
+<li><p>Decide the inputs to be spent (<span class="math inline">\(j \in \{1,...,m\}\)</span> owned outputs with one-time addresses <span class="math inline">\(K^{o,grp}_j\)</span> and amounts <span class="math inline">\(a_1,...,a_m\)</span>), and recipients to receive funds (<span class="math inline">\(t \in \{0,...,p-1\}\)</span> new outputs with amounts <span class="math inline">\(b_0,...,b_{p-1}\)</span> and one-time addresses <span class="math inline">\(K^{o}_t\)</span>). This includes the miner’s fee <span class="math inline">\(f\)</span> and its commitment <span class="math inline">\(f H\)</span>. Decide each input’s set of decoy ring members.</p></li>
+<li><p>Encode each output’s amount <span class="math inline">\(\mathit{amount}_t\)</span> (Section <a href="#sec:pedersen_monero" data-reference-type="ref" data-reference="sec:pedersen_monero">[sec:pedersen_monero]</a>), and compute the output commitments <span class="math inline">\(C^b_t\)</span>.</p></li>
+<li><p>Select, for each input <span class="math inline">\(j \in \{1,...,m-1\}\)</span>, pseudo output commitment mask components <span class="math inline">\(x&#39;_{j} \in_R \mathbb{Z}_l\)</span>, and compute the <span class="math inline">\(m\)</span>mask as (Section <a href="#sec:ringct-introduction" data-reference-type="ref" data-reference="sec:ringct-introduction">[sec:ringct-introduction]</a>) <span class="math display">\[x&#39;_m = \sum_t y_t - \sum_{j=1}^{m-1} x&#39;_j\]</span> Compute the pseudo output commitments <span class="math inline">\(C&#39;^a_{j}\)</span>.</p></li>
+<li><p>Produce the aggregate Bulletproof range proof for all outputs. Recall Section <a href="#sec:range_proofs" data-reference-type="ref" data-reference="sec:range_proofs">[sec:range_proofs]</a>.</p></li>
+<li><p>Prepare for MLSTAG signatures by generating, for the commitments to zero, seed components <span class="math inline">\(\alpha^z_{j} \in_R \mathbb{Z}_l\)</span>, and computing <span class="math inline">\(\alpha^z_{j} G\)</span>.<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a></p></li>
+</ol>
+<p>He sends all this information to the other participants securely. Now the group of signers is ready to build input signatures with their private keys <span class="math inline">\(k^{s,agg}_e\)</span>, and the commitments to zero <span class="math inline">\(C^a_{\pi,j} - C&#39;^a_{\pi,j} = z_j G\)</span>.</p>
+<h4 class="unnumbered" id="mlstag-ringct">MLSTAG RingCT</h4>
+<p>First they construct the group key images for all inputs <span class="math inline">\(j \in \{1,...,m\}\)</span> with one-time addresses <span class="math inline">\(K^{o,grp}_{\pi,j}\)</span>.<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a></p>
+<ol>
+<li><p>For each input <span class="math inline">\(j\)</span> each participant <span class="math inline">\(e\)</span> does the following:</p>
+<ol>
+<li><p>computes partial key image <span class="math inline">\(\tilde{K}^{o}_{j,e} = k^{s,agg}_e \mathcal{H}_p(K^{o,grp}_{\pi,j})\)</span>,</p></li>
+<li><p>and sends <span class="math inline">\(\tilde{K}^{o}_{j,e}\)</span> to the other participants securely.</p></li>
+</ol></li>
+<li><p>Each participant can now compute, using <span class="math inline">\(u_j\)</span> as the output index in the transaction where <span class="math inline">\(K^{o,grp}_{\pi,j}\)</span> was sent to the multisig address,<a href="#fn18" class="footnote-ref" id="fnref18" role="doc-noteref"><sup>18</sup></a> <span class="math display">\[\tilde{K}^{o,grp}_j = \mathcal{H}_n(k^{v,grp} r G, u_j) \mathcal{H}_p(K^{o,grp}_{\pi,j}) + \sum_e \tilde{K}^{o}_{j,e}\]</span></p></li>
+</ol>
+<p>Then they build a MLSTAG signature for each input <span class="math inline">\(j\)</span>.</p>
+<ol>
+<li><p>Each participant <span class="math inline">\(e\)</span> does the following:</p>
+<ol>
+<li><p>generates seed components <span class="math inline">\(\alpha_{j,e} \in_R \mathbb{Z}_l\)</span> and computes <span class="math inline">\(\alpha_{j,e} G\)</span>, and <span class="math inline">\(\alpha_{j,e} \mathcal{H}_p(K^{o,grp}_{\pi,j})\)</span>,</p></li>
+<li><p>generates, for <span class="math inline">\(i \in \{1,...,v+1\}\)</span> except <span class="math inline">\(i = \pi\)</span>, random components <span class="math inline">\(r_{i,j,e}\)</span> and <span class="math inline">\(r^z_{i,j,e}\)</span>,</p></li>
+<li><p>computes the commitment <span class="math display">\[C^{\alpha}_{j,e} = \mathcal{H}_n(T_{com},\alpha_{j,e} G, \alpha_{j,e} \mathcal{H}_p(K^{o,grp}_{\pi,j}),r_{1,j,e},...,r_{v+1,j,e},r^z_{1,j,e},...,r^z_{v+1,j,e})\]</span></p></li>
+<li><p>and sends <span class="math inline">\(C^{\alpha}_{j,e}\)</span> to the other participants securely.</p></li>
+</ol></li>
+<li><p>Upon receiving all <span class="math inline">\(C^{\alpha}_{j,e}\)</span> from the other participants, send all <span class="math inline">\(\alpha_{j,e} G\)</span>, <span class="math inline">\(\alpha_{j,e} \mathcal{H}_p(K^{o,grp}_{\pi,j})\)</span>, and <span class="math inline">\(r_{i,j,e}\)</span> and <span class="math inline">\(r^z_{i,j,e}\)</span>, and verify each participant’s original commitment was valid.</p></li>
+<li><p>Each participant can compute all <span class="math display">\[\begin{aligned}
+        \alpha_{j} G &amp;= \sum_e \alpha_{j,e} G\\
+        \alpha_{j} \mathcal{H}_p(K^{o,grp}_{\pi,j}) &amp;= \sum_e \alpha_{j,e} \mathcal{H}_p(K^{o,grp}_{\pi,j})\\
+        r_{i,j} &amp;= \sum_e r_{i,j,e}\\
+        r^{z}_{i,j} &amp;= \sum_e r^z_{i,j,e}
+    \end{aligned}\]</span></p></li>
+<li><p>Each participant can build the signature loop (see Section <a href="#sec:MLSAG" data-reference-type="ref" data-reference="sec:MLSAG">[sec:MLSAG]</a>).</p></li>
+<li><p>To finish closing the signature, each participant <span class="math inline">\(e\)</span> does the following:</p>
+<ol>
+<li><p>defines <span class="math inline">\(r_{\pi,j,e} = \alpha_{j,e} - c_{\pi} k^{s,agg}_e \pmod l\)</span>,</p></li>
+<li><p>and sends <span class="math inline">\(r_{\pi,j,e}\)</span> to the other participants securely.</p></li>
+</ol></li>
+<li><p>Everyone can compute (recall <span class="math inline">\(\alpha^z_{j,e}\)</span> was created by the initiator)<a href="#fn19" class="footnote-ref" id="fnref19" role="doc-noteref"><sup>19</sup></a> <span class="math display">\[r_{\pi,j} = \sum_e r_{\pi,j,e} - c_{\pi}*\mathcal{H}_n(k^{v,grp} r G, u_j)\]</span> <span class="math display">\[r^{z}_{\pi,j} = \alpha^z_{j,e} - c_{\pi} z_j \pmod l\]</span></p></li>
+</ol>
+<p>The signature for input <span class="math inline">\(j\)</span> is <span class="math inline">\(\sigma_j(\mathfrak{m}) = (c_1,r_{1,j},r^{z}_{1,j},...,r_{v+1,j},r^{z}_{v+1,j})\)</span> with <span class="math inline">\(\tilde{K}^{o,grp}_j\)</span>.</p>
+<p>Since in Monero the message <span class="math inline">\(\mathfrak{m}\)</span> and the challenge <span class="math inline">\(c_{\pi}\)</span> depend on all other parts of the transaction, any participant who tries to cheat by sending the wrong value, at any point in the whole process, to his fellow signers will cause the signature to fail. The response <span class="math inline">\(r_{\pi,j}\)</span> is only useful for the <span class="math inline">\(\mathfrak{m}\)</span> and <span class="math inline">\(c_{\pi}\)</span> it is defined for.</p>
+<h3 id="sec:simplified-communication">Simplified communication</h3>
+<p>It takes a lot of steps to build a multisignature Monero transaction. We can reorganize and simplify some of them so that signer interactions are encompassed by two parts with five total rounds.</p>
+<ol>
+<li><p><span><em>Key aggregation for a multisig public address</em></span>: Anyone with a set of public addresses can run <span><code>premerge</code></span> on them and then <span><code>merge</code></span> an N-of-N address, but no participant will know the group view key unless they learn all the components, so the group starts by sending <span class="math inline">\(k^{v}_e\)</span> and <span class="math inline">\(K^{s,base}_e\)</span> to each other securely. Any participant can <span><code>premerge</code></span> and <span><code>merge</code></span> and publish <span class="math inline">\((K^{v,grp},K^{s,grp})\)</span>, allowing the group to receive funds to the group address. M-of-N aggregation requires more steps, which we describe in Section <a href="#sec:smaller-thresholds" data-reference-type="ref" data-reference="sec:smaller-thresholds">1.6</a>.</p></li>
+<li><p><span><em>Transactions</em></span>:</p>
+<ol>
+<li><p>Some participant or sub-coalition (the initiator) decides to write a transaction. They choose <span class="math inline">\(m\)</span> inputs with one-time addresses <span class="math inline">\(K^{o,grp}_{j}\)</span> and amount commitments <span class="math inline">\(C^a_j\)</span>, <span class="math inline">\(m\)</span> sets of <span class="math inline">\(v\)</span> additional one-time addresses and commitments to be used as ring decoys, pick <span class="math inline">\(p\)</span> output recipients with public addresses <span class="math inline">\((K^v_t,K^s_t)\)</span> and amounts <span class="math inline">\(b_t\)</span> to send them, decide a transaction fee <span class="math inline">\(f\)</span>, pick a transaction private key <span class="math inline">\(r\)</span>,<a href="#fn20" class="footnote-ref" id="fnref20" role="doc-noteref"><sup>20</sup></a> generate pseudo output commitment masks <span class="math inline">\(x&#39;_{j}\)</span> with <span class="math inline">\(j \neq m\)</span>, construct the ECDH term <span class="math inline">\(\mathit{amount}_t\)</span> for each output, produce an aggregate range proof, and generate signature openers <span class="math inline">\(\alpha^z_j\)</span> for all inputs’ commitments to zero and random scalars <span class="math inline">\(r_{i,j}\)</span> and <span class="math inline">\(r^z_{i,j}\)</span> with <span class="math inline">\(i \neq \pi_j\)</span>.<a href="#fn21" class="footnote-ref" id="fnref21" role="doc-noteref"><sup>21</sup></a> They also prepare their contribution for the next communication round.<br />
+The initiator sends all this information to the other participants securely.<a href="#fn22" class="footnote-ref" id="fnref22" role="doc-noteref"><sup>22</sup></a> The other participants can signal agreement by sending their part of the next communication round, or negotiate for changes.</p></li>
+<li><p>Each participant chooses their opening components for the MLSTAG signature(s), commits to them, calculates their partial key images, and sends those commitments and partial images to other participants securely.<br />
+MLSTAG Signature(s): key image <span class="math inline">\(\tilde{K}^{o}_{j,e}\)</span>, signature randomness <span class="math inline">\(\alpha_{j,e} G\)</span>, and <span class="math inline">\(\alpha_{j,e} \mathcal{H}_p(K^{o,grp}_{\pi,j})\)</span>. Partial key images don’t need to be in committed data, as they can’t be used to extract signers’ private keys. They are also useful for viewing which owned outputs have been spent, so for the sake of modular design should be handled separately.</p></li>
+<li><p>Upon receiving all signature commitments, each participant sends the committed information to the other participants securely.</p></li>
+<li><p>Each participant closes their part of the MLSTAG signature(s), sending all <span class="math inline">\(r_{{\pi_j},j,e}\)</span> to the other participants securely.<a href="#fn23" class="footnote-ref" id="fnref23" role="doc-noteref"><sup>23</sup></a></p></li>
+</ol></li>
+</ol>
+<p>Assuming the process went well, all participants can finish writing the transaction and broadcast it on their own. Transactions authored by a multisig coalition are indistinguishable from those authored by individuals.</p>
+<h2 id="sec:recalculating-key-images-multisig">Recalculating key images</h2>
+<p>If someone loses their records and wants to calculate their address’s balance (received minus spent funds), they need to check the blockchain. View keys are only useful for reading received funds, so users need to calculate key images for all owned outputs to see if they have been spent, by comparing with key images stored in the blockchain. Since members of a group address can’t compute key images on their own, they need to enlist the other participants’ help.</p>
+<p>Calculating key images from a simple sum of components might fail if dishonest participants report false keys.<a href="#fn24" class="footnote-ref" id="fnref24" role="doc-noteref"><sup>24</sup></a> Given a received output with one-time address <span class="math inline">\(K^{o,grp}\)</span>, the group can produce a simple ‘linkable’ Schnorr-like proof (basically single-key bLSTAG, recall Sections <a href="#sec:proofs-discrete-logarithm-multiple-bases" data-reference-type="ref" data-reference="sec:proofs-discrete-logarithm-multiple-bases">[sec:proofs-discrete-logarithm-multiple-bases]</a> and <a href="#blsag_note" data-reference-type="ref" data-reference="blsag_note">[blsag_note]</a>) to prove the key image <span class="math inline">\(\tilde{K}^{o,grp}\)</span> is legitimate without revealing their private spend key components or needing to trust each other.</p>
+<h3 class="unnumbered" id="proof">Proof</h3>
+<ol>
+<li><p>Each participant <span class="math inline">\(e\)</span> does the following:</p>
+<ol>
+<li><p>computes <span class="math inline">\(\tilde{K}^{o}_{e} = k^{s,agg}_e \mathcal{H}_p(K^{o,grp})\)</span>,</p></li>
+<li><p>generates seed component <span class="math inline">\(\alpha_e \in_R \mathbb{Z}_l\)</span> and computes <span class="math inline">\(\alpha_e G\)</span> and <span class="math inline">\(\alpha_e \mathcal{H}_p(K^{o,grp})\)</span>,</p></li>
+<li><p>commits to the data with <span class="math inline">\(C^{\alpha}_{e} = \mathcal{H}_n(T_{com}, \alpha_e G, \alpha_e \mathcal{H}_p(K^{o,grp}))\)</span>,</p></li>
+<li><p>and sends <span class="math inline">\(C^{\alpha}_{e}\)</span> and <span class="math inline">\(\tilde{K}^{o}_{e}\)</span> to the other participants securely.</p></li>
+</ol></li>
+<li><p>Upon receiving all <span class="math inline">\(C^{\alpha}_{e}\)</span>, each participant sends the committed information and verifies other participants’ commitments were legitimate.</p></li>
+<li><p>Each participant can compute:<a href="#fn25" class="footnote-ref" id="fnref25" role="doc-noteref"><sup>25</sup></a> <span class="math display">\[\tilde{K}^{o,grp} = \mathcal{H}_n(k^{v,grp} r G, u) \mathcal{H}_p(K^{o,grp}) + \sum_e \tilde{K}^{o}_{e}\]</span> <span class="math display">\[\alpha G = \sum_e \alpha_{e} G\]</span> <span class="math display">\[\alpha \mathcal{H}_p(K^{o,grp}) = \sum_e \alpha_{e} \mathcal{H}_p(K^{o,grp})\]</span></p></li>
+<li><p>Each participant computes the challenge<a href="#fn26" class="footnote-ref" id="fnref26" role="doc-noteref"><sup>26</sup></a> <span class="math display">\[c = \mathcal{H}_n([\alpha G],[\alpha \mathcal{H}_p(K^{o,grp})])\]</span></p></li>
+<li><p>Each participant does the following:</p>
+<ol>
+<li><p>defines <span class="math inline">\(r_e = \alpha_e - c*k^{s,agg}_e \pmod l\)</span>,</p></li>
+<li><p>and sends <span class="math inline">\(r_e\)</span> to the other participants securely.</p></li>
+</ol></li>
+<li><p>Each participant can compute<a href="#fn27" class="footnote-ref" id="fnref27" role="doc-noteref"><sup>27</sup></a> <span class="math display">\[r^{resp} = \sum_e r_e - c*\mathcal{H}_n(k^{v,grp} r G, u)\]</span></p></li>
+</ol>
+<p>The proof is <span class="math inline">\((c,r^{resp})\)</span> with <span class="math inline">\(\tilde{K}^{o,grp}\)</span>.</p>
+<h3 class="unnumbered" id="verification-1">Verification</h3>
+<ol>
+<li><p>Check <span class="math inline">\(l \tilde{K}^{o,grp} \stackrel{?}{=} 0\)</span>.</p></li>
+<li><p>Compute <span class="math inline">\(c&#39; = \mathcal{H}_n([r^{resp} G + c*K^{o,grp}],[r^{resp} \mathcal{H}_p(K^{o,grp}) + c*\tilde{K}^{o,grp}])\)</span>.</p></li>
+<li><p>If <span class="math inline">\(c = c&#39;\)</span> then the key image <span class="math inline">\(\tilde{K}^{o,grp}\)</span> corresponds to one-time address <span class="math inline">\(K^{o,grp}\)</span> (except with negligible probability).</p></li>
+</ol>
+<h2 id="sec:smaller-thresholds">Smaller thresholds</h2>
+<p>At the beginning of this chapter we discussed escrow services, which used 2-of-2 multisig to split signing power between a user and a security company. That setup isn’t ideal, because if the security company is compromised, or refuses to cooperate, your funds may get stuck.</p>
+<p>We can get around that potentiality with a 2-of-3 multisig address, which has three participants but only needs two of them to sign transactions. An escrow service provides one key and users provide two keys. Users can store one key in a secure location (like a safety deposit box), and use the other for day-to-day purchases. If the escrow service fails, a user can use the secure key and day key to withdraw funds.</p>
+<p>Multisignatures with sub-N thresholds have a wide range of uses.</p>
+<h3 id="sec:1-of-n">1-of-N key aggregation</h3>
+<p>Suppose a group of people want to make a multisig key <span class="math inline">\(K^{grp}\)</span> they can all sign with. The solution is trivial: let everyone know the private key <span class="math inline">\(k^{grp}\)</span>. There are three ways to do this.</p>
+<ol>
+<li><p>One participant or sub-coalition selects a key and sends it to everyone else securely.</p></li>
+<li><p>All participants compute private key components and send them securely, using the simple sum as the merged key.<a href="#fn28" class="footnote-ref" id="fnref28" role="doc-noteref"><sup>28</sup></a></p></li>
+<li><p>Participants extend M-of-N multisig to 1-of-N. This might be useful if an adversary has access to the group’s communications.</p></li>
+</ol>
+<p>In this case, for Monero, everyone would know the private keys <span class="math inline">\((k^{v,grp,{1\textrm{xN}}},k^{s,grp,{1\textrm{xN}}})\)</span>. Before this section all group keys were N-of-N, but now we use superscript 1xN to denote keys related to 1-of-N signing.</p>
+<h3 id="sec:n-1-of-n">(N-1)-of-N key aggregation</h3>
+<p>In an (N-1)-of-N group key, such as 2-of-3 or 4-of-5, any set of (N-1) participants can sign. We achieve this with Diffie-Hellman shared secrets. Lets say there are participants <span class="math inline">\(e \in \{1,...,N\}\)</span>, with base public keys <span class="math inline">\(K^{base}_e\)</span> which they are all aware of.</p>
+<p>Each participant <span class="math inline">\(e\)</span> computes, for <span class="math inline">\(w \in \{1,...,N\}\)</span> but <span class="math inline">\(w \neq e\)</span> <span class="math display">\[k^{sh,\textrm{(N-1)xN}}_{e,w} = \mathcal{H}_n(k^{base}_e K^{base}_w)\]</span></p>
+<p>Then he computes all <span class="math inline">\(K^{sh,\textrm{(N-1)xN}}_{e,w} = k^{sh,\textrm{(N-1)xN}}_{e,w} G\)</span> and sends them to the other participants securely. We now use superscript <span class="math inline">\(sh\)</span> to denote keys shared by a sub-group of participants.</p>
+<p>Each participant will have (N-1) shared private key components corresponding to each of the other participants, making N*(N-1) total keys between everyone. All keys are shared by two Diffie-Hellman partners, so there are really [N*(N-1)]/2 unique keys. Those unique keys compose the set <span class="math inline">\(\mathbb{S}^{\textrm{(N-1)xN}}\)</span>.</p>
+<h4 class="unnumbered" id="generalizing-premerge-and-merge">Generalizing <span><code>premerge</code></span> and <span><code>merge</code></span></h4>
+<p>This is where we update the definition of <span><code>premerge</code></span> from Section <a href="#sec:robust-key-aggregation" data-reference-type="ref" data-reference="sec:robust-key-aggregation">1.2.3</a>. Its input will be the set <span class="math inline">\(\mathbb{S}^{\textrm{MxN}}\)</span>, where <span class="math inline">\(M\)</span> is the ‘threshold’ that the set’s keys are prepared for. When <span class="math inline">\(M = N\)</span>, <span class="math inline">\(\mathbb{S}^{\textrm{NxN}} = \mathbb{S}^{base}\)</span>, and when <span class="math inline">\(M &lt; N\)</span> it contains shared keys. The output is <span class="math inline">\(\mathbb{K}^{agg,\textrm{MxN}}\)</span>.</p>
+<p>The [N*(N-1)]/2 key components in <span class="math inline">\(\mathbb{K}^{agg,\textrm{(N-1)xN}}\)</span> can be sent into <span><code>merge</code></span>, outputting <span class="math inline">\(K^{grp,\textrm{(N-1)xN}}\)</span>. Importantly, all [N*(N-1)]/2 private key components can be assembled with just (N-1) participants since each participant shares one Diffie-Hellman secret with the Nguy.</p>
+<h4 class="unnumbered" id="a-2-of-3-example">A 2-of-3 example</h4>
+<p>Say there are three people with public keys <span class="math inline">\(\{K^{base}_1,K^{base}_2,K^{base}_3\}\)</span>, to which they each know a private key, who want to make a 2-of-3 multisig key. After Diffie-Hellman and sending each other the public keys they each know the following:</p>
+<ol>
+<li><p>Person 1: <span class="math inline">\(k^{sh,\textrm{2x3}}_{1,2}\)</span>, <span class="math inline">\(k^{sh,\textrm{2x3}}_{1,3}\)</span>, <span class="math inline">\(K^{sh,\textrm{2x3}}_{2,3}\)</span></p></li>
+<li><p>Person 2: <span class="math inline">\(k^{sh,\textrm{2x3}}_{2,1}\)</span>, <span class="math inline">\(k^{sh,\textrm{2x3}}_{2,3}\)</span>, <span class="math inline">\(K^{sh,\textrm{2x3}}_{1,3}\)</span></p></li>
+<li><p>Person 3: <span class="math inline">\(k^{sh,\textrm{2x3}}_{3,1}\)</span>, <span class="math inline">\(k^{sh,\textrm{2x3}}_{3,2}\)</span>, <span class="math inline">\(K^{sh,\textrm{2x3}}_{1,2}\)</span></p></li>
+</ol>
+<p>Where <span class="math inline">\(k^{sh,\textrm{2x3}}_{1,2} = k^{sh,\textrm{2x3}}_{2,1}\)</span>, and so on. The set <span class="math inline">\(\mathbb{S}^{\textrm{2x3}} = \{ K^{sh,\textrm{2x3}}_{1,2}, K^{sh,\textrm{2x3}}_{1,3}, K^{sh,\textrm{2x3}}_{2,3}\}\)</span>.</p>
+<p>Performing <span><code>premerge</code></span> and <span><code>merge</code></span> creates the group key:<a href="#fn29" class="footnote-ref" id="fnref29" role="doc-noteref"><sup>29</sup></a> <span class="math display">\[\begin{aligned}
+    K^{grp,\textrm{2x3}} = &amp;\mathcal{H}_n(T_{agg},\mathbb{S}^{\textrm{2x3}},K^{sh,\textrm{2x3}}_{1,2}) K^{sh,\textrm{2x3}}_{1,2} + \\
+                           &amp;\mathcal{H}_n(T_{agg},\mathbb{S}^{\textrm{2x3}},K^{sh,\textrm{2x3}}_{1,3}) K^{sh,\textrm{2x3}}_{1,3} + \\
+                           &amp;\mathcal{H}_n(T_{agg},\mathbb{S}^{\textrm{2x3}},K^{sh,\textrm{2x3}}_{2,3}) K^{sh,\textrm{2x3}}_{2,3}\end{aligned}\]</span></p>
+<p>Now let’s say persons 1 and 2 want to sign a message <span class="math inline">\(\mathfrak{m}\)</span>. We will use a basic Schnorr-like signature to demonstrate.</p>
+<ol>
+<li><p>Each participant <span class="math inline">\(e \in \{1,2\}\)</span> does the following:</p>
+<ol>
+<li><p>picks random component <span class="math inline">\(\alpha_e \in_R \mathbb{Z}_l\)</span>,</p></li>
+<li><p>computes <span class="math inline">\(\alpha_e G\)</span>,</p></li>
+<li><p>commits with <span class="math inline">\(C^{\alpha}_{e} = \mathcal{H}_n(T_{com},\alpha_e G)\)</span>,</p></li>
+<li><p>and sends <span class="math inline">\(C^{\alpha}_{e}\)</span> to the other participants securely.</p></li>
+</ol></li>
+<li><p>On receipt of all <span class="math inline">\(C^{\alpha}_{e}\)</span>, each participant sends out <span class="math inline">\(\alpha_e G\)</span> and verifies the other commitments were legitimate.</p></li>
+<li><p>Each participant computes <span class="math display">\[\alpha G = \sum_e \alpha_e G\]</span> <span class="math display">\[c = \mathcal{H}_n(\mathfrak{m},[\alpha G])\]</span></p></li>
+<li><p>Participant 1 does the following:</p>
+<ol>
+<li><p>computes <span class="math inline">\(r_1 = \alpha_1 - c*[k^{agg,\textrm{2x3}}_{1,3} + k^{agg,\textrm{2x3}}_{1,2}]\)</span>,</p></li>
+<li><p>and sends <span class="math inline">\(r_1\)</span> to participant 2 securely.</p></li>
+</ol></li>
+<li><p>Participant 2 does the following:</p>
+<ol>
+<li><p>computes <span class="math inline">\(r_2 = \alpha_2 - c*k^{agg,\textrm{2x3}}_{2,3}\)</span>,</p></li>
+<li><p>and sends <span class="math inline">\(r_2\)</span> to participant 1 securely.</p></li>
+</ol></li>
+<li><p>Each participant computes <span class="math display">\[r = \sum_e r_e\]</span></p></li>
+<li><p>Either participant can publish the signature <span class="math inline">\(\sigma(\mathfrak{m}) = (c,r)\)</span>.</p></li>
+</ol>
+<p>The only change with sub-N threshold signatures is how to ‘close the loop’ by defining <span class="math inline">\(r_{\pi,e}\)</span> (in the case of ring signatures, with secret index <span class="math inline">\(\pi\)</span>). Each participant must include their shared secret corresponding to the ‘missing person’, but since all the other shared secrets are doubled up there is a trick. Given the set <span class="math inline">\(\mathbb{S}^{base}\)</span> of all participants’ original keys, only the <span><em>first person</em></span> - ordered by index in <span class="math inline">\(\mathbb{S}^{base}\)</span> - with the copy of a shared secret uses it to calculate his <span class="math inline">\(r_{\pi,e}\)</span>.<a href="#fn30" class="footnote-ref" id="fnref30" role="doc-noteref"><sup>30</sup></a><a href="#fn31" class="footnote-ref" id="fnref31" role="doc-noteref"><sup>31</sup></a></p>
+<p>In the previous example, participant 1 computes <span class="math display">\[r_1 = \alpha_1 - c*[k^{agg,\textrm{2x3}}_{1,3} + k^{agg,\textrm{2x3}}_{1,2}]\]</span></p>
+<p>while participant 2 only computes <span class="math display">\[r_2 = \alpha_2 - c*k^{agg,\textrm{2x3}}_{2,3}\]</span></p>
+<p>The same principle applies to computing the group key image in sub-N threshold Monero multisig transactions.</p>
+<h3 id="sec:m-of-n">M-of-N key aggregation</h3>
+<p>We can understand M-of-N by adjusting our perspective on (N-1)-of-N. In (N-1)-of-N every shared secret between two public keys, such as <span class="math inline">\(K^{base}_1\)</span> and <span class="math inline">\(K^{base}_2\)</span>, contains two private keys, <span class="math inline">\(k^{base}_1 k^{base}_2 G\)</span>. It’s a secret because only person 1 can compute <span class="math inline">\(k^{base}_1 K^{base}_2\)</span>, and only person 2 can compute <span class="math inline">\(k^{base}_2 K^{base}_1\)</span>.</p>
+<p>What if there is a third person with <span class="math inline">\(K^{base}_3\)</span>, there exist shared secrets <span class="math inline">\(k^{base}_1 k^{base}_2 G\)</span>, <span class="math inline">\(k^{base}_1 k^{base}_3 G\)</span>, and <span class="math inline">\(k^{base}_2 k^{base}_3 G\)</span>, and the participants send those public keys to each other (making them no longer secret)? They each contributed a private key to two of the public keys. Now say they make a new shared secret with that third public key.</p>
+<p>Person 1 computes shared secret <span class="math inline">\(k^{base}_1*(k^{base}_2 k^{base}_3 G)\)</span>, person 2 computes <span class="math inline">\(k^{base}_2*(k^{base}_1 k^{base}_3 G)\)</span>, and person 3 computes <span class="math inline">\(k^{base}_3*(k^{base}_1 k^{base}_2 G)\)</span>. Now they all know <span class="math inline">\(k^{base}_1 k^{base}_2 k^{base}_3 G\)</span>, making a three-way shared secret (so long as no one publishes it).</p>
+<p>The group could use <span class="math inline">\(k^{sh,\textrm{1x3}} = \mathcal{H}_n(k^{base}_1 k^{base}_2 k^{base}_3 G)\)</span> as a shared private key, and publish <span class="math display">\[K^{grp,\textrm{1x3}} = \mathcal{H}_n(T_{agg},\mathbb{S}^{\textrm{1x3}},K^{sh,\textrm{1x3}}) K^{sh,\textrm{1x3}}\]</span> as a 1-of-3 multisig address.</p>
+<p>In a 3-of-3 multisig every 1 person has a secret, in a 2-of-3 multisig every group of 2 people has a shared secret, and in 1-of-3 every group of 3 people has a shared secret.</p>
+<p>Now we can generalize to M-of-N: every possible group of (N-M+1) people has a shared secret <span class="citation" data-cites="old-multisig-mrl-note"></span>. If (N-M) people are missing, all their shared secrets are owned by at least one of the M remaining people, who can collaborate to sign with the group’s key.</p>
+<h4 class="unnumbered" id="m-of-n-algorithm">M-of-N algorithm</h4>
+<p>Given participants <span class="math inline">\(e \in \{1,...,N\}\)</span> with initial private keys <span class="math inline">\(k^{base}_1,...,k^{base}_N\)</span> who wish to produce an M-of-N merged key (M <span class="math inline">\(\leq\)</span> N; M <span class="math inline">\(\geq\)</span> 1 and N <span class="math inline">\(\geq\)</span> 2), we can use an interactive algorithm.</p>
+<p>We will use <span class="math inline">\(\mathbb{S}_s\)</span> to denote all the <span><em>unique</em></span> public keys at stage <span class="math inline">\(s \in \{0,...,(N-M)\}\)</span>. The final set <span class="math inline">\(\mathbb{S}_{N-M}\)</span> is ordered according to a sorting convention (such as smallest to largest numerically, i.e. lexicographically). This notation is a convenience, and <span class="math inline">\(\mathbb{S}_s\)</span> is the same as <span class="math inline">\(\mathbb{S}^{\textrm{(N-s)xN}}\)</span> from the previous sections.</p>
+<p>We will use <span class="math inline">\(\mathbb{S}^K_{s,e}\)</span> to denote the set of public keys each participant created at stage <span class="math inline">\(s\)</span> of the algorithm. In the beginning <span class="math inline">\(\mathbb{S}^K_{0,e} = \{K^{base}_e\}\)</span>.</p>
+<p>The set <span class="math inline">\(\mathbb{S}^{k}_{e}\)</span> will contain each participant’s aggregation private keys at the end.</p>
+<ol>
+<li><p>Each participant <span class="math inline">\(e\)</span> sends their original public key set <span class="math inline">\(\mathbb{S}^K_{0,e} = \{K^{base}_e\}\)</span> to the other participants securely.</p></li>
+<li><p>Each participant builds <span class="math inline">\(\mathbb{S}_{0}\)</span> by collecting all <span class="math inline">\(\mathbb{S}^K_{0,e}\)</span> and removing duplicates.</p></li>
+<li><p>For stage <span class="math inline">\(s \in \{1,...,(N-M)\}\)</span> (skip if M = N)</p>
+<ol>
+<li><p>Each participant <span class="math inline">\(e\)</span> does the following:</p>
+<ol>
+<li><p>For each element <span class="math inline">\(g_{s-1}\)</span> of <span class="math inline">\(\mathbb{S}_{s-1} \notin \mathbb{S}^K_{s-1,e}\)</span>, compute a new shared secret <span class="math display">\[k^{base}_e*\mathbb{S}_{s-1}[g_{s-1}]\]</span></p></li>
+<li><p>Put all new shared secrets in <span class="math inline">\(\mathbb{S}^K_{s,e}\)</span>.</p></li>
+<li><p>If <span class="math inline">\(s = (N-M)\)</span>, compute the shared private key for each element <span class="math inline">\(x\)</span> in <span class="math inline">\(\mathbb{S}^K_{N-M,e}\)</span> <span class="math display">\[\mathbb{S}^{k}_{e}[x] = \mathcal{H}_n(\mathbb{S}^K_{N-M,e}[x])\]</span></p>
+<p>and overwrite the public key by setting <span class="math inline">\(\mathbb{S}^K_{N-M,e}[x] = \mathbb{S}^{k}_{e}[x]*G\)</span>.</p></li>
+<li><p>Send the other participants <span class="math inline">\(\mathbb{S}^K_{s,e}\)</span>.</p></li>
+</ol></li>
+<li><p>Each participant builds <span class="math inline">\(\mathbb{S}_{s}\)</span> by collecting all <span class="math inline">\(\mathbb{S}^K_{s,e}\)</span> and removing duplicates.<a href="#fn32" class="footnote-ref" id="fnref32" role="doc-noteref"><sup>32</sup></a></p></li>
+</ol></li>
+<li><p>Each participant sorts <span class="math inline">\(\mathbb{S}_{N-M}\)</span> according to the convention.</p></li>
+<li><p>The <span><code>premerge</code></span> function takes <span class="math inline">\(\mathbb{S}_{(N-M)}\)</span> as input, and each aggregation key is, for <span class="math inline">\(g \in \{1,...,(\textrm{size of }\mathbb{S}_{N-M})\}\)</span>, <span class="math display">\[\mathbb{K}^{agg,\textrm{MxN}}[g] = \mathcal{H}_n(T_{agg},\mathbb{S}_{(N-M)},\mathbb{S}_{(N-M)}[g])*\mathbb{S}_{(N-M)}[g]\]</span></p></li>
+<li><p>The <span><code>merge</code></span> function takes <span class="math inline">\(\mathbb{K}^{agg,\textrm{MxN}}\)</span> as input, and the group key is <span class="math display">\[K^{grp,\textrm{MxN}} = \sum^{\textrm{size of }\mathbb{S}_{N-M}}_{g = 1} \mathbb{K}^{agg,\textrm{MxN}}[g]\]</span></p></li>
+<li><p>Each participant <span class="math inline">\(e\)</span> overwrites each element <span class="math inline">\(x\)</span> in <span class="math inline">\(\mathbb{S}^k_{e}\)</span> with their aggregation private key <span class="math display">\[\mathbb{S}^k_{e}[x] = \mathcal{H}_n(T_{agg},\mathbb{S}_{(N-M)},\mathbb{S}^k_{e}[x] G)*\mathbb{S}^k_{e}[x]\]</span></p></li>
+</ol>
+<p>Note: If users want to have unequal signing power in a multisig, like 2 shares in a 3-of-4, they should use multiple starting key components instead of reusing the same one.</p>
+<h2 id="sec:general-key-families">Key families</h2>
+<p>Up to this point we have considered key aggregation between a simple group of signers. For example, Alice, Bob, and Carol each contributing key components to a 2-of-3 multisig address.</p>
+<p>Now imagine Alice wants to sign all transactions from that address, but doesn’t want Bob and Carol to sign without her. In other words, (Alice + Bob) or (Alice + Carol) are acceptable, but not (Bob + Carol).</p>
+<p>We can achieve that scenario with two layers of key aggregation. First a 1-of-2 multisig aggregation <span class="math inline">\(\mathbb{K}^{agg,{1\textrm{x}2}}_{BC}\)</span> between Bob and Carol, then a 2-of-2 group key <span class="math inline">\(K^{grp,{2\textrm{x}2}}\)</span> between Alice and <span class="math inline">\(\mathbb{K}^{agg,{1\textrm{x}2}}_{BC}\)</span>. Basically, a (2-of-([1-of-1] and [1-of-2])) multisig address.</p>
+<p>This implies access structures to signing rights can be fairly open-ended.</p>
+<h3 id="family-trees">Family trees</h3>
+<p>We can diagram the (2-of-([1-of-1] and [1-of-2])) multisig address like this:</p>
+<div class="center">
+<p>forked edges, for tree = <span>edge = <span>&lt;-, &gt; = triangle 60</span> ,fork sep = 4.5 mm, ,l sep = 8 mm ,circle, draw </span>, where n children=0<span>tier=terminus</span>, [<span class="math inline">\(K^{grp,{2\textrm{x}2}}\)</span> [<span class="math inline">\(K^{base}_A\)</span>] [<span class="math inline">\(\mathbb{K}^{agg,{1\textrm{x}2}}_{BC}\)</span> [<span class="math inline">\(K^{base}_B\)</span>] [<span class="math inline">\(K^{base}_C\)</span>] ] ]</p>
+</div>
+<p>The keys <span class="math inline">\(K^{base}_A,K^{base}_B,K^{base}_C\)</span> are considered <span><em>root ancestors</em></span>, while <span class="math inline">\(\mathbb{K}^{agg,{1\textrm{x}2}}_{BC}\)</span> is the <span><em>child</em></span> of <span><em>parents</em></span> <span class="math inline">\(K^{base}_B\)</span> and <span class="math inline">\(K^{base}_C\)</span>. Parents can have more than one child, though for conceptual clarity we consider each copy of a parent as distinct. This means there can be multiple root ancestors that are the same key.</p>
+<p>For example, in this 2-of-3 and 1-of-2 joined in a 2-of-2, Carol’s key <span class="math inline">\(K^{base}_C\)</span> is used twice and displayed twice:</p>
+<div class="center">
+<p>forked edges, for tree = <span>edge = <span>&lt;-, &gt; = triangle 60</span> ,fork sep = 4.5 mm, ,l sep = 8 mm ,circle, draw </span>, where n children=0<span>tier=terminus</span>, [<span class="math inline">\(K^{grp,{2\textrm{x}2}}\)</span> [<span class="math inline">\(\mathbb{K}^{agg,{2\textrm{x}3}}_{ABC}\)</span> [<span class="math inline">\(K^{base}_A\)</span>] [<span class="math inline">\(K^{base}_B\)</span>] [<span class="math inline">\(K^{base}_C\)</span>] ] [<span class="math inline">\(\mathbb{K}^{agg,{1\textrm{x}2}}_{CD}\)</span> [<span class="math inline">\(K^{base}_C\)</span>] [<span class="math inline">\(K^{base}_D\)</span>] ] ]</p>
+</div>
+<p>Separate sets <span class="math inline">\(\mathbb{S}\)</span> are defined for each multisig sub-coalition. There are three premerge sets in the previous example: <span class="math inline">\(\mathbb{S}^{\textrm{2x3}}_{ABC} = \{K^{sh,\textrm{2x3}}_{AB},K^{sh,\textrm{2x3}}_{BC},K^{sh,\textrm{2x3}}_{AC}\}\)</span>, <span class="math inline">\(\mathbb{S}^{\textrm{1x2}}_{CD} = \{K^{sh,\textrm{1x2}}_{CD}\}\)</span>, and <span class="math inline">\(\mathbb{S}^{\textrm{2x3}}_{final} = \{\mathbb{K}^{agg,{2\textrm{x}3}}_{ABC},\mathbb{K}^{agg,{1\textrm{x}2}}_{CD}\}\)</span>.</p>
+<h3 id="subsec:nesting-multisig-keys">Nesting multisig keys</h3>
+<p>Suppose we have the following key family</p>
+<div class="center">
+<p>forked edges, for tree = <span>edge = <span>&lt;-, &gt; = triangle 60</span> ,fork sep = 4.5 mm, ,l sep = 8 mm ,circle, draw </span>, where n children=0<span>tier=terminus</span>, [<span class="math inline">\(K^{grp,{2\textrm{x}3}}\)</span> [<span class="math inline">\(K^{grp,{2\textrm{x}3}}_{ABC}\)</span> [<span class="math inline">\(K^{base}_A\)</span>] [<span class="math inline">\(K^{base}_B\)</span>] [<span class="math inline">\(K^{base}_C\)</span>] ] [<span class="math inline">\(K^{base}_D\)</span>] [<span class="math inline">\(K^{base}_E\)</span>] ]</p>
+</div>
+<p>If we merge the keys in <span class="math inline">\(\mathbb{S}^{\textrm{2x3}}_{ABC}\)</span> corresponding to the first 2-of-3, we run into an issue at the next level. Let’s take just one shared secret, between <span class="math inline">\(K^{grp,\textrm{2x3}}_{ABC}\)</span> and <span class="math inline">\(K^{base}_D\)</span>, to illustrate: <span class="math display">\[k_{ABC,D} = \mathcal{H}_n(k^{grp,\textrm{2x3}}_{ABC} K^{base}_D)\]</span></p>
+<p>Now, two people from ABC could easily contribute aggregation key components so the sub-coalition can compute <span class="math display">\[k^{grp,\textrm{2x3}}_{ABC} K^{base}_D = \sum k^{agg,\textrm{2x3}}_{ABC} K^{base}_D\]</span></p>
+<p>The problem is everyone from ABC can compute <span class="math inline">\(k^{sh,\textrm{2x3}}_{ABC,D} = \mathcal{H}_n(k^{grp,\textrm{2x3}}_{ABC} K^{base}_D)\)</span>! If everyone from a lower-tier multisig knows all its private keys for a higher-tier multisig, then the lower-tier multisig might as well be 1-of-N.</p>
+<p>We get around this by not completely merging keys until the final child key. Instead, we just do <span><code>premerge</code></span> for all keys output by low-tier multisigs.</p>
+<h4 class="unnumbered" id="solution-for-nesting">Solution for nesting</h4>
+<p>To use <span class="math inline">\(\mathbb{K}^{agg,\textrm{MxN}}\)</span> in a new multisig, we pass it around just like a normal key, with one change. Operations involving <span class="math inline">\(\mathbb{K}^{agg,\textrm{MxN}}\)</span> use each of its member keys, instead of the merged group key. For example, the public ‘key’ of a shared secret between <span class="math inline">\(\mathbb{K}^{agg,\textrm{2x3}}_x\)</span> and <span class="math inline">\(K^{base}_A\)</span> would look like <span class="math display">\[\mathbb{K}^{sh,\textrm{1x2}}_{x,A} = \{ [\mathcal{H}_n(k^{base}_A \mathbb{K}^{agg,\textrm{2x3}}_x[1])*G], [\mathcal{H}_n(k^{base}_A \mathbb{K}^{agg,\textrm{2x3}}_x[2])*G], ...\}\]</span></p>
+<p>This way all members of <span class="math inline">\(\mathbb{K}^{agg,\textrm{2x3}}_x\)</span> only know shared secrets corresponding to their private keys from the lower-tier 2-of-3 multisig. An operation between a keyset of size two <span class="math inline">\({}^{2}\mathbb{K}_A\)</span> and keyset of size three <span class="math inline">\({}^{3}\mathbb{K}_B\)</span> would produce a keyset of size six <span class="math inline">\({}^{6}\mathbb{K}_{AB}\)</span>. We can generalize all keys in a key family as keysets, where single keys are denoted <span class="math inline">\({}^{1}\mathbb{K}\)</span>. Elements of a keyset are ordered according to some convention (i.e. smallest to largest numerically), and sets containing keysets (e.g. <span class="math inline">\(\mathbb{S}\)</span> sets) are ordered by the first element in each keyset, according to some convention.<br />
+We let the key sets propagate through the family structure, with each nested multisig group sending their <span><code>premerge</code></span> aggregation set as the ‘base key’ for the next level,<a href="#fn33" class="footnote-ref" id="fnref33" role="doc-noteref"><sup>33</sup></a> until the last child’s aggregation set appears, at which point <span><code>merge</code></span> is finally used.<br />
+Users should store their base private keys, the aggregation private keys for all levels of a multisig family structure, and the public keys for all levels. Doing so facilitates creating new structures, <span><code>merging</code></span> nested multisigs, and collaborating with other signers to rebuild a structure if there is a problem.</p>
+<h3 id="implications-for-monero">Implications for Monero</h3>
+<p>Each sub-coalition contributing to the final key needs to contribute components to Monero transactions (such as the opening values <span class="math inline">\(\alpha G\)</span>), and so every sub-sub-coalition needs to contribute to its child sub-coalition.</p>
+<p>This means every root ancestor, even when there are multiple copies of the same key in the family structure, must contribute one root component to their child, and each child one component to its child and so on. We use simple sums at each level.</p>
+<p>For example, let’s take this family</p>
+<div class="center">
+<p>forked edges, for tree = <span>edge = <span>&lt;-, &gt; = triangle 60</span> ,fork sep = 4.5 mm, ,l sep = 8 mm ,circle, draw </span>, where n children=0<span>tier=terminus</span>, [<span class="math inline">\({}^{1}\mathbb{K}^{grp,{2\textrm{x}2}}\)</span> [<span class="math inline">\({}^{1}\mathbb{K}^{base}_A\)</span>] [<span class="math inline">\({}^{2}\mathbb{K}^{agg,{2\textrm{x}2}}_{AB}\)</span> [<span class="math inline">\({}^{1}\mathbb{K}^{base}_A\)</span>] [<span class="math inline">\({}^{1}\mathbb{K}^{base}_B\)</span>] ] ]</p>
+</div>
+<p>Say they need to compute some group value <span class="math inline">\(x\)</span> for a signature. Root ancestors contribute: <span class="math inline">\(x_{A,1}\)</span>, <span class="math inline">\(x_{A,2}\)</span>, <span class="math inline">\(x_B\)</span>. The total is <span class="math inline">\(x = x_{A,1} + x_{A,2} + x_B\)</span>.</p>
+<p>There are currently no implementations of nested multisig in Monero.</p>
+<section class="footnotes" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1" role="doc-endnote"><p>Multisignatures have a diversity of applications, from corporate accounts to newspaper subscriptions to online marketplaces.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>As of this writing we are aware of three multisig implementations. First is a very basic manual process using the CLI (command line interface) <span class="citation" data-cites="cli-22multisig-instructions"></span>. Second is the truly excellent MMS (Multisig Messaging System) which enables secure, highly automated multisig via the CLI <span class="citation" data-cites="mms-manual mms-project-proposal"></span>. Third is the commercially available ‘Exa Wallet’, which has initial release code available on their Github repository at <a href="https://github.com/exantech">https://github.com/exantech</a> (it does not appear up to date with current release version). All three of these rely on the same fundamental core team’s codebase, which essentially means only one implementation exists.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>If at least one honest participant uses components selected randomly from a uniform distribution, then keys aggregated by a simple sum are indistinguishable <span class="citation" data-cites="SCOZZAFAVA1993313"></span> from normal keys.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4" role="doc-endnote"><p>The random masks could easily be derived from some password. For example, <span class="math inline">\(\mu^s = \mathcal{H}_n(password)\)</span> and <span class="math inline">\(\mu^v = \mathcal{H}_n(\mu^s)\)</span>. Or, as is done in Monero, mask the spend and view keys with a string e.g. <span class="math inline">\(\mu^s,\mu^v =\)</span> “Multisig". This implies Monero only supports one multisig base spend key per normal address, although in reality making a wallet multisig causes users to lose access to the original wallet <span class="citation" data-cites="cli-22multisig-instructions"></span>. Users must make a new wallet with their normal address to access its funds, assuming the multisig wasn’t made from a brand new normal address.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5" role="doc-endnote"><p>As we will see in Section <a href="#sec:smaller-thresholds" data-reference-type="ref" data-reference="sec:smaller-thresholds">1.6</a>, key aggregation does not work on M-of-N multisig when M <span class="math inline">\(&lt;\)</span> N due to the presence of shared secrets.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6" role="doc-endnote"><p>Monero’s current (and first) iteration of multisig, made available in April 2018 <span class="citation" data-cites="lithiumluna-v7"></span> (with M-of-N integration following in October 2018 <span class="citation" data-cites="berylliumbullet-v8"></span>), used this naive key aggregation, and required users sign their spend key components.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7" role="doc-endnote"><p><span class="math inline">\(\mathbb{S}^{base}\)</span> needs to be ordered consistently so participants can be sure they are all hashing the same thing.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8" role="doc-endnote"><p>Recalling Section <a href="#sec:CLSAG" data-reference-type="ref" data-reference="sec:CLSAG">[sec:CLSAG]</a>, hash functions should be domain separated by prefixing them with tags, e.g. <span class="math inline">\(T_{agg} =\)</span> “Multisig_Aggregation". We leave tags out for examples like the next section’s Schnorr signatures.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9" role="doc-endnote"><p>It is important to include <span class="math inline">\(\mathbb{S}^{base}\)</span> in the aggregation hashes to avoid sophisticated key cancellation attacks involving Wagner’s generalized solution to the birthday problem <span class="citation" data-cites="generalized-birthday-wagner"></span>. <span class="citation" data-cites="adam-wagnerian-tragedies"></span> <span class="citation" data-cites="maxwell2018simple-musig"></span><a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10" role="doc-endnote"><p>As we will see later, key aggregation only meets the plain public-key model for N-of-N and 1-of-N multisig.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11" role="doc-endnote"><p>Notation: <span class="math inline">\(\mathbb{K}^{agg}[e]\)</span> is the eelement of the set.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12" role="doc-endnote"><p>Robust key aggregation has not yet been implemented in Monero, but since participants can store and use private key <span class="math inline">\(k^{agg}_e\)</span> (for naive key aggregation, <span class="math inline">\(k^{agg}_e = k^{base}_e\)</span>), updating Monero to use robust key aggregation will only change the premerge process.<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13" role="doc-endnote"><p>As in Section <a href="#sec:schnorr-fiat-shamir" data-reference-type="ref" data-reference="sec:schnorr-fiat-shamir">[sec:schnorr-fiat-shamir]</a>, it is important not to reuse <span class="math inline">\(\alpha_e\)</span> for different challenges <span class="math inline">\(c\)</span>. This means to reset a multisignature process where responses have been sent out, it should start again from the beginning with new <span class="math inline">\(\alpha_e\)</span> values.<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn14" role="doc-endnote"><p>Commit-and-reveal is not used in the current implementation of Monero multisig, although it is being looked at for future releases. <span class="citation" data-cites="multisig-research-issue-67"></span><a href="#fnref14" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn15" role="doc-endnote"><p>Multisig subaddresses are supported in Monero.<a href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn16" role="doc-endnote"><p>There is no need to commit-and-reveal these since the commitments to zero are known by all signers.<a href="#fnref16" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn17" role="doc-endnote"><p>If <span class="math inline">\(K^{o,grp}_{\pi,j}\)</span> is built from an <span class="math inline">\(i\)</span>-indexed multisig subaddress, then (from Section <a href="#sec:subaddresses" data-reference-type="ref" data-reference="sec:subaddresses">[sec:subaddresses]</a>) its private key is a composite: <span class="math display">\[k^{o,grp}_{\pi,j} = \mathcal{H}_n(k^{v,grp} r_{u_j} K^{s,grp,i}, u_j) + \sum_e k^{s,agg}_e + \mathcal{H}_n(k^{v,grp},i)\]</span><a href="#fnref17" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn18" role="doc-endnote"><p>If the one-time address corresponds to an <span class="math inline">\(i\)</span>-indexed multisig subaddress, add <span class="math display">\[\tilde{K}^{o,grp}_j = ... + \mathcal{H}_n(k^{v,grp},i) \mathcal{H}_p(K^{o,grp}_{\pi,j})\]</span><a href="#fnref18" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn19" role="doc-endnote"><p>If the one-time address <span class="math inline">\(K^{o,grp}_{\pi,j}\)</span> corresponds to an <span class="math inline">\(i\)</span>-indexed multisig subaddress, include <span class="math display">\[r_{\pi,j} = ... - c_{\pi}*\mathcal{H}_n(k^{v,grp},i)\]</span><a href="#fnref19" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn20" role="doc-endnote"><p>Or transaction private keys <span class="math inline">\(r_{t}\)</span> if sending to at least one subaddress.<a href="#fnref20" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn21" role="doc-endnote"><p>Note that we simplify the signing process by letting the initiator generate random scalars <span class="math inline">\(r_{i,j}\)</span> and <span class="math inline">\(r^z_{i,j}\)</span>, instead of each co-signer generating components that eventually get summed together.<a href="#fnref21" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn22" role="doc-endnote"><p>He doesn’t need to send the output amounts <span class="math inline">\(b_t\)</span> directly, as they can be computed from <span class="math inline">\(\mathit{amount}_t\)</span>. Monero takes the reasonable approach of creating a partial transaction filled with the information selected by the initiator, and sending that to other cosigners along with a list of related information like transaction private keys, destination addresses, the real inputs, etc.<a href="#fnref22" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn23" role="doc-endnote"><p>It is imperative that each signing attempt by a signer use a unique <span class="math inline">\(\alpha_{j,e}\)</span>, to avoid leaking his private spend key to other signers (recall Section <a href="#sec:schnorr-fiat-shamir" data-reference-type="ref" data-reference="sec:schnorr-fiat-shamir">[sec:schnorr-fiat-shamir]</a>) <span class="citation" data-cites="MRL-0009-multisig"></span>. Wallets should fundamentally enforce this by always deleting <span class="math inline">\(\alpha_{j,e}\)</span> whenever a response that uses it has been transmitted outside of the wallet.<a href="#fnref23" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn24" role="doc-endnote"><p>Currently Monero appears to use a simple sum.<a href="#fnref24" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn25" role="doc-endnote"><p>If the one-time address corresponds to an <span class="math inline">\(i\)</span>-indexed multisig subaddress, add <span class="math display">\[\tilde{K}^{o,grp} = ... + \mathcal{H}_n(k^{v,grp},i) \mathcal{H}_p(K^{o,grp})\]</span><a href="#fnref25" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn26" role="doc-endnote"><p>This proof should include domain separation and key prefixing, which we omit for brevity.<a href="#fnref26" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn27" role="doc-endnote"><p>If the one-time address <span class="math inline">\(K^{o,grp}\)</span> corresponds to an <span class="math inline">\(i\)</span>-indexed multisig subaddress, include <span class="math display">\[r^{resp} = ... - c*\mathcal{H}_n(k^{v,grp},i)\]</span><a href="#fnref27" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn28" role="doc-endnote"><p>Note that key cancellation is largely meaningless here because everyone knows the full private key.<a href="#fnref28" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn29" role="doc-endnote"><p>Since the merged key is composed of shared secrets, an observer who just knows the original base public keys would not be able to aggregate them (Section <a href="#subsec:drawbacks-naive-aggregation-cancellation" data-reference-type="ref" data-reference="subsec:drawbacks-naive-aggregation-cancellation">1.2.2</a>) and identify members of the merged key.<a href="#fnref29" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn30" role="doc-endnote"><p>In practice this means an initiator should determine which subset of M signers will sign a given message. If he discovers O signers are willing to sign, with (O <span class="math inline">\(\geq\)</span> M), he can orchestrate multiple concurrent signing attempts for each M-size subset within O to increase the chances of one succeeding. It appears Monero uses this approach. It also turns out (an esoteric point) that the <span><em>original</em></span> list of output destinations created by the initiator is randomly shuffled, and that random list is then used by all concurrent signing attempts, and all other co-signers (this is related to the obscure flag <span><code>shuffle_outs</code></span>).<a href="#fnref30" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn31" role="doc-endnote"><p>Currently Monero appears to use a round-robin signing method, where the initiator signs with all his private keys, passes the partially signed transaction to another signer who signs with all <span><em>his</em></span> private keys (that have not been used to sign with yet), who passes to yet another signer, and so on, until the final signer who can either publish the transaction or send it to other signers so they can publish it.<a href="#fnref31" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn32" role="doc-endnote"><p>Participants should keep track of who has which keys at the last stage (<span class="math inline">\(s = N-M\)</span>), to facilitate collaborative signing, where only the first person in <span class="math inline">\(\mathbb{S}_0\)</span> with a certain private key uses it to sign. See Section <a href="#sec:n-1-of-n" data-reference-type="ref" data-reference="sec:n-1-of-n">1.6.2</a>.<a href="#fnref32" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn33" role="doc-endnote"><p>Note that <span><code>premerge</code></span> needs to be done to the outputs of <span><em>all</em></span> nested multisigs, even when an N’-of-N’ multisig is nested into an N-of-N, because the set <span class="math inline">\(\mathbb{S}\)</span> will change.<a href="#fnref33" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+</body>
+</html>

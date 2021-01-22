@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>introduction.tex</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">introduction.tex</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#chapter:introduction">Introduction</a>
+<ul>
+<li><a href="#sec:goals">Objectives</a></li>
+<li><a href="#readership">Readership</a></li>
+<li><a href="#origins-of-the-monero-cryptocurrency">Origins of the Monero cryptocurrency</a></li>
+<li><a href="#outline">Outline</a>
+<ul>
+<li><a href="#part-1-essentials">Part 1: ‘Essentials’</a></li>
+<li><a href="#part-2-extensions">Part 2: ‘Extensions’</a></li>
+<li><a href="#additional-content">Additional content</a></li>
+</ul></li>
+<li><a href="#disclaimer">Disclaimer</a></li>
+<li><a href="#history-of-zero-to-monero">History of Zero to Monero</a></li>
+<li><a href="#sec:acknowledgements">Acknowledgements</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="chapter:introduction">Introduction</h1>
+<p>In the digital realm it is often trivial to make endless copies of information, with equally endless alterations. For a currency to exist digitally and be widely adopted, its users must believe its supply is strictly limited. A money recipient must trust they are not receiving counterfeit coins, or coins that have already been sent to someone else. To accomplish that without requiring the collaboration of any third party like a central authority, its supply and complete transaction history must be publicly verifiable.</p>
+<p>We can use cryptographic tools to allow data registered in an easily accessible database - the blockchain - to be virtually immutable and unforgeable, with legitimacy that cannot be disputed by any party.<br />
+Cryptocurrencies store transactions in the blockchain, which acts as a public ledger<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> of all the currency operations. Most cryptocurrencies store transactions in clear text, to facilitate verification of transactions by the community of users.<br />
+Clearly, an open blockchain defies any basic understanding of privacy or fungibility<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, since it literally <span><em>publicizes</em></span> the complete transaction histories of its users.<br />
+To address the lack of privacy, users of cryptocurrencies such as Bitcoin can obfuscate transactions by using temporary intermediate addresses <span class="citation" data-cites="DBLP:journals/corr/NarayananM17"></span>. However, with appropriate tools it is possible to analyze flows and to a large extent link true senders with receivers <span class="citation" data-cites="DBLP:journals/corr/ShenTuY15b DK-police-tracing-btc Andrew-Cox-Sandia chainalysis-2020-report"></span>.</p>
+<p>In contrast, the cryptocurrency Monero (Moe-neh-row) attempts to tackle the issue of privacy by storing only single-use addresses for receipt of funds in the blockchain, and by authenticating the dispersal of funds in each transaction with ring signatures. With these methods there are no known generally effective ways to link receivers or trace the origin of funds.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>Additionally, transaction amounts in the Monero blockchain are concealed behind cryptographic constructions, rendering currency flows opaque.</p>
+<p>The result is a cryptocurrency with a high level of privacy and fungibility.</p>
+<h2 id="sec:goals">Objectives</h2>
+<p>Monero is an established cryptocurrency with over five years of development <span class="citation" data-cites="bitmonero-launched monero-history"></span>, and maintains a steadily increasing level of adoption <span class="citation" data-cites="justin-defcon-2019-community-growth"></span>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> Unfortunately, there is little comprehensive documentation describing the mechanisms it uses.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> Even worse, essential parts of its theoretical framework have been published in non-peer-reviewed papers that are incomplete or contain errors. For significant parts of the theoretical framework of Monero, only the source code is reliable as a source of information.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
+<p>Moreover, for those without a background in mathematics, learning the basics of elliptic curve cryptography, which Monero uses extensively, can be a haphazard and frustrating endeavor.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p>
+<p>We intend to palliate this situation by introducing the fundamental concepts necessary to understand elliptic curve cryptography, reviewing algorithms and cryptographic schemes, and collecting in-depth information about Monero’s inner workings.</p>
+<p>To provide the best experience for our readers, we have taken care to build a constructive, step-by-step description of the Monero cryptocurrency.</p>
+<p>In the second edition of this report we have centered our attention on version 12 of the Monero protocol<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a>, corresponding to version 0.15.x.x of the Monero software suite. All transaction and blockchain-related mechanisms described here belong to those versions.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a><a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a> Deprecated transaction schemes have not been explored to any extent, even if they may be partially supported for backward compatibility. Likewise with deprecated blockchain features. The first edition <span class="citation" data-cites="ztm-1"></span> corresponded to version 7 of the protocol, and version 0.12.x.x of the software suite.</p>
+<h2 id="readership">Readership</h2>
+<p>We anticipate many readers will encounter this report with little to no understanding of discrete mathematics, algebraic structures, cryptography<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a>, and blockchains. We have tried to be thorough enough that laypeople from all perspectives may learn Monero without needing external research.</p>
+<p>We have purposefully omitted, or delegated to footnotes, some mathematical technicalities, when they would be in the way of clarity. We have also omitted concrete implementation details where we thought they were not essential. Our objective has been to present the subject half-way between mathematical cryptography and computer programming, aiming at completeness and conceptual clarity.<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a></p>
+<h2 id="origins-of-the-monero-cryptocurrency">Origins of the Monero cryptocurrency</h2>
+<p>The cryptocurrency Monero, initially known as BitMonero, was created in April 2014 as a derivative of the proof-of-concept currency CryptoNote <span class="citation" data-cites="bitmonero-launched"></span>. Monero means ‘money’ in the language Esperanto, and its plural form is Moneroj (Moe-neh-rowje, similar to Moneros but using the -ge from orange).</p>
+<p>CryptoNote is a cryptocurrency devised by various individuals. A landmark whitepaper describing it was published under the pseudonym of Nicolas van Saberhagen in October 2013 <span class="citation" data-cites="cryptoNoteWhitePaper"></span>. It offered receiver anonymity through the use of one-time addresses, and sender ambiguity by means of ring signatures.</p>
+<p>Since its inception, Monero has further strengthened its privacy aspects by implementing amount hiding, as described by Greg Maxwell (among others) in <span class="citation" data-cites="Signatures2015BorromeanRS"></span> and integrated into ring signatures based on Shen Noether’s recommendations in <span class="citation" data-cites="MRL-0005-ringct"></span>, then made more efficient with Bulletproofs <span class="citation" data-cites="Bulletproofs_paper"></span>.</p>
+<h2 id="outline">Outline</h2>
+<p>As mentioned, our aim is to deliver a self-contained and step-by-step description of the Monero cryptocurrency. Zero to Monero has been structured to fulfill this objective, leading the reader through all parts of the currency’s inner workings.</p>
+<h3 id="part-1-essentials">Part 1: ‘Essentials’</h3>
+<p>In our quest for comprehensiveness, we have chosen to present all the basic elements of cryptography needed to understand the complexities of Monero, and their mathematical antecedents. In Chapter <a href="#chapter:basicConcepts" data-reference-type="ref" data-reference="chapter:basicConcepts">[chapter:basicConcepts]</a> we develop essential aspects of elliptic curve cryptography.</p>
+<p>Chapter <a href="#chapter:advanced-schnorr" data-reference-type="ref" data-reference="chapter:advanced-schnorr">[chapter:advanced-schnorr]</a> expands on the Schnorr signature scheme from the prior chapter, and outlines the ring signature algorithms that will be applied to achieve confidential transactions.</p>
+<p>Chapter <a href="#chapter:addresses" data-reference-type="ref" data-reference="chapter:addresses">[chapter:addresses]</a> explores how Monero uses addresses to control ownership of funds, and the different kinds of addresses.</p>
+<p>In Chapter <a href="#chapter:pedersen-commitments" data-reference-type="ref" data-reference="chapter:pedersen-commitments">[chapter:pedersen-commitments]</a> we introduce the cryptographic mechanisms used to conceal amounts.</p>
+<p>With all the components in place, we explain the transaction scheme used in Monero in Chapter <a href="#chapter:transactions" data-reference-type="ref" data-reference="chapter:transactions">[chapter:transactions]</a>.</p>
+<p>The Monero blockchain is unfolded in Chapter <a href="#chapter:blockchain" data-reference-type="ref" data-reference="chapter:blockchain">[chapter:blockchain]</a>.</p>
+<h3 id="part-2-extensions">Part 2: ‘Extensions’</h3>
+<p>A cryptocurrency is more than just its protocol, and in ‘Extensions’ we talk about a number of different ideas, many of which have not been implemented.<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a></p>
+<p>Various information about a transaction can be proven to observers, and those methods are the content of Chapter <a href="#chapter:tx-knowledge-proofs" data-reference-type="ref" data-reference="chapter:tx-knowledge-proofs">[chapter:tx-knowledge-proofs]</a>.</p>
+<p>While not essential to the operation of Monero, there is a lot of utility in multisignatures that allow multiple people to send and receive money collaboratively. Chapter <a href="#chapter:multisignatures" data-reference-type="ref" data-reference="chapter:multisignatures">[chapter:multisignatures]</a> describes Monero’s current multisignature approach and outlines possible future developments in that area.</p>
+<p>Of extreme importance is applying multisig to the interactions of vendors and shoppers in online marketplaces. Chapter <a href="#chapter:escrowed-market" data-reference-type="ref" data-reference="chapter:escrowed-market">[chapter:escrowed-market]</a> constitutes our original design of an escrowed marketplace using Monero multisig.</p>
+<p>First presented here, TxTangle, outlined in Chapter <a href="#chapter:txtangle" data-reference-type="ref" data-reference="chapter:txtangle">[chapter:txtangle]</a>, is a decentralized protocol for joining the transactions of multiple individuals into one.</p>
+<h3 id="additional-content">Additional content</h3>
+<p>Appendix <a href="#appendix:RCTTypeBulletproof2" data-reference-type="ref" data-reference="appendix:RCTTypeBulletproof2">[appendix:RCTTypeBulletproof2]</a> explains the structure of a sample transaction from the blockchain. Appendix <a href="#appendix:block-content" data-reference-type="ref" data-reference="appendix:block-content">[appendix:block-content]</a> explains the structure of blocks (including block headers and miner transactions) in Monero’s blockchain. Finally, Appendix <a href="#appendix:genesis-block" data-reference-type="ref" data-reference="appendix:genesis-block">[appendix:genesis-block]</a> brings our report to a close by explaining the structure of Monero’s genesis block. These provide a connection between the theoretical elements described in earlier sections with their real-life implementation.</p>
+<p>We use margin notes to indicate where Monero implementation details can be found in the source code.<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a> There is usually a file path, such as src/ringct/rctOps.cpp, and a function, such as <span class="math inline">\(\textrm{{\tt ecdhEncode()}}\)</span>. Note: ‘-’ indicates split text, such as crypto- note <span class="math inline">\(\rightarrow\)</span> cryptonote, and we neglect namespace qualifiers (e.g. <span><code>Blockchain::</code></span>) in most cases.</p>
+<h2 id="disclaimer">Disclaimer</h2>
+<p>All signature schemes, applications of elliptic curves, and Monero implementation details should be considered descriptive only. Readers considering serious practical applications (as opposed to a hobbyist’s explorations) should consult primary sources and technical specifications (which we have cited where possible). Signature schemes need well-vetted security proofs, and Monero implementation details can be found in Monero’s source code. In particular, as a common saying goes, ‘don’t roll your own crypto’. Code implementing cryptographic primitives should be well-reviewed by experts and have a long history of dependable performance. Moreover, original contributions in this document may not be well-reviewed and are likely untested, so readers should exercise their judgement when reading them.</p>
+<h2 id="history-of-zero-to-monero">History of Zero to Monero</h2>
+<p>Zero to Monero is an expansion of Kurt Alonso’s master’s thesis, ‘Monero - Privacy in the Blockchain’ <span class="citation" data-cites="kurt-original"></span>, published in May 2018. The first edition was published in June 2018 <span class="citation" data-cites="ztm-1"></span>.</p>
+<p>For the second edition we have improved how ring signatures are introduced (Chapter <a href="#chapter:advanced-schnorr" data-reference-type="ref" data-reference="chapter:advanced-schnorr">[chapter:advanced-schnorr]</a>), reorganized how transactions are explained (added Chapter <a href="#chapter:addresses" data-reference-type="ref" data-reference="chapter:addresses">[chapter:addresses]</a> on Monero Addresses), modernized the method used to communicate output amounts (Section <a href="#sec:pedersen_monero" data-reference-type="ref" data-reference="sec:pedersen_monero">[sec:pedersen_monero]</a>), replaced Borromean ring signatures with Bulletproofs (Section <a href="#sec:range_proofs" data-reference-type="ref" data-reference="sec:range_proofs">[sec:range_proofs]</a>), deprecated <span><code>RCTTypeFull</code></span> (Chapter <a href="#chapter:transactions" data-reference-type="ref" data-reference="chapter:transactions">[chapter:transactions]</a>), updated and elaborated Monero’s dynamic block weight and fee system (Chapter <a href="#chapter:blockchain" data-reference-type="ref" data-reference="chapter:blockchain">[chapter:blockchain]</a>), investigated transaction-related proofs (Chapter <a href="#chapter:tx-knowledge-proofs" data-reference-type="ref" data-reference="chapter:tx-knowledge-proofs">[chapter:tx-knowledge-proofs]</a>), described Monero multisignatures (Chapter <a href="#chapter:multisignatures" data-reference-type="ref" data-reference="chapter:multisignatures">[chapter:multisignatures]</a>), designed solutions for escrowed marketplaces (Chapter <a href="#chapter:escrowed-market" data-reference-type="ref" data-reference="chapter:escrowed-market">[chapter:escrowed-market]</a>), proposed a new decentralized joint transaction protocol named TxTangle (Chapter <a href="#chapter:txtangle" data-reference-type="ref" data-reference="chapter:txtangle">[chapter:txtangle]</a>), updated or added various minor details to align with the most current protocol (v12) and Monero software suite (v0.15.x.x), and scoured the document for quality-of-reading edits.<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a></p>
+<h2 id="sec:acknowledgements">Acknowledgements</h2>
+<p>Written by author ‘koe’.</p>
+<p>This report would not exist without Kurt’s original master’s thesis <span class="citation" data-cites="kurt-original"></span>, so to him I owe a great debt of gratitude. Monero Research Lab (MRL) researchers Brandon “Surae Noether" Goodell and pseudonymous ‘Sarang Noether’ (who collaborated with me on Section <a href="#sec:range_proofs" data-reference-type="ref" data-reference="sec:range_proofs">[sec:range_proofs]</a> and Chapter <a href="#chapter:tx-knowledge-proofs" data-reference-type="ref" data-reference="chapter:tx-knowledge-proofs">[chapter:tx-knowledge-proofs]</a>) have been a reliable and knowledgeable resource throughout both editions of Zero to Monero’s development. Pseudonymous ‘moneromooo’, the Monero Project’s most prolific core developer, has probably the most extensive understanding of the codebase on this planet, and has pointed me in the right direction numerous times. And of course, many other wonderful Monero contributors have spent time answering my endless questions. Finally, to the various individuals who contacted us with proofreading feedback, and encouraging comments, thank you!</p>
+<section class="footnotes" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1" role="doc-endnote"><p>In this context ledger just means a record of all currency creation and exchange events. Specifically, how much money was transferred in each event and to whom.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>“<strong>Fungible</strong> means capable of mutual substitution in use or satisfaction of a contract. ... Examples: ... money, etc."<span class="citation" data-cites="mises-org-fungible"></span> In an open blockchain such as Bitcoin, the coins owned by Alice can be differentiated from those owned by Bob based on the ‘transaction history’ of those coins. If Alice’s transaction history includes transactions related to supposedly nefarious actors, then her coins might be ‘tainted’ <span class="citation" data-cites="bitcoin-big-bang-taint"></span>, and hence less valuable than Bob’s (even if they own the same amount of coins). Reputable figures claim that newly minted Bitcoins trade at a premium over used coins, since they don’t have a history <span class="citation" data-cites="new-bitcoin-premium"></span>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>Depending on the behavior of users, there may be cases where transactions can be analyzed to some extent. For an example see this article: <span class="citation" data-cites="monero-ring-heuristics-ryo"></span>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4" role="doc-endnote"><p><span id="marketcap_note" label="marketcap_note">[marketcap_note]</span>In terms of market capitalization, Monero has been steady relative to other cryptocurrencies. It was 14as of June 14, 2018, and 12on January 5, 2020; see <a href="https://coinmarketcap.com/">https://coinmarketcap.com/</a>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5" role="doc-endnote"><p>One documentation effort, at <a href="https://monerodocs.org/">https://monerodocs.org/</a>, has some helpful entries, especially related to the Command Line Interface. The CLI is a Monero wallet accessible through a console/terminal. It has the most functionality out of all Monero wallets, at the expense of no user-friendly graphical interface.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6" role="doc-endnote"><p>Another, more general, documentation effort called Mastering Monero can be found here: <span class="citation" data-cites="mastering-monero"></span>.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7" role="doc-endnote"><p>Mr. Seguias has created the excellent Monero Building Blocks series <span class="citation" data-cites="monero-building-blocks"></span>, which contains a thorough treatment of the cryptographic security proofs used to justify Monero’s signature schemes. As with Zero to Monero: First Edition <span class="citation" data-cites="ztm-1"></span>, Seguias’s series is focused on v7 of the protocol.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8" role="doc-endnote"><p>A previous attempt to explain how Monero works <span class="citation" data-cites="MRL-0003-about-monero"></span> did not elucidate elliptic curve cryptography, was incomplete, and is now over five years outdated.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9" role="doc-endnote"><p>The ‘protocol’ is the set of rules that each new block is tested against before it can be added to the blockchain. This set of rules includes the ‘transaction protocol’ (currently version 2, RingCT), which are general rules pertaining to how a transaction is constructed. Specific transaction rules can, and do, change, without the transaction protocol’s version changing. Only large-scale changes to the transaction structure warrant moving its version number.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10" role="doc-endnote"><p>The Monero codebase’s integrity and reliability is predicated on assuming enough people have reviewed it to catch most or all significant errors. We hope that readers will not take our explanations for granted, and verify for themselves the code does what it’s supposed to. If it doesn’t, we hope you will make a responsible disclosure (<a href="https://hackerone.com/monero">https://hackerone.com/monero</a>) for major problems, or Github pull request (<a href="https://github.com/monero-project/monero">https://github.com/monero-project/monero</a>) for minor issues.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11" role="doc-endnote"><p>Several protocols worth considering for the next generation of Monero transactions are undergoing research and investigation, including Triptych <span class="citation" data-cites="triptych-preprint"></span>, RingCT3.0 <span class="citation" data-cites="ringct3-preprint"></span>, Omniring <span class="citation" data-cites="omniring-paper"></span>, and Lelantus <span class="citation" data-cites="lelantus-preprint"></span>.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12" role="doc-endnote"><p>An extensive textbook on applied cryptography can be found here: <span class="citation" data-cites="applied-cryptography-textbook"></span>.<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13" role="doc-endnote"><p>Some footnotes, especially in chapters related to the protocol, spoil future chapters or sections. These are intended to make more sense on a second read-through, since they usually involve specific implementation details that are only useful to those who have a grasp of how Monero works.<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn14" role="doc-endnote"><p>Please note that future protocol versions of Monero, especially those implementing new transaction protocols, may make any or all of these ideas impossible or impractical.<a href="#fnref14" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn15" role="doc-endnote"><p>Our margin notes are accurate for version 0.15.x.x of the Monero software suite, but may gradually become inaccurate as the codebase is constantly changing. However, the code is stored in a git repository (<a href="https://github.com/monero-project/monero">https://github.com/monero-project/monero</a>), so a complete history of changes is available.<a href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn16" role="doc-endnote"><p>The LaTeX source code for both editions of Zero to Monero can be found here (the first edition is in branch ‘ztm1’): <a href="https://github.com/UkoeHB/Monero-RCT-report">https://github.com/UkoeHB/Monero-RCT-report</a>.<a href="#fnref16" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+</body>
+</html>

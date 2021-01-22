@@ -1,5 +1,5 @@
 #!/bin/sh
 
 for file in $(ls content); do
-    pandoc -s "content/${file}" -o "markdown/${file}.md"
+    pandoc --metadata title="${file}" --toc --standalone --mathjax -t html -s "content/${file}" -t html -o "html/${file}.html"
 done

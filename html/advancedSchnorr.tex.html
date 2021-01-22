@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>advancedSchnorr.tex</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">advancedSchnorr.tex</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#chapter:advanced-schnorr">Advanced Schnorr-like Signatures</a>
+<ul>
+<li><a href="#sec:proofs-discrete-logarithm-multiple-bases">Prove knowledge of a discrete logarithm across multiple bases</a>
+<ul>
+<li><a href="#non-interactive-proof">Non-interactive proof</a></li>
+<li><a href="#verification">Verification</a></li>
+<li><a href="#why-it-works">Why it works</a></li>
+</ul></li>
+<li><a href="#sec:multiple_private_keys_in_one_proof">Multiple private keys in one proof</a>
+<ul>
+<li><a href="#non-interactive-proof-1">Non-interactive proof</a></li>
+<li><a href="#verification-1">Verification</a></li>
+</ul></li>
+<li><a href="#SAG_section">Spontaneous Anonymous Group (SAG) signatures</a>
+<ul>
+<li><a href="#signature">Signature</a></li>
+<li><a href="#verification-2">Verification</a></li>
+<li><a href="#why-it-works-1">Why it works</a></li>
+</ul></li>
+<li><a href="#blsag_note">Back’s Linkable Spontaneous Anonymous Group (bLSAG) signatures</a>
+<ul>
+<li><a href="#signature-1">Signature</a></li>
+<li><a href="#verification-3">Verification</a></li>
+<li><a href="#linkability">Linkability</a></li>
+</ul></li>
+<li><a href="#sec:MLSAG">Multilayer Linkable Spontaneous Anonymous Group (MLSAG) signatures</a>
+<ul>
+<li><a href="#signature-2">Signature</a></li>
+<li><a href="#verification-4">Verification</a></li>
+<li><a href="#why-it-works-2">Why it works</a></li>
+<li><a href="#linkability-1">Linkability</a></li>
+<li><a href="#space-requirements">Space requirements</a></li>
+</ul></li>
+<li><a href="#sec:CLSAG">Concise Linkable Spontaneous Anonymous Group (CLSAG) signatures</a>
+<ul>
+<li><a href="#signature-3">Signature</a></li>
+<li><a href="#verification-5">Verification</a></li>
+<li><a href="#why-it-works-3">Why it works</a></li>
+<li><a href="#linkability-2">Linkability</a></li>
+<li><a href="#space-requirements-1">Space requirements</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="chapter:advanced-schnorr">Advanced Schnorr-like Signatures</h1>
+<p>A basic Schnorr signature has one signing key. As it happens, we can apply its core concepts to create a variety of progressively more complex signature schemes. One of those schemes, MLSAG, will be of central importance in Monero’s transaction protocol.</p>
+<h2 id="sec:proofs-discrete-logarithm-multiple-bases">Prove knowledge of a discrete logarithm across multiple bases</h2>
+<p>It is often useful to prove the same private key was used to construct public keys on different ‘base’ keys. For example, we could have a normal public key <span class="math inline">\(k G\)</span>, and a Diffie-Hellman shared secret <span class="math inline">\(k R\)</span> with some other person’s public key (recall Section <a href="#DH_exchange_section" data-reference-type="ref" data-reference="DH_exchange_section">[DH_exchange_section]</a>), where the base keys are <span class="math inline">\(G\)</span> and <span class="math inline">\(R\)</span>. As we will soon see, we can prove knowledge of the discrete log <span class="math inline">\(k\)</span> in <span class="math inline">\(k G\)</span>, prove knowledge of <span class="math inline">\(k\)</span> in <span class="math inline">\(k R\)</span>, <span><em>and</em></span> prove that <span class="math inline">\(k\)</span> is the same in both cases (all without revealing <span class="math inline">\(k\)</span>).</p>
+<h3 class="unnumbered" id="non-interactive-proof">Non-interactive proof</h3>
+<p>Suppose we have a private key <span class="math inline">\(k\)</span>, and <span class="math inline">\(d\)</span> base keys <span class="math inline">\(\mathcal{J} = \{J_1,...,J_d\}\)</span>. The corresponding public keys are <span class="math inline">\(\mathcal{K} = \{K_1,...,K_d\}\)</span>. We make a Schnorr-like proof (recall Section <a href="#sec:schnorr-fiat-shamir" data-reference-type="ref" data-reference="sec:schnorr-fiat-shamir">[sec:schnorr-fiat-shamir]</a>) across all bases.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Assume the existence of a hash function <span class="math inline">\(\mathcal{H}_n\)</span> mapping to integers from 0 to <span class="math inline">\(l-1\)</span>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<ol>
+<li><p>Generate random number <span class="math inline">\(\alpha \in_R \mathbb{Z}_l\)</span>, and compute, for all <span class="math inline">\(i \in (1,...,d)\)</span>, <span class="math inline">\(\alpha J_i\)</span>.</p></li>
+<li><p>Calculate the challenge, <span class="math display">\[c = \mathcal{H}_n(\mathcal{J},\mathcal{K},[\alpha J_1],[\alpha J_2],...,[\alpha J_d])\]</span></p></li>
+<li><p>Define the response <span class="math inline">\(r = \alpha - c*k\)</span>.</p></li>
+<li><p>Publish the signature <span class="math inline">\((c, r)\)</span>.</p></li>
+</ol>
+<h3 class="unnumbered" id="verification">Verification</h3>
+<p>Assuming the verifier knows <span class="math inline">\(\mathcal{J}\)</span> and <span class="math inline">\(\mathcal{K}\)</span>, he does the following.</p>
+<ol>
+<li><p>Calculate the challenge: <span class="math display">\[c&#39; = \mathcal{H}(\mathcal{J},\mathcal{K},[r J_1 + c*K_1],[r J_2 + c*K_2],...,[r J_d + c*K_d])\]</span></p></li>
+<li><p>If <span class="math inline">\(c = c&#39;\)</span> then the signer must know the discrete logarithm across all bases, and it’s the same discrete logarithm in each case (as always, except with negligible probability).</p></li>
+</ol>
+<h3 class="unnumbered" id="why-it-works">Why it works</h3>
+<p>If instead of <span class="math inline">\(d\)</span> base keys there was just one, this proof would clearly be the same as our original Schnorr proof (Section <a href="#sec:schnorr-fiat-shamir" data-reference-type="ref" data-reference="sec:schnorr-fiat-shamir">[sec:schnorr-fiat-shamir]</a>). We can imagine each base key in isolation to see that the multi-base proof is just a bunch of Schnorr proofs connected together. Moreover, by using only one challenge and response for all of those proofs, they must have the same discrete logarithm <span class="math inline">\(k\)</span>. To get a single response that works for multiple keys the challenge would need to be known before defining an <span class="math inline">\(\alpha\)</span> for each key, but <span class="math inline">\(c\)</span> is a function of <span class="math inline">\(\alpha\)</span>!</p>
+<h2 id="sec:multiple_private_keys_in_one_proof">Multiple private keys in one proof</h2>
+<p>Much like a multi-base proof, we can combine many Schnorr proofs that use different private keys. Doing so proves we know all the private keys for a set of public keys, and reduces storage requirements by making just one challenge for all proofs.</p>
+<h3 class="unnumbered" id="non-interactive-proof-1">Non-interactive proof</h3>
+<p>Suppose we have <span class="math inline">\(d\)</span> private keys <span class="math inline">\(k_1,...,k_d\)</span>, and base keys <span class="math inline">\(\mathcal{J} = \{J_1,...,J_d\}\)</span>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> The corresponding public keys are <span class="math inline">\(\mathcal{K} = \{K_1,...,K_d\}\)</span>. We make a Schnorr-like proof for all keys simultaneously.</p>
+<ol>
+<li><p>Generate random numbers <span class="math inline">\(\alpha_i \in_R \mathbb{Z}_l\)</span> for all <span class="math inline">\(i \in (1,...,d)\)</span>, and compute all <span class="math inline">\(\alpha_i J_i\)</span>.</p></li>
+<li><p>Calculate the challenge, <span class="math display">\[c = \mathcal{H}_n(\mathcal{J},\mathcal{K},[\alpha_1 J_1],[\alpha_2 J_2],...,[\alpha_d J_d])\]</span></p></li>
+<li><p>Define each response <span class="math inline">\(r_i = \alpha_i - c*k_i\)</span>.</p></li>
+<li><p>Publish the signature <span class="math inline">\((c, r_1,...,r_d)\)</span>.</p></li>
+</ol>
+<h3 class="unnumbered" id="verification-1">Verification</h3>
+<p>Assuming the verifier knows <span class="math inline">\(\mathcal{J}\)</span> and <span class="math inline">\(\mathcal{K}\)</span>, he does the following.</p>
+<ol>
+<li><p>Calculate the challenge: <span class="math display">\[c&#39; = \mathcal{H}(\mathcal{J},\mathcal{K},[r_1 J_1 + c*K_1],[r_2 J_2 + c*K_2],...,[r_d J_d + c*K_d])\]</span></p></li>
+<li><p>If <span class="math inline">\(c = c&#39;\)</span> then the signer must know the private keys for all public keys in <span class="math inline">\(\mathcal{K}\)</span> (except with negligible probability).</p></li>
+</ol>
+<h2 id="SAG_section">Spontaneous Anonymous Group (SAG) signatures</h2>
+<p>Group signatures are a way of proving a signer belongs to a group, without necessarily identifying him. Originally (Chaum in <span class="citation" data-cites="Chaum:1991:GS:1754868.1754897"></span>), group signature schemes required the system be set up, and in some cases managed, by a trusted person in order to prevent illegitimate signatures, and, in a few schemes, adjudicate disputes. These relied on a <span><em>group secret</em></span> which is not desirable since it creates a disclosure risk that could undermine anonymity. Moreover, requiring coordination between group members (i.e. for setup and management) is not scalable beyond small groups or inside companies.</p>
+<p>Liu <span><em>et al.</em></span> presented a more interesting scheme in <span class="citation" data-cites="Liu2004"></span> building on the work of Rivest <span><em>et al.</em></span> in <span class="citation" data-cites="rivest-leak-secret"></span>. The authors detailed a group signature algorithm called LSAG characterized by three properties: <span><em>anonymity, linkability,</em></span> and <span><em>spontaneity</em></span>. Here we discuss SAG, the non-linkable version of LSAG, for conceptual clarity. We reserve the idea of linkability for later sections.<br />
+Schemes with anonymity and spontaneity are typically referred to as ‘ring signatures’. In the context of Monero they will ultimately allow for unforgeable, signer-ambiguous transactions that leave currency flows largely untraceable.</p>
+<h3 class="unnumbered" id="signature">Signature</h3>
+<p>Ring signatures are composed of a ring and a signature. Each <span><em>ring</em></span> is a set of public keys, one of which belongs to the signer and the rest of which are unrelated. The <span><em>signature</em></span> is generated with that ring of keys, and anyone verifying it would not be able to tell which ring member was the actual signer.</p>
+<p>Our Schnorr-like signature scheme in Section <a href="#sec:signing-messages" data-reference-type="ref" data-reference="sec:signing-messages">[sec:signing-messages]</a> can be considered a one-key ring signature. We get to two keys by, instead of defining <span class="math inline">\(r\)</span> right away, generating a decoy <span class="math inline">\(r&#39;\)</span> and creating a new challenge to define <span class="math inline">\(r\)</span> with.<br />
+Let <span class="math inline">\(\mathfrak{m}\)</span> be the message to sign, <span class="math inline">\(\mathcal{R} = \{K_1, K_2, ..., K_n\}\)</span> a set of distinct public keys (a group/ring), and <span class="math inline">\(k_\pi\)</span> the signer’s private key corresponding to his public key <span class="math inline">\(K_\pi \in \mathcal{R}\)</span>, where <span class="math inline">\(\pi\)</span> is a secret index.</p>
+<ol>
+<li><p>Generate random number <span class="math inline">\(\alpha \in_R \mathbb{Z}_l\)</span> and fake responses <span class="math inline">\(r_i \in_R \mathbb{Z}_l\)</span> for <span class="math inline">\(i \in \{1, 2, ..., n\}\)</span> but excluding <span class="math inline">\(i = \pi\)</span>.</p></li>
+<li><p>Calculate <span class="math display">\[c_{\pi+1} = \mathcal{H}_n(\mathcal{R}, \mathfrak{m}, [\alpha G])\]</span></p></li>
+<li><p>For <span class="math inline">\(i = \pi+1, \pi+2, ..., n, 1, 2, ..., \pi-1\)</span> calculate, replacing <span class="math inline">\(n + 1 \rightarrow 1\)</span>, <span class="math display">\[c_{i+1} = \mathcal{H}_n(\mathcal{R}, \mathfrak{m}, [r_i G + c_i K_i])\]</span></p></li>
+<li><p>Define the real response <span class="math inline">\(r_\pi\)</span> such that <span class="math inline">\(\alpha = r_\pi + c_\pi k_\pi \pmod l\)</span>.</p></li>
+</ol>
+<p>The ring signature contains the signature <span class="math inline">\(\sigma(\mathfrak{m}) = (c_1, r_1, ..., r_n)\)</span>, and the ring <span class="math inline">\(\mathcal{R}\)</span>.</p>
+<h3 class="unnumbered" id="verification-2">Verification</h3>
+<p>Verification means proving <span class="math inline">\(\sigma(\mathfrak{m})\)</span> is a valid signature created by a private key corresponding to a public key in <span class="math inline">\(\mathcal{R}\)</span> (without necessarily knowing which one), and is done in the following manner:</p>
+<ol>
+<li><p>For <span class="math inline">\(i = 1, 2, ..., n\)</span> iteratively compute, replacing <span class="math inline">\(n + 1 \rightarrow 1\)</span>, <span class="math display">\[\begin{aligned}
+    c&#39;_{i+1}   = \mathcal{H}_n(\mathcal{R}, \mathfrak{m}, [r_i G + c_i {K_i}])
+    \end{aligned}\]</span></p></li>
+<li><p>If <span class="math inline">\(c_1 = c&#39;_1\)</span> then the signature is valid. Note that <span class="math inline">\(c&#39;_1\)</span> is the last term calculated.</p></li>
+</ol>
+<p>In this scheme we store (1+<span class="math inline">\(n\)</span>) integers and use <span class="math inline">\(n\)</span> public keys.</p>
+<h3 class="unnumbered" id="why-it-works-1">Why it works</h3>
+<p>We can informally convince ourselves the algorithm works by going through an example. Consider ring <span class="math inline">\(R = \{K_1, K_2, K_3\}\)</span> with <span class="math inline">\(k_\pi = k_2\)</span>. First the signature:</p>
+<ol>
+<li><p>Generate random numbers: <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(r_1\)</span>, <span class="math inline">\(r_3\)</span> <span class="math display">\[\begin{aligned}
+    \intertext{\item Seed the signature loop:}  c_3 &amp;= \mathcal{H}_n(\mathcal{R}, \mathfrak{m}, [\alpha G])
+    \intertext{\item Iterate: \vspace{-.2cm}}
+        c_1 &amp;= \mathcal{H}_n(\mathcal{R}, \mathfrak{m}, [r_3 G + c_3 K_3])\\
+        c_2 &amp;= \mathcal{H}_n(\mathcal{R}, \mathfrak{m}, [r_1 G + c_1 K_1])\end{aligned}\]</span></p></li>
+<li><p>Close the loop by responding: <span class="math inline">\(r_2 = \alpha - c_2 k_2 \pmod{l}\)</span></p></li>
+</ol>
+<p>We can substitute <span class="math inline">\(\alpha\)</span> into <span class="math inline">\(c_3\)</span> to see where the word ‘ring’ comes from: <span class="math display">\[\begin{aligned}
+{3}
+    c_3 &amp;= \mathcal{H}_n(\mathcal{R}, \mathfrak{m}, [(r_2 + c_2 k_2) G &amp;&amp;])\\
+    c_3 &amp;= \mathcal{H}_n(\mathcal{R}, \mathfrak{m}, [r_2 G + c_2 K_2 &amp;&amp;])\end{aligned}\]</span></p>
+<p>Then verification using <span class="math inline">\(\mathcal{R}\)</span>, and <span class="math inline">\(\sigma(\mathfrak{m}) = (c_1, r_1, r_2, r_3)\)</span>:</p>
+<ol>
+<li><p>We use <span class="math inline">\(r_1\)</span> and <span class="math inline">\(c_1\)</span> to compute <span class="math display">\[\begin{aligned}
+c&#39;_2 &amp;= \mathcal{H}_n(\mathcal{R}, \mathfrak{m}, [r_1 G + c_1 K_1])
+    \intertext{\item From when we made the signature, we see $c&#39;_2 = c_2$. With $r_2$ and $c&#39;_2$ we compute\vspace{.175cm}}
+c&#39;_3 &amp;= \mathcal{H}_n(\mathcal{R}, \mathfrak{m}, [r_2 G + c&#39;_2 K_2])
+    \intertext{\item We can easily see that $c&#39;_3 = c_3$ by substituting $c_2$ for $c&#39;_2$. Using $r_3$ and $c&#39;_3$ we get\vspace{.175cm}}
+c&#39;_1 &amp;= \mathcal{H}_n(\mathcal{R}, \mathfrak{m}, [r_3 G + c&#39;_3 K_3])
+    \end{aligned}\]</span></p></li>
+</ol>
+<p>No surprises here: <span class="math inline">\(c&#39;_1 = c_1\)</span> if we substitute <span class="math inline">\(c_3\)</span> for <span class="math inline">\(c&#39;_3\)</span>.</p>
+<h2 id="blsag_note">Back’s Linkable Spontaneous Anonymous Group (bLSAG) signatures</h2>
+<p>The ring signature schemes discussed here on out display several properties that will be useful for producing confidential transactions.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> Note that both ‘signer ambiguity’ and ‘unforgeability’ also apply to SAG signatures.</p>
+<dl>
+<dt>Signer Ambiguity</dt>
+<dd><p>An observer should be able to determine the signer must be a member of the ring (except with negligible probability), but not which member.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> Monero uses this to obfuscate the origin of funds in each transaction.</p>
+</dd>
+<dt>Linkability</dt>
+<dd><p>If a private key is used to sign two different messages then the messages will become linked.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> As we will show, this property is used to prevent double-spending attacks in Monero (except with negligible probability).</p>
+</dd>
+<dt>Unforgeability</dt>
+<dd><p>No attacker can forge a signature except with negligible probability.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> This is used to prevent theft of Monero funds by those not in possession of the appropriate private keys.</p>
+</dd>
+</dl>
+<p>In the LSAG signature scheme <span class="citation" data-cites="Liu2004"></span>, the owner of a private key could produce one anonymous unlinked signature per ring.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> In this section we present an enhanced version of the LSAG algorithm where linkability is independent of the ring’s decoy members.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></p>
+<p>The modification was unraveled in <span class="citation" data-cites="MRL-0005-ringct"></span> based on a publication by Adam Back <span class="citation" data-cites="AdamBack-ring-efficiency"></span> regarding the CryptoNote <span class="citation" data-cites="cryptoNoteWhitePaper"></span> ring signature algorithm (previously used in Monero, and now deprecated; see Section <a href="#subsec:proofs-input-creation-spendproof" data-reference-type="ref" data-reference="subsec:proofs-input-creation-spendproof">[subsec:proofs-input-creation-spendproof]</a>), which was in turn inspired by Fujisaki and Suzuki’s work in <span class="citation" data-cites="Fujisaki2007"></span>.</p>
+<h3 class="unnumbered" id="signature-1">Signature</h3>
+<p>As with SAG, let <span class="math inline">\(\mathfrak{m}\)</span> be the message to sign, <span class="math inline">\(\mathcal{R} = \{K_1, K_2, ..., K_n\}\)</span> a set of distinct public keys, and <span class="math inline">\(k_\pi\)</span> the signer’s private key corresponding to his public key <span class="math inline">\(K_\pi \in \mathcal{R}\)</span>, where <span class="math inline">\(\pi\)</span> is a secret index. Assume the existence of a hash function <span class="math inline">\(\mathcal{H}_p\)</span>, which maps to curve points in EC.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a><a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a></p>
+<ol>
+<li><p>Calculate key image <span class="math inline">\(\tilde{K} = k_\pi \mathcal{H}_p(K_\pi)\)</span>.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a></p></li>
+<li><p>Generate random number <span class="math inline">\(\alpha \in_R \mathbb{Z}_l\)</span> and random numbers <span class="math inline">\(r_i \in_R \mathbb{Z}_l\)</span> for <span class="math inline">\(i \in \{1, 2, ..., n\}\)</span> but excluding <span class="math inline">\(i = \pi\)</span>.</p></li>
+<li><p>Compute <span class="math display">\[c_{\pi+1} = \mathcal{H}_n(\mathfrak{m}, [\alpha G], [\alpha \mathcal{H}_p(K_\pi)])\]</span></p></li>
+<li><p>For <span class="math inline">\(i = \pi+1, \pi+2, ..., n, 1, 2, ..., \pi-1\)</span> calculate, replacing <span class="math inline">\(n + 1 \rightarrow 1\)</span>, <span class="math display">\[c_{i+1} = \mathcal{H}_n(\mathfrak{m}, [r_i G + c_i K_i], [r_i \mathcal{H}_p(K_i) + c_i \tilde{K}])\]</span></p></li>
+<li><p>Define <span class="math inline">\(r_\pi = \alpha - c_\pi k_\pi \pmod l\)</span>.</p></li>
+</ol>
+<p>The signature will be <span class="math inline">\(\sigma(\mathfrak{m}) = (c_1, r_1, ..., r_n)\)</span>, with key image <span class="math inline">\(\tilde{K}\)</span> and ring <span class="math inline">\(\mathcal{R}\)</span>.</p>
+<h3 class="unnumbered" id="verification-3">Verification</h3>
+<p>Verification means proving <span class="math inline">\(\sigma(\mathfrak{m})\)</span> is a valid signature created by a private key corresponding to a public key in <span class="math inline">\(\mathcal{R}\)</span>, and is done in the following manner:</p>
+<ol>
+<li><p>Check <span class="math inline">\(l \tilde{K} \stackrel{?}{=} 0\)</span>.</p></li>
+<li><p>For <span class="math inline">\(i = 1, 2, ..., n\)</span> iteratively compute, replacing <span class="math inline">\(n + 1 \rightarrow 1\)</span>, <span class="math display">\[\begin{aligned}
+    c&#39;_{i+1} = \mathcal{H}_n(\mathfrak{m}, [r_i G + c_i {K_i}], [r_i \mathcal{H}_p(K_i) + c_i \tilde{K}])
+    \end{aligned}\]</span></p></li>
+<li><p>If <span class="math inline">\(c_1 = c&#39;_1\)</span> then the signature is valid.</p></li>
+</ol>
+<p>In this scheme we store (1+<span class="math inline">\(n\)</span>) integers, have one EC key image, and use <span class="math inline">\(n\)</span> public keys.</p>
+<p>We must check <span class="math inline">\(l \tilde{K} \stackrel{?}{=} 0\)</span> because it is possible to add an EC point from the subgroup of size <span class="math inline">\(h\)</span> (the cofactor) to <span class="math inline">\(\tilde{K}\)</span> and, if all <span class="math inline">\(c_i\)</span> are multiples of <span class="math inline">\(h\)</span> (which we could achieve with automated trial and error using different <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(r_i\)</span> values), make <span class="math inline">\(h\)</span> unlinked valid signatures using the same ring and signing key.<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a> This is because an EC point multiplied by its subgroup’s order is zero.<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a></p>
+<p>To be clear, given some point <span class="math inline">\(K\)</span> in the subgroup of order <span class="math inline">\(l\)</span>, some point <span class="math inline">\(K^h\)</span> with order <span class="math inline">\(h\)</span>, and an integer <span class="math inline">\(c\)</span> divisible by <span class="math inline">\(h\)</span>: <span class="math display">\[\begin{aligned}
+    c*(K + K^h) &amp;= cK + cK^h\\
+                &amp;= cK + 0\end{aligned}\]</span></p>
+<p>We can demonstrate correctness (i.e. ‘how it works’) in a similar way to the more simple SAG signature scheme.</p>
+<p>Our description attempts to be faithful to the original explanation of bLSAG, which does not include <span class="math inline">\(\mathcal{R}\)</span> in the hash that calculates <span class="math inline">\(c_i\)</span>. Including keys in the hash is known as ‘key prefixing’. Recent research <span class="citation" data-cites="key-prefix-paper"></span> suggests it may not be necessary, although adding the prefix is standard practice for similar signature schemes (LSAG uses key prefixing).</p>
+<h3 class="unnumbered" id="linkability">Linkability</h3>
+<p>Given two valid signatures that are different in some way (e.g. different fake responses, different messages, different overall ring members), <span class="math display">\[\begin{aligned}
+    \sigma(\mathfrak{m})   &amp;= (c_1, r_1, ..., r_n)\textrm{ with } \tilde{K}\textrm{, and}\\
+    \sigma&#39;(\mathfrak{m}&#39;)  &amp;= (c_1&#39;, r&#39;_1, ..., r&#39;_{n&#39;})\textrm{ with } \tilde{K}&#39;\textrm{,}\end{aligned}\]</span> if <span class="math inline">\(\tilde{K} =  \tilde{K}&#39;\)</span> then clearly both signatures come from the same private key.</p>
+<p>While an observer could link <span class="math inline">\(\sigma\)</span> and <span class="math inline">\(\sigma&#39;\)</span>, he wouldn’t necessarily know which <span class="math inline">\(K_i\)</span> in <span class="math inline">\(\mathcal{R}\)</span> or <span class="math inline">\(\mathcal{R}&#39;\)</span> was the culprit unless there was only one common key between them. If there was more than one common ring member, his only recourse would be solving the DLP or auditing the rings in some way (such as learning all <span class="math inline">\(k_i\)</span> with <span class="math inline">\(i \neq \pi\)</span>, or learning <span class="math inline">\(k_\pi\)</span>).<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a></p>
+<h2 id="sec:MLSAG">Multilayer Linkable Spontaneous Anonymous Group (MLSAG) signatures</h2>
+<p>In order to sign transactions, one has to sign with multiple private keys. In <span class="citation" data-cites="MRL-0005-ringct"></span>, Shen Noether <span><em>et al.</em></span> describe a multi-layered generalization of the bLSAG signature scheme applicable when we have a set of <span class="math inline">\(n \cdot m\)</span> keys; that is, the set <span class="math display">\[\mathcal{R} = \{K_{i,j}\}  \quad \textrm{for} \quad  i \in \{1, 2, ..., n\} \quad \textrm{and} \quad j \in \{1, 2, ..., m\}\]</span></p>
+<p>where we know the <span class="math inline">\(m\)</span> private keys <span class="math inline">\(\{k_{\pi, j}\}\)</span> corresponding to the subset <span class="math inline">\(\{K_{\pi, j}\}\)</span> for some index <span class="math inline">\(i = \pi\)</span>. Such an algorithm would address our needs if we generalize the notion of linkability.</p>
+<dl>
+<dt>Linkability</dt>
+<dd><p>If any private key <span class="math inline">\(k_{\pi, j}\)</span> is used in 2 different signatures, then those signatures will be automatically linked.</p>
+</dd>
+</dl>
+<h3 class="unnumbered" id="signature-2">Signature</h3>
+<ol>
+<li><p>Calculate key images <span class="math inline">\(\tilde{K_j} = k_{\pi, j} \mathcal{H}_p(K_{\pi, j})\)</span> for all <span class="math inline">\(j \in \{1, 2, ..., m\}\)</span>.</p></li>
+<li><p>Generate random numbers <span class="math inline">\(\alpha_j \in_R \mathbb{Z}_l\)</span>, and <span class="math inline">\(r_{i, j} \in_R \mathbb{Z}_l\)</span> for <span class="math inline">\(i \in \{1, 2, ..., n\}\)</span> (except <span class="math inline">\(i = \pi\)</span>) and <span class="math inline">\(j \in \{1, 2, ..., m\}\)</span>.</p></li>
+<li><p>Compute<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a> <span class="math display">\[c_{\pi+1} = \mathcal{H}_n(\mathfrak{m}, [\alpha_1 G], [\alpha_1 \mathcal{H}_p(K_{\pi, 1})], ..., [\alpha_m G], [\alpha_m \mathcal{H}_p(K_{\pi, m})])\]</span></p></li>
+<li><p>For <span class="math inline">\(i = \pi+1, \pi+2, ..., n, 1, 2, ..., \pi-1\)</span> calculate, replacing <span class="math inline">\(n + 1 \rightarrow 1\)</span>, <span class="math display">\[c_{i+1} = \mathcal{H}_n(\mathfrak{m}, [r_{i, 1} G + c_i K_{i, 1}], [r_{i, 1} \mathcal{H}_p(K_{i, 1}) + c_i \tilde{K}_1], 
+    ..., [r_{i, m} G + c_i K_{i, m}], [r_{i, m} \mathcal{H}_p(K_{i, m}) + c_i \tilde{K}_m])\]</span></p></li>
+<li><p>Define all <span class="math inline">\(r_{\pi, j} = \alpha_j - c_\pi k_{\pi, j} \pmod l\)</span>.</p></li>
+</ol>
+<p>The signature will be <span class="math inline">\(\sigma(\mathfrak{m}) = (c_1, r_{1, 1}, ..., r_{1, m}, ..., r_{n, 1}, ..., r_{n, m})\)</span>, with key images <span class="math inline">\((\tilde{K}_1, ...,  \tilde{K}_m)\)</span>.</p>
+<h3 class="unnumbered" id="verification-4">Verification</h3>
+<p>Verification of a signature is done in the following manner:</p>
+<ol>
+<li><p>For all <span class="math inline">\(j \in \{1,...,m\}\)</span> check <span class="math inline">\(l \tilde{K}_j \stackrel{?}{=} 0\)</span>.</p></li>
+<li><p>For <span class="math inline">\(i = 1, ..., n\)</span> compute, replacing <span class="math inline">\(n + 1 \rightarrow 1\)</span>, <span class="math display">\[\begin{aligned}
+    c&#39;_{i+1} = \mathcal{H}_n(\mathfrak{m}, [r_{i, 1} G + c_i K_{i, 1}], [r_{i, 1} \mathcal{H}_p(K_{i, 1}) + c_i \tilde{K}_1], 
+    ..., [r_{i, m} G + c_i K_{i, m}], [r_{i, m} \mathcal{H}_p(K_{i, m}) + c_i \tilde{K}_m])
+    \end{aligned}\]</span></p></li>
+<li><p>If <span class="math inline">\(c_1 = c&#39;_1\)</span> then the signature is valid.</p></li>
+</ol>
+<h3 class="unnumbered" id="why-it-works-2">Why it works</h3>
+<p>Just as with the SAG algorithm, we can readily observe that</p>
+<ul>
+<li><p>If <span class="math inline">\(i \ne \pi\)</span>, then clearly the values <span class="math inline">\(c&#39;_{i + 1}\)</span> are calculated as described in the signature algorithm.</p></li>
+<li><p>If <span class="math inline">\(i = \pi\)</span> then, since <span class="math inline">\(r_{\pi, j} = \alpha_j - c_\pi k_{\pi, j}\)</span> closes the loop, <span class="math display">\[\begin{aligned}
+{6}
+        r_{\pi, j} G + c_\pi K_{\pi,j} &amp;= (\alpha_j - c_\pi k_{\pi, j}) G + c_\pi K_{\pi,j} = \alpha_j G\\
+        \intertext{and}
+        r_{\pi, j} \mathcal{H}_p(K_{\pi, j}) + c_\pi \tilde{K}_j &amp;= (\alpha_j - c_\pi k_{\pi, j}) \mathcal{H}_p(K_{\pi, j}) + c_\pi \tilde{K}_j = \alpha_j \mathcal{H}_p(K_{\pi, j})\\
+    \end{aligned}\]</span> In other words, it holds also that <span class="math inline">\(c&#39;_{\pi + 1} = c_{\pi+1}\)</span>.</p></li>
+</ul>
+<h3 class="unnumbered" id="linkability-1">Linkability</h3>
+<p>If a private key <span class="math inline">\(k_{\pi, j}\)</span> is re-used to make any signature, the corresponding key image <span class="math inline">\(\tilde{K}_j\)</span> supplied in the signature will reveal it. This observation matches our generalized definition of linkability.<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a></p>
+<h3 class="unnumbered" id="space-requirements">Space requirements</h3>
+<p>In this scheme we store (1+<span class="math inline">\(m*n\)</span>) integers, have <span class="math inline">\(m\)</span> EC key images, and use <span class="math inline">\(m*n\)</span> public keys.</p>
+<h2 id="sec:CLSAG">Concise Linkable Spontaneous Anonymous Group (CLSAG) signatures</h2>
+<p>CLSAG <span class="citation" data-cites="MRL-0011-CLSAG"></span><a href="#fn18" class="footnote-ref" id="fnref18" role="doc-noteref"><sup>18</sup></a> is sort of half-way between bLSAG and MLSAG. Suppose you have a ‘primary’ key, and associated with it are several ‘auxiliary’ keys. It is important to prove knowledge of all private keys, but linkability only applies to the primary. This linkability retraction allows smaller, faster signatures than afforded by MLSAG.</p>
+<p>As with MLSAG, we have a set of <span class="math inline">\(n \cdot m\)</span> keys (<span class="math inline">\(n\)</span> is the ring size, <span class="math inline">\(m\)</span> is the number of signing keys), and the primary keys are at index 1. In other words, there are <span class="math inline">\(n\)</span> primary keys, and the <span class="math inline">\(\pi\)</span>such key and its auxiliaries will sign. <span class="math display">\[\mathcal{R} = \{K_{i,j}\}  \quad \textrm{for} \quad  i \in \{1, 2, ..., n\} \quad \textrm{and} \quad j \in \{1, 2, ..., m\}\]</span></p>
+<p>We know the private keys <span class="math inline">\(\{k_{\pi, j}\}\)</span> corresponding to the subset <span class="math inline">\(\{K_{\pi, j}\}\)</span> for some index <span class="math inline">\(i = \pi\)</span>.</p>
+<h3 class="unnumbered" id="signature-3">Signature</h3>
+<ol>
+<li><p>Calculate key images <span class="math inline">\(\tilde{K_j} = k_{\pi, j} \mathcal{H}_p(K_{\pi, 1})\)</span> for all <span class="math inline">\(j \in \{1, 2, ..., m\}\)</span>. Note the base key is always the same, and so key images with <span class="math inline">\(j&gt;1\)</span> are ‘auxiliary key images’. For notational simplicity we call them all <span class="math inline">\(\tilde{K}_j\)</span>.</p></li>
+<li><p>Generate random numbers <span class="math inline">\(\alpha \in_R \mathbb{Z}_l\)</span>, and <span class="math inline">\(r_{i} \in_R \mathbb{Z}_l\)</span> for <span class="math inline">\(i \in \{1, 2, ..., n\}\)</span> (except <span class="math inline">\(i = \pi\)</span>).</p></li>
+<li><p>Calculate aggregate public keys <span class="math inline">\(W_i\)</span> for <span class="math inline">\(i \in \{1, 2, ..., n\}\)</span>, and aggregate key image <span class="math inline">\(\tilde{W}\)</span><a href="#fn19" class="footnote-ref" id="fnref19" role="doc-noteref"><sup>19</sup></a> <span class="math display">\[\begin{aligned}
+    W_i &amp;= \sum^{m}_{j=1} \mathcal{H}_n(T_j, \mathcal{R}, \tilde{K}_1,...,\tilde{K}_{m})*K_{i,j}\\
+    \tilde{W} &amp;= \sum^{m}_{j=1} \mathcal{H}_n(T_j, \mathcal{R}, \tilde{K}_1,...,\tilde{K}_{m})*\tilde{K}_j
+    \end{aligned}\]</span> where <span class="math inline">\(w_{\pi} = \sum_j \mathcal{H}_n(T_j,...)*k_{\pi,j}\)</span> is the aggregate private key.</p></li>
+<li><p>Compute <span class="math display">\[c_{\pi+1} = \mathcal{H}_n(T_c, \mathcal{R}, \mathfrak{m}, [\alpha G], [\alpha \mathcal{H}_p(K_{\pi, 1})])\]</span></p></li>
+<li><p>For <span class="math inline">\(i = \pi+1, \pi+2, ..., n, 1, 2, ..., \pi-1\)</span> calculate, replacing <span class="math inline">\(n + 1 \rightarrow 1\)</span>, <span class="math display">\[c_{i+1} = \mathcal{H}_n(T_c, \mathcal{R}, \mathfrak{m}, [r_i G + c_i W_i], [r_{i} \mathcal{H}_p(K_{i,1}) + c_i \tilde{W}])\]</span></p></li>
+<li><p>Define <span class="math inline">\(r_{\pi} = \alpha - c_\pi w_\pi \pmod l\)</span>.</p></li>
+</ol>
+<p>Therefore <span class="math inline">\(\sigma(\mathfrak{m}) = (c_1, r_1, ..., r_n)\)</span>, with primary key image <span class="math inline">\(\tilde{K}_1\)</span>, and auxiliary images <span class="math inline">\((\tilde{K}_2,...,\tilde{K}_{m})\)</span>.</p>
+<h3 class="unnumbered" id="verification-5">Verification</h3>
+<p>The verification of a signature is done in the following manner:</p>
+<ol>
+<li><p>For all <span class="math inline">\(j \in \{1,...,m\}\)</span> check <span class="math inline">\(l \tilde{K}_j \stackrel{?}{=} 0\)</span>.<a href="#fn20" class="footnote-ref" id="fnref20" role="doc-noteref"><sup>20</sup></a></p></li>
+<li><p>Calculate aggregate public keys <span class="math inline">\(W_i\)</span> for <span class="math inline">\(i \in \{1, 2, ..., n\}\)</span>, and aggregate key image <span class="math inline">\(\tilde{W}\)</span> <span class="math display">\[\begin{aligned}
+    W_i &amp;= \sum^{m}_{j=1} \mathcal{H}_n(T_j, \mathcal{R}, \tilde{K}_1,...,\tilde{K}_{m})*K_{i,j}\\
+    \tilde{W} &amp;= \sum^{m}_{j=1} \mathcal{H}_n(T_j, \mathcal{R}, \tilde{K}_1,...,\tilde{K}_{m})*\tilde{K}_j
+    \end{aligned}\]</span></p></li>
+<li><p>For <span class="math inline">\(i = 1, ..., n\)</span> compute, replacing <span class="math inline">\(n + 1 \rightarrow 1\)</span>, <span class="math display">\[c_{i+1} = \mathcal{H}_n(T_c, \mathcal{R}, \mathfrak{m}, [r_i G + c_i W_i], [r_{i} \mathcal{H}_p(K_{i,1}) + c_i \tilde{W}])\]</span></p></li>
+<li><p>If <span class="math inline">\(c_1 = c&#39;_1\)</span> then the signature is valid.</p></li>
+</ol>
+<h3 class="unnumbered" id="why-it-works-3">Why it works</h3>
+<p>The biggest danger in concise signatures like this is key cancellation, where the key images reported aren’t legitimate, yet still sum to a legitimate aggregate value. This is where the aggregation coefficients <span class="math inline">\(\mathcal{H}_n(T_j, \mathcal{R}, \tilde{K}_1,...,\tilde{K}_{m})\)</span> come into play, locking down each key to its expected value. We leave tracing out the circular repercussions of faking a key image as an exercise to the reader (perhaps start by imagining those coefficients don’t exist). Auxiliary key images are an artifact of proving the primary image is legitimate, since the aggregate private key <span class="math inline">\(w_{\pi}\)</span>, which contains all the private keys, is applied to base point <span class="math inline">\(\mathcal{H}_p(K_{\pi,1})\)</span>.</p>
+<h3 class="unnumbered" id="linkability-2">Linkability</h3>
+<p>If a private key <span class="math inline">\(k_{\pi, 1}\)</span> is re-used to make any signature, the corresponding primary key image <span class="math inline">\(\tilde{K}_1\)</span> supplied in the signature will reveal it. Auxiliary key images are ignored, as they only exist to facilitate the ‘Concise’ part of CLSAG.</p>
+<h3 class="unnumbered" id="space-requirements-1">Space requirements</h3>
+<p>We store (1+<span class="math inline">\(n\)</span>) integers, have <span class="math inline">\(m\)</span> key images, and use <span class="math inline">\(m*n\)</span> public keys.</p>
+<section class="footnotes" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1" role="doc-endnote"><p>While we say ‘proof’, it can be trivially made a signature by including a message <span class="math inline">\(\mathfrak{m}\)</span> in the challenge hash. The terminology is loosely interchangeable in this context.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>In Monero, the hash function <span class="math inline">\(\mathcal{H}_n(x) = \textrm{sc\textunderscore reduce32}(\mathit{Keccak}(x))\)</span> where <span class="math inline">\(\mathit{Keccak}\)</span> is the basis of SHA3 and screduce32() puts the 256 bit result in the range 0 to <span class="math inline">\(l-1\)</span> (although it should really be 1 to <span class="math inline">\(l-1\)</span>).<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>There is no reason <span class="math inline">\(\mathcal{J}\)</span> can’t contain duplicate base keys here, or for all base keys to be the same (e.g. <span class="math inline">\(G\)</span>). Duplicates would be redundant for multi-base proofs, but now we are dealing with different private keys.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4" role="doc-endnote"><p>Keep in mind that all robust signature schemes have security models which contain various properties. The properties mentioned here are perhaps most relevant to understanding the purpose of Monero’s ring signatures, but are not a comprehensive overview of linkable ring signature properties.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5" role="doc-endnote"><p><span id="anonymity_note" label="anonymity_note">[anonymity_note]</span>Anonymity for an action is usually in terms of an ‘anonymity set’, which is ‘all the people who could have possibly taken that action’. The largest anonymity set is ‘humanity’, and for Monero it is the ring size, or e.g. the so-called ‘mixin level’ <span class="math inline">\(v\)</span> plus the real signer. Mixin refers to how many fake members each ring signature has. If the mixin is <span class="math inline">\(v\)</span> = 4 then there are 5 possible signers. Expanding anonymity sets makes it progressively harder to track down real actors.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6" role="doc-endnote"><p><span id="linkability_note" label="linkability_note">[linkability_note]</span>The linkability property does not apply to non-signing public keys. That is, a ring member whose public key has been used in different ring signatures will not cause linkage.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7" role="doc-endnote"><p><span id="unforgeability_note" label="unforgeability_note">[unforgeability_note]</span>Certain ring signature schemes, including the one in Monero, are strong against adaptive chosen-message and adaptive chosen-public-key attacks. An attacker who can obtain legitimate signatures for chosen messages and corresponding to specific public keys in rings of his choice cannot discover how to forge the signature of even one message. This is called <span><em>existential unforgeability</em></span>; see <span class="citation" data-cites="MRL-0005-ringct"></span> and <span class="citation" data-cites="Liu2004"></span>.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8" role="doc-endnote"><p><span id="lsag_linkability_note" label="lsag_linkability_note">[lsag_linkability_note]</span>In the LSAG scheme linkability only applies to signatures using rings with the same members and in the same order, the ‘exact same ring.’ It is really “one anonymous signature per ring member per ring.” Signatures can be linked even if made for different messages.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9" role="doc-endnote"><p>LSAG was discussed in the first edition of this report. <span class="citation" data-cites="ztm-1"></span><a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10" role="doc-endnote"><p>It doesn’t matter if points from <span class="math inline">\(\mathcal{H}_p\)</span> are compressed or not. They can always be decompressed.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11" role="doc-endnote"><p>Monero uses a hash function that returns curve points directly, rather than computing some integer that is then multiplied by <span class="math inline">\(G\)</span>. <span class="math inline">\(\mathcal{H}_p\)</span> would be broken if someone discovered a way to find <span class="math inline">\(n_x\)</span> such that <span class="math inline">\(n_x G = \mathcal{H}_p(x)\)</span>. See a description of the algorithm in <span class="citation" data-cites="hashtopoint-writeup"></span>. According to the CryptoNote whitepaper <span class="citation" data-cites="cryptoNoteWhitePaper"></span> its origin was this paper: <span class="citation" data-cites="hashtopoint-original-paper"></span>.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12" role="doc-endnote"><p>In Monero it’s important to use the hash to point function for key images instead of another base point so linearity doesn’t lead to linking signatures created by the same address (even if for different one-time addresses). See <span class="citation" data-cites="cryptoNoteWhitePaper"></span> page 18.<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13" role="doc-endnote"><p>We are not concerned with points from other subgroups because the output of <span class="math inline">\(\mathcal{H}_n\)</span> is confined to <span class="math inline">\(\mathbb{Z}_l\)</span>. For EC order <span class="math inline">\(N = h l\)</span>, all divisors of <span class="math inline">\(N\)</span> (and hence, possible subgroups) are either multiples of <span class="math inline">\(l\)</span> (a prime) or divisors of <span class="math inline">\(h\)</span>.<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn14" role="doc-endnote"><p>In Monero’s early history this was not checked for. Fortunately, it was not exploited before a fix was implemented in April 2017 (v5 of the protocol) <span class="citation" data-cites="key-image-bug"></span>.<a href="#fnref14" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn15" role="doc-endnote"><p><span id="lsag_unforgeable_note" label="lsag_unforgeable_note">[lsag_unforgeable_note]</span>LSAG, which is quite similar to bLSAG, is unforgeable, meaning no attacker could make a valid ring signature without knowing a private key. If he invents a fake <span class="math inline">\(\tilde{K}\)</span> and seeds his signature computation with <span class="math inline">\(c_{\pi+1}\)</span>, then, not knowing <span class="math inline">\(k_\pi\)</span>, he can’t calculate a number <span class="math inline">\(r_\pi = \alpha - c_\pi k_\pi\)</span> that would produce <span class="math inline">\([r_\pi G + c_\pi K_\pi] = \alpha G\)</span>. A verifier would reject his signature. Liu <span><em>et al.</em></span> prove forgeries that manage to pass verification are extremely improbable <span class="citation" data-cites="Liu2004"></span>.<a href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn16" role="doc-endnote"><p>Monero MLSAG uses key prefixing. Each challenge contains explicit public keys like this (adding the <span class="math inline">\(K\)</span> terms absent from bLSAG; key images are included in the message signed): <span class="math display">\[c_{\pi+1} = \mathcal{H}_n(\mathfrak{m}, K_{\pi, 1}, [\alpha_1 G], [\alpha_1 \mathcal{H}_p(K_{\pi, 1})], ..., K_{\pi, m}, [\alpha_m G], [\alpha_m \mathcal{H}_p(K_{\pi, m})])\]</span><a href="#fnref16" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn17" role="doc-endnote"><p>As with bLSAG, linked MLSAG signatures do not indicate which public key was used to sign it. However, if the linking key image’s sub-loops’ rings have only one key in common, the culprit is obvious. If the culprit is identified, all other signing members of both signatures are revealed since they share the culprit’s indices.<a href="#fnref17" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn18" role="doc-endnote"><p>The paper this section is based on is a pre-print being finalized for external review. CLSAG is promising as a replacement for MLSAG in future protocol versions, but has not been implemented, and might not be in the future.<a href="#fnref18" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn19" role="doc-endnote"><p>The CLSAG paper says to use different hash functions for domain separation, which we model by prefixing each hash with a tag <span class="citation" data-cites="MRL-0011-CLSAG"></span>, e.g. <span class="math inline">\(T_1 =\)</span> “CLSAG_1", <span class="math inline">\(T_c =\)</span> “CLSAG_c", etc. Domain separated hash functions have different outputs even with the same inputs. We also use key prefixing here (including <span class="math inline">\(\mathcal{R}\)</span>, which has all the keys, in the hash). Domain separating is a new policy for Monero development, and will likely be done with all applications of hash functions added in the future (v13+). Historical uses of hash functions will probably be left alone.<a href="#fnref19" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn20" role="doc-endnote"><p>In Monero we would only check <span class="math inline">\(l*\tilde{K}_1 \stackrel{?}{=} 0\)</span> for the primary key image. Auxiliary keys would be stored as <span class="math inline">\((1/8)*\tilde{K}_j\)</span>, and during verification multiplied by 8 (recall Section <a href="#elliptic_curves_section" data-reference-type="ref" data-reference="elliptic_curves_section">[elliptic_curves_section]</a>), which is more efficient. The method discrepancy is an implementation choice, since linkable key images are very important and so shouldn’t be messed with aggressively, and the other method was employed in prior protocol versions.<a href="#fnref20" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+</body>
+</html>
